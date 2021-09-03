@@ -9,18 +9,20 @@ class MyApp(wx.App):
 
 class MyFrame(wx.Frame):
     def __init__(self, title = 'App', pos = wx.DefaultPosition, size = wx.Size( 1200,864 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL):
-        super().__init__(None, title = title)
+        # super().__init__(None, title = title)
+        super().__init__(None, id=wx.ID_ANY, title=u"Digital Calibration Generator", pos=wx.DefaultPosition,
+                         size=wx.Size(1120, 750), style=wx.DEFAULT_FRAME_STYLE | wx.TAB_TRAVERSAL)
         self.InitFrame()
 
     def InitFrame(self):
 
-        self.SetSizeHints(wx.DefaultSize, wx.DefaultSize)
+        self.SetSizeHints(wx.Size(1120, 750), wx.Size(1120, 750))
 
         bSizer_main = wx.BoxSizer(wx.HORIZONTAL)
 
         self.m_panel_left = wx.Panel(self, wx.ID_ANY, wx.DefaultPosition, wx.Size(800, -1), wx.TAB_TRAVERSAL)
-        self.m_panel_left.SetMinSize(wx.Size(800, -1))
-        self.m_panel_left.SetMaxSize(wx.Size(800, -1))
+        self.m_panel_left.SetMinSize(wx.Size(720, -1))
+        self.m_panel_left.SetMaxSize(wx.Size(720, -1))
 
         bSizer_left = wx.BoxSizer(wx.VERTICAL)
 
@@ -35,13 +37,15 @@ class MyFrame(wx.Frame):
                                   wx.TAB_TRAVERSAL)
         bSizer15 = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.m_staticText1 = wx.StaticText(self.m_panel28, wx.ID_ANY, u"Total Runs", wx.Point(-1, -1), wx.DefaultSize,
-                                           0)
-        self.m_staticText1.Wrap(-1)
-        bSizer15.Add(self.m_staticText1, 0, wx.ALIGN_CENTER | wx.ALL, 5)
+        self.m_staticText_total_run = wx.StaticText(self.m_panel28, wx.ID_ANY, u"Total Runs", wx.Point(-1, -1),
+                                                    wx.DefaultSize, 0)
+        self.m_staticText_total_run.Wrap(-1)
 
-        self.m_textCtrl1 = wx.TextCtrl(self.m_panel28, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0)
-        bSizer15.Add(self.m_textCtrl1, 0, wx.ALIGN_CENTER | wx.ALL, 5)
+        bSizer15.Add(self.m_staticText_total_run, 0, wx.ALIGN_CENTER | wx.ALL, 5)
+
+        self.m_textCtrl_total_run = wx.TextCtrl(self.m_panel28, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
+                                                wx.DefaultSize, 0)
+        bSizer15.Add(self.m_textCtrl_total_run, 0, wx.ALIGN_CENTER | wx.ALL, 5)
 
         self.m_panel28.SetSizer(bSizer15)
         self.m_panel28.Layout()
@@ -52,15 +56,15 @@ class MyFrame(wx.Frame):
                                    wx.TAB_TRAVERSAL)
         bSizer16 = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.m_staticText4 = wx.StaticText(self.m_panel281, wx.ID_ANY, u"Selected Runs", wx.DefaultPosition,
-                                           wx.DefaultSize, 0)
-        self.m_staticText4.Wrap(-1)
+        self.m_staticText_selected_run = wx.StaticText(self.m_panel281, wx.ID_ANY, u"Selected Runs", wx.DefaultPosition,
+                                                       wx.DefaultSize, 0)
+        self.m_staticText_selected_run.Wrap(-1)
 
-        bSizer16.Add(self.m_staticText4, 0, wx.ALIGN_CENTER | wx.ALL, 5)
+        bSizer16.Add(self.m_staticText_selected_run, 0, wx.ALIGN_CENTER | wx.ALL, 5)
 
-        self.m_textCtrl2 = wx.TextCtrl(self.m_panel281, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize,
-                                       0)
-        bSizer16.Add(self.m_textCtrl2, 0, wx.ALIGN_CENTER | wx.ALL, 5)
+        self.m_textCtrl_selected_run = wx.TextCtrl(self.m_panel281, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
+                                                   wx.DefaultSize, 0)
+        bSizer16.Add(self.m_textCtrl_selected_run, 0, wx.ALIGN_CENTER | wx.ALL, 5)
 
         self.m_panel281.SetSizer(bSizer16)
         self.m_panel281.Layout()
@@ -71,8 +75,8 @@ class MyFrame(wx.Frame):
                                    wx.TAB_TRAVERSAL)
         bSizer17 = wx.BoxSizer(wx.VERTICAL)
 
-        self.m_button11 = wx.Button(self.m_panel282, wx.ID_ANY, u"Compare", wx.DefaultPosition, wx.DefaultSize, 0)
-        bSizer17.Add(self.m_button11, 0, wx.ALIGN_CENTER | wx.ALL, 12)
+        self.m_button_compare = wx.Button(self.m_panel282, wx.ID_ANY, u"Compare", wx.DefaultPosition, wx.DefaultSize, 0)
+        bSizer17.Add(self.m_button_compare, 0, wx.ALIGN_CENTER | wx.ALL, 12)
 
         self.m_panel282.SetSizer(bSizer17)
         self.m_panel282.Layout()
@@ -90,10 +94,10 @@ class MyFrame(wx.Frame):
 
         bSizer18 = wx.BoxSizer(wx.VERTICAL)
 
-        self.m_gauge1 = wx.Gauge(self.m_panel_pbar, wx.ID_ANY, 100, wx.DefaultPosition, wx.Size(500, -1),
-                                 wx.GA_HORIZONTAL)
-        self.m_gauge1.SetValue(30)
-        bSizer18.Add(self.m_gauge1, 0, wx.ALL | wx.EXPAND, 5)
+        self.m_gauge_bar = wx.Gauge(self.m_panel_pbar, wx.ID_ANY, 100, wx.DefaultPosition, wx.Size(500, -1),
+                                    wx.GA_HORIZONTAL)
+        self.m_gauge_bar.SetValue(80)
+        bSizer18.Add(self.m_gauge_bar, 0, wx.ALL | wx.EXPAND, 5)
 
         self.m_panel_pbar.SetSizer(bSizer18)
         self.m_panel_pbar.Layout()
@@ -113,15 +117,15 @@ class MyFrame(wx.Frame):
                                   wx.TAB_TRAVERSAL)
         bSizer27 = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.m_textCtrl3 = wx.TextCtrl(self.m_panel39, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size(530, -1),
-                                       0)
-        self.m_textCtrl3.SetMinSize(wx.Size(530, -1))
-        self.m_textCtrl3.SetMaxSize(wx.Size(530, -1))
+        self.m_textCtrl_run1_1 = wx.TextCtrl(self.m_panel39, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
+                                             wx.Size(530, -1), 0)
+        self.m_textCtrl_run1_1.SetMinSize(wx.Size(530, -1))
+        self.m_textCtrl_run1_1.SetMaxSize(wx.Size(530, -1))
 
-        bSizer27.Add(self.m_textCtrl3, 0, wx.ALIGN_CENTER | wx.ALL, 5)
+        bSizer27.Add(self.m_textCtrl_run1_1, 0, wx.ALIGN_CENTER | wx.ALL, 5)
 
-        self.m_button12 = wx.Button(self.m_panel39, wx.ID_ANY, u"Select", wx.DefaultPosition, wx.DefaultSize, 0)
-        bSizer27.Add(self.m_button12, 0, wx.ALIGN_CENTER | wx.ALL, 1)
+        self.m_button_run1_1 = wx.Button(self.m_panel39, wx.ID_ANY, u"Select", wx.DefaultPosition, wx.DefaultSize, 0)
+        bSizer27.Add(self.m_button_run1_1, 0, wx.ALIGN_CENTER | wx.ALL, 1)
 
         self.m_panel39.SetSizer(bSizer27)
         self.m_panel39.Layout()
@@ -132,15 +136,15 @@ class MyFrame(wx.Frame):
                                   wx.TAB_TRAVERSAL)
         bSizer271 = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.m_textCtrl31 = wx.TextCtrl(self.m_panel40, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size(530, -1),
-                                        0)
-        self.m_textCtrl31.SetMinSize(wx.Size(530, -1))
-        self.m_textCtrl31.SetMaxSize(wx.Size(530, -1))
+        self.m_textCtrl_run1_2 = wx.TextCtrl(self.m_panel40, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
+                                             wx.Size(530, -1), 0)
+        self.m_textCtrl_run1_2.SetMinSize(wx.Size(530, -1))
+        self.m_textCtrl_run1_2.SetMaxSize(wx.Size(530, -1))
 
-        bSizer271.Add(self.m_textCtrl31, 0, wx.ALIGN_CENTER | wx.ALL, 5)
+        bSizer271.Add(self.m_textCtrl_run1_2, 0, wx.ALIGN_CENTER | wx.ALL, 5)
 
-        self.m_button121 = wx.Button(self.m_panel40, wx.ID_ANY, u"Select", wx.DefaultPosition, wx.DefaultSize, 0)
-        bSizer271.Add(self.m_button121, 0, wx.ALIGN_CENTER | wx.ALL, 1)
+        self.m_button_run1_2 = wx.Button(self.m_panel40, wx.ID_ANY, u"Select", wx.DefaultPosition, wx.DefaultSize, 0)
+        bSizer271.Add(self.m_button_run1_2, 0, wx.ALIGN_CENTER | wx.ALL, 1)
 
         self.m_panel40.SetSizer(bSizer271)
         self.m_panel40.Layout()
@@ -189,15 +193,15 @@ class MyFrame(wx.Frame):
                                    wx.TAB_TRAVERSAL)
         bSizer272 = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.m_textCtrl32 = wx.TextCtrl(self.m_panel391, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
-                                        wx.Size(530, -1), 0)
-        self.m_textCtrl32.SetMinSize(wx.Size(530, -1))
-        self.m_textCtrl32.SetMaxSize(wx.Size(530, -1))
+        self.m_textCtrl_run2_1 = wx.TextCtrl(self.m_panel391, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
+                                             wx.Size(530, -1), 0)
+        self.m_textCtrl_run2_1.SetMinSize(wx.Size(530, -1))
+        self.m_textCtrl_run2_1.SetMaxSize(wx.Size(530, -1))
 
-        bSizer272.Add(self.m_textCtrl32, 0, wx.ALIGN_CENTER | wx.ALL, 5)
+        bSizer272.Add(self.m_textCtrl_run2_1, 0, wx.ALIGN_CENTER | wx.ALL, 5)
 
-        self.m_button122 = wx.Button(self.m_panel391, wx.ID_ANY, u"Select", wx.DefaultPosition, wx.DefaultSize, 0)
-        bSizer272.Add(self.m_button122, 0, wx.ALIGN_CENTER | wx.ALL, 1)
+        self.m_button_run2_1 = wx.Button(self.m_panel391, wx.ID_ANY, u"Select", wx.DefaultPosition, wx.DefaultSize, 0)
+        bSizer272.Add(self.m_button_run2_1, 0, wx.ALIGN_CENTER | wx.ALL, 1)
 
         self.m_panel391.SetSizer(bSizer272)
         self.m_panel391.Layout()
@@ -208,15 +212,15 @@ class MyFrame(wx.Frame):
                                    wx.TAB_TRAVERSAL)
         bSizer2711 = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.m_textCtrl311 = wx.TextCtrl(self.m_panel401, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
-                                         wx.Size(530, -1), 0)
-        self.m_textCtrl311.SetMinSize(wx.Size(530, -1))
-        self.m_textCtrl311.SetMaxSize(wx.Size(530, -1))
+        self.m_textCtrl_run2_2 = wx.TextCtrl(self.m_panel401, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
+                                             wx.Size(530, -1), 0)
+        self.m_textCtrl_run2_2.SetMinSize(wx.Size(530, -1))
+        self.m_textCtrl_run2_2.SetMaxSize(wx.Size(530, -1))
 
-        bSizer2711.Add(self.m_textCtrl311, 0, wx.ALIGN_CENTER | wx.ALL, 5)
+        bSizer2711.Add(self.m_textCtrl_run2_2, 0, wx.ALIGN_CENTER | wx.ALL, 5)
 
-        self.m_button1211 = wx.Button(self.m_panel401, wx.ID_ANY, u"Select", wx.DefaultPosition, wx.DefaultSize, 0)
-        bSizer2711.Add(self.m_button1211, 0, wx.ALIGN_CENTER | wx.ALL, 1)
+        self.m_button_run2_2 = wx.Button(self.m_panel401, wx.ID_ANY, u"Select", wx.DefaultPosition, wx.DefaultSize, 0)
+        bSizer2711.Add(self.m_button_run2_2, 0, wx.ALIGN_CENTER | wx.ALL, 1)
 
         self.m_panel401.SetSizer(bSizer2711)
         self.m_panel401.Layout()
@@ -235,10 +239,10 @@ class MyFrame(wx.Frame):
 
         bSizer_run1_check1 = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.m_checkBox_run11 = wx.CheckBox(self.m_panel_run1_check1, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
-                                            wx.Size(-1, -1), 0)
-        self.m_checkBox_run11.SetValue(True)
-        bSizer_run1_check1.Add(self.m_checkBox_run11, 0, wx.ALL, 25)
+        self.m_checkBox_run2 = wx.CheckBox(self.m_panel_run1_check1, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
+                                           wx.Size(-1, -1), 0)
+        self.m_checkBox_run2.SetValue(True)
+        bSizer_run1_check1.Add(self.m_checkBox_run2, 0, wx.ALL, 25)
 
         self.m_panel_run1_check1.SetSizer(bSizer_run1_check1)
         self.m_panel_run1_check1.Layout()
@@ -265,15 +269,15 @@ class MyFrame(wx.Frame):
                                    wx.TAB_TRAVERSAL)
         bSizer273 = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.m_textCtrl33 = wx.TextCtrl(self.m_panel392, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
-                                        wx.Size(530, -1), 0)
-        self.m_textCtrl33.SetMinSize(wx.Size(530, -1))
-        self.m_textCtrl33.SetMaxSize(wx.Size(530, -1))
+        self.m_textCtrl_run3_1 = wx.TextCtrl(self.m_panel392, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
+                                             wx.Size(530, -1), 0)
+        self.m_textCtrl_run3_1.SetMinSize(wx.Size(530, -1))
+        self.m_textCtrl_run3_1.SetMaxSize(wx.Size(530, -1))
 
-        bSizer273.Add(self.m_textCtrl33, 0, wx.ALIGN_CENTER | wx.ALL, 5)
+        bSizer273.Add(self.m_textCtrl_run3_1, 0, wx.ALIGN_CENTER | wx.ALL, 5)
 
-        self.m_button123 = wx.Button(self.m_panel392, wx.ID_ANY, u"Select", wx.DefaultPosition, wx.DefaultSize, 0)
-        bSizer273.Add(self.m_button123, 0, wx.ALIGN_CENTER | wx.ALL, 1)
+        self.m_button_run3_1 = wx.Button(self.m_panel392, wx.ID_ANY, u"Select", wx.DefaultPosition, wx.DefaultSize, 0)
+        bSizer273.Add(self.m_button_run3_1, 0, wx.ALIGN_CENTER | wx.ALL, 1)
 
         self.m_panel392.SetSizer(bSizer273)
         self.m_panel392.Layout()
@@ -284,15 +288,15 @@ class MyFrame(wx.Frame):
                                    wx.TAB_TRAVERSAL)
         bSizer2712 = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.m_textCtrl312 = wx.TextCtrl(self.m_panel402, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
-                                         wx.Size(530, -1), 0)
-        self.m_textCtrl312.SetMinSize(wx.Size(530, -1))
-        self.m_textCtrl312.SetMaxSize(wx.Size(530, -1))
+        self.m_textCtrl_run3_2 = wx.TextCtrl(self.m_panel402, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
+                                             wx.Size(530, -1), 0)
+        self.m_textCtrl_run3_2.SetMinSize(wx.Size(530, -1))
+        self.m_textCtrl_run3_2.SetMaxSize(wx.Size(530, -1))
 
-        bSizer2712.Add(self.m_textCtrl312, 0, wx.ALIGN_CENTER | wx.ALL, 5)
+        bSizer2712.Add(self.m_textCtrl_run3_2, 0, wx.ALIGN_CENTER | wx.ALL, 5)
 
-        self.m_button1212 = wx.Button(self.m_panel402, wx.ID_ANY, u"Select", wx.DefaultPosition, wx.DefaultSize, 0)
-        bSizer2712.Add(self.m_button1212, 0, wx.ALIGN_CENTER | wx.ALL, 1)
+        self.m_button_run3_2 = wx.Button(self.m_panel402, wx.ID_ANY, u"Select", wx.DefaultPosition, wx.DefaultSize, 0)
+        bSizer2712.Add(self.m_button_run3_2, 0, wx.ALIGN_CENTER | wx.ALL, 1)
 
         self.m_panel402.SetSizer(bSizer2712)
         self.m_panel402.Layout()
@@ -311,10 +315,10 @@ class MyFrame(wx.Frame):
 
         bSizer_run1_check2 = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.m_checkBox_run12 = wx.CheckBox(self.m_panel_run1_check2, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
-                                            wx.Size(-1, -1), 0)
-        self.m_checkBox_run12.SetValue(True)
-        bSizer_run1_check2.Add(self.m_checkBox_run12, 0, wx.ALL, 25)
+        self.m_checkBox_run3 = wx.CheckBox(self.m_panel_run1_check2, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
+                                           wx.Size(-1, -1), 0)
+        self.m_checkBox_run3.SetValue(True)
+        bSizer_run1_check2.Add(self.m_checkBox_run3, 0, wx.ALL, 25)
 
         self.m_panel_run1_check2.SetSizer(bSizer_run1_check2)
         self.m_panel_run1_check2.Layout()
@@ -341,15 +345,15 @@ class MyFrame(wx.Frame):
                                    wx.TAB_TRAVERSAL)
         bSizer274 = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.m_textCtrl34 = wx.TextCtrl(self.m_panel393, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
-                                        wx.Size(530, -1), 0)
-        self.m_textCtrl34.SetMinSize(wx.Size(530, -1))
-        self.m_textCtrl34.SetMaxSize(wx.Size(530, -1))
+        self.m_textCtrl_run4_1 = wx.TextCtrl(self.m_panel393, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
+                                             wx.Size(530, -1), 0)
+        self.m_textCtrl_run4_1.SetMinSize(wx.Size(530, -1))
+        self.m_textCtrl_run4_1.SetMaxSize(wx.Size(530, -1))
 
-        bSizer274.Add(self.m_textCtrl34, 0, wx.ALIGN_CENTER | wx.ALL, 5)
+        bSizer274.Add(self.m_textCtrl_run4_1, 0, wx.ALIGN_CENTER | wx.ALL, 5)
 
-        self.m_button124 = wx.Button(self.m_panel393, wx.ID_ANY, u"Select", wx.DefaultPosition, wx.DefaultSize, 0)
-        bSizer274.Add(self.m_button124, 0, wx.ALIGN_CENTER | wx.ALL, 1)
+        self.m_button_run4_1 = wx.Button(self.m_panel393, wx.ID_ANY, u"Select", wx.DefaultPosition, wx.DefaultSize, 0)
+        bSizer274.Add(self.m_button_run4_1, 0, wx.ALIGN_CENTER | wx.ALL, 1)
 
         self.m_panel393.SetSizer(bSizer274)
         self.m_panel393.Layout()
@@ -360,15 +364,15 @@ class MyFrame(wx.Frame):
                                    wx.TAB_TRAVERSAL)
         bSizer2713 = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.m_textCtrl313 = wx.TextCtrl(self.m_panel403, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
-                                         wx.Size(530, -1), 0)
-        self.m_textCtrl313.SetMinSize(wx.Size(530, -1))
-        self.m_textCtrl313.SetMaxSize(wx.Size(530, -1))
+        self.m_textCtrl_run4_2 = wx.TextCtrl(self.m_panel403, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
+                                             wx.Size(530, -1), 0)
+        self.m_textCtrl_run4_2.SetMinSize(wx.Size(530, -1))
+        self.m_textCtrl_run4_2.SetMaxSize(wx.Size(530, -1))
 
-        bSizer2713.Add(self.m_textCtrl313, 0, wx.ALIGN_CENTER | wx.ALL, 5)
+        bSizer2713.Add(self.m_textCtrl_run4_2, 0, wx.ALIGN_CENTER | wx.ALL, 5)
 
-        self.m_button1213 = wx.Button(self.m_panel403, wx.ID_ANY, u"Select", wx.DefaultPosition, wx.DefaultSize, 0)
-        bSizer2713.Add(self.m_button1213, 0, wx.ALIGN_CENTER | wx.ALL, 1)
+        self.m_button_run4_2 = wx.Button(self.m_panel403, wx.ID_ANY, u"Select", wx.DefaultPosition, wx.DefaultSize, 0)
+        bSizer2713.Add(self.m_button_run4_2, 0, wx.ALIGN_CENTER | wx.ALL, 1)
 
         self.m_panel403.SetSizer(bSizer2713)
         self.m_panel403.Layout()
@@ -387,10 +391,9 @@ class MyFrame(wx.Frame):
 
         bSizer_run1_check3 = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.m_checkBox_run13 = wx.CheckBox(self.m_panel_run1_check3, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
-                                            wx.Size(-1, -1), 0)
-        self.m_checkBox_run13.SetValue(True)
-        bSizer_run1_check3.Add(self.m_checkBox_run13, 0, wx.ALL, 25)
+        self.m_checkBox_run4 = wx.CheckBox(self.m_panel_run1_check3, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
+                                           wx.Size(-1, -1), 0)
+        bSizer_run1_check3.Add(self.m_checkBox_run4, 0, wx.ALL, 25)
 
         self.m_panel_run1_check3.SetSizer(bSizer_run1_check3)
         self.m_panel_run1_check3.Layout()
@@ -417,15 +420,15 @@ class MyFrame(wx.Frame):
                                    wx.TAB_TRAVERSAL)
         bSizer275 = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.m_textCtrl35 = wx.TextCtrl(self.m_panel394, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
-                                        wx.Size(530, -1), 0)
-        self.m_textCtrl35.SetMinSize(wx.Size(530, -1))
-        self.m_textCtrl35.SetMaxSize(wx.Size(530, -1))
+        self.m_textCtrl_run5_1 = wx.TextCtrl(self.m_panel394, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
+                                             wx.Size(530, -1), 0)
+        self.m_textCtrl_run5_1.SetMinSize(wx.Size(530, -1))
+        self.m_textCtrl_run5_1.SetMaxSize(wx.Size(530, -1))
 
-        bSizer275.Add(self.m_textCtrl35, 0, wx.ALIGN_CENTER | wx.ALL, 5)
+        bSizer275.Add(self.m_textCtrl_run5_1, 0, wx.ALIGN_CENTER | wx.ALL, 5)
 
-        self.m_button125 = wx.Button(self.m_panel394, wx.ID_ANY, u"Select", wx.DefaultPosition, wx.DefaultSize, 0)
-        bSizer275.Add(self.m_button125, 0, wx.ALIGN_CENTER | wx.ALL, 1)
+        self.m_button_run5_1 = wx.Button(self.m_panel394, wx.ID_ANY, u"Select", wx.DefaultPosition, wx.DefaultSize, 0)
+        bSizer275.Add(self.m_button_run5_1, 0, wx.ALIGN_CENTER | wx.ALL, 1)
 
         self.m_panel394.SetSizer(bSizer275)
         self.m_panel394.Layout()
@@ -436,15 +439,15 @@ class MyFrame(wx.Frame):
                                    wx.TAB_TRAVERSAL)
         bSizer2714 = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.m_textCtrl314 = wx.TextCtrl(self.m_panel404, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
-                                         wx.Size(530, -1), 0)
-        self.m_textCtrl314.SetMinSize(wx.Size(530, -1))
-        self.m_textCtrl314.SetMaxSize(wx.Size(530, -1))
+        self.m_textCtrl_run5_2 = wx.TextCtrl(self.m_panel404, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
+                                             wx.Size(530, -1), 0)
+        self.m_textCtrl_run5_2.SetMinSize(wx.Size(530, -1))
+        self.m_textCtrl_run5_2.SetMaxSize(wx.Size(530, -1))
 
-        bSizer2714.Add(self.m_textCtrl314, 0, wx.ALIGN_CENTER | wx.ALL, 5)
+        bSizer2714.Add(self.m_textCtrl_run5_2, 0, wx.ALIGN_CENTER | wx.ALL, 5)
 
-        self.m_button1214 = wx.Button(self.m_panel404, wx.ID_ANY, u"Select", wx.DefaultPosition, wx.DefaultSize, 0)
-        bSizer2714.Add(self.m_button1214, 0, wx.ALIGN_CENTER | wx.ALL, 1)
+        self.m_button_run5_2 = wx.Button(self.m_panel404, wx.ID_ANY, u"Select", wx.DefaultPosition, wx.DefaultSize, 0)
+        bSizer2714.Add(self.m_button_run5_2, 0, wx.ALIGN_CENTER | wx.ALL, 1)
 
         self.m_panel404.SetSizer(bSizer2714)
         self.m_panel404.Layout()
@@ -463,10 +466,9 @@ class MyFrame(wx.Frame):
 
         bSizer_run1_check4 = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.m_checkBox_run14 = wx.CheckBox(self.m_panel_run1_check4, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
-                                            wx.Size(-1, -1), 0)
-        self.m_checkBox_run14.SetValue(True)
-        bSizer_run1_check4.Add(self.m_checkBox_run14, 0, wx.ALL, 25)
+        self.m_checkBox_run5 = wx.CheckBox(self.m_panel_run1_check4, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
+                                           wx.Size(-1, -1), 0)
+        bSizer_run1_check4.Add(self.m_checkBox_run5, 0, wx.ALL, 25)
 
         self.m_panel_run1_check4.SetSizer(bSizer_run1_check4)
         self.m_panel_run1_check4.Layout()
@@ -482,95 +484,272 @@ class MyFrame(wx.Frame):
         self.m_panel_left.SetSizer(bSizer_left)
         self.m_panel_left.Layout()
         bSizer_main.Add(self.m_panel_left, 1, wx.EXPAND | wx.ALL, 1)
-        #######################################################################################
+
         self.m_panel_right = wx.Panel(self, wx.ID_ANY, wx.DefaultPosition, wx.Size(400, -1), wx.TAB_TRAVERSAL)
         self.m_panel_right.SetMinSize(wx.Size(400, -1))
         self.m_panel_right.SetMaxSize(wx.Size(400, -1))
 
-        right_sizer = wx.GridBagSizer(5, 5)
+        bSizer_right = wx.BoxSizer(wx.VERTICAL)
 
-        txt_job_number = wx.StaticText(self.m_panel_right, label="Job number")
-        right_sizer.Add(txt_job_number, pos=(0, 0), flag=wx.TOP | wx.LEFT | wx.BOTTOM, border=15)
-        self.ipt_job_number = wx.TextCtrl(self.m_panel_right)
-        right_sizer.Add(self.ipt_job_number, pos=(0, 2),span=(0, 5), flag=wx.TOP | wx.CENTER | wx.BOTTOM, border=15)
+        self.m_panel_job_no = wx.Panel(self.m_panel_right, wx.ID_ANY, wx.DefaultPosition, wx.Size(-1, 70),
+                                       wx.TAB_TRAVERSAL)
+        self.m_panel_job_no.SetMinSize(wx.Size(-1, 70))
+        self.m_panel_job_no.SetMaxSize(wx.Size(-1, 70))
 
-        ###Equipment Info form
-        EIbox = wx.StaticBox(self.m_panel_right, label="Equipment Info")
-        EIboxsizer = wx.StaticBoxSizer(EIbox, wx.VERTICAL)
-        font = wx.Font(11, wx.ROMAN, wx.NORMAL, wx.NORMAL)
+        bSizer57 = wx.BoxSizer(wx.HORIZONTAL)
 
-        txt_chamber1 = wx.StaticText(self.m_panel_right, label="Chamber1")
-        txt_chamber1.SetFont(font)
-        EIboxsizer.Add(txt_chamber1, flag=wx.ALL, border=5)
+        self.m_staticText_job_no = wx.StaticText(self.m_panel_job_no, wx.ID_ANY, u"Job number", wx.DefaultPosition,
+                                                 wx.DefaultSize, 0)
+        self.m_staticText_job_no.Wrap(-1)
 
-        Chamber1SizerModel = wx.BoxSizer()
-        Chamber1SizerSerial = wx.BoxSizer()
-        txt_model1 = wx.StaticText(self.m_panel_right, label="model")
-        txt_serial1 = wx.StaticText(self.m_panel_right, label="serial")
-        self.ipt_model1 = wx.TextCtrl(self.m_panel_right)
-        self.ipt_serial1 = wx.TextCtrl(self.m_panel_right)
-        Chamber1SizerModel.Add(txt_model1, flag=wx.ALL| wx.CENTER, border=5)
-        Chamber1SizerModel.Add(self.ipt_model1, flag=wx.ALL | wx.EXPAND, border=5)
-        Chamber1SizerSerial.Add(txt_serial1, flag=wx.ALL, border=5)
-        Chamber1SizerSerial.Add(self.ipt_serial1, flag=wx.ALL | wx.EXPAND, border=5)
-        EIboxsizer.Add(Chamber1SizerModel, 0, wx.LEFT, 5)
-        EIboxsizer.Add(Chamber1SizerSerial, 0, wx.LEFT, 5)
+        bSizer57.Add(self.m_staticText_job_no, 0, wx.ALIGN_CENTER | wx.ALL, 5)
 
-        txt_chamber2 = wx.StaticText(self.m_panel_right, label="Chamber2")
-        txt_chamber2.SetFont(font)
-        EIboxsizer.Add(txt_chamber2, flag=wx.LEFT | wx.TOP, border=5)
+        self.m_textCtrl_job_no = wx.TextCtrl(self.m_panel_job_no, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
+                                             wx.Size(200, -1), 0)
+        self.m_textCtrl_job_no.SetMinSize(wx.Size(200, -1))
+        self.m_textCtrl_job_no.SetMaxSize(wx.Size(200, -1))
 
-        Chamber2SizerModel = wx.BoxSizer()
-        Chamber2SizerSerial = wx.BoxSizer()
-        txt_model2 = wx.StaticText(self.m_panel_right, label="model")
-        txt_serial2 = wx.StaticText(self.m_panel_right, label="serial")
-        self.ipt_model2 = wx.TextCtrl(self.m_panel_right)
-        self.ipt_serial2 = wx.TextCtrl(self.m_panel_right)
-        Chamber2SizerModel.Add(txt_model2, flag=wx.ALL, border=5)
-        Chamber2SizerModel.Add(self.ipt_model2, flag=wx.ALL | wx.EXPAND, border=5)
-        Chamber2SizerSerial.Add(txt_serial2, flag=wx.ALL, border=5)
-        Chamber2SizerSerial.Add(self.ipt_serial2, flag=wx.ALL | wx.EXPAND, border=5)
-        EIboxsizer.Add(Chamber2SizerModel, 0, wx.LEFT, 5)
-        EIboxsizer.Add(Chamber2SizerSerial, 0, wx.LEFT, 5)
+        bSizer57.Add(self.m_textCtrl_job_no, 0, wx.ALIGN_CENTER | wx.ALL, 5)
 
-        right_sizer.Add(EIboxsizer, pos=(1, 0), span=(1, 5), flag=wx.EXPAND | wx.TOP | wx.LEFT | wx.RIGHT, border=15)
+        self.m_panel_job_no.SetSizer(bSizer57)
+        self.m_panel_job_no.Layout()
+        bSizer_right.Add(self.m_panel_job_no, 1, wx.EXPAND | wx.ALL, 5)
 
-        ### Client Info form
-        CIbox = wx.StaticBox(self.m_panel_right, label="Client Info")
-        CIboxsizer = wx.StaticBoxSizer(CIbox, wx.VERTICAL)
+        self.m_panel_equip_info = wx.Panel(self.m_panel_right, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize,
+                                           wx.TAB_TRAVERSAL)
+        sbSizer11 = wx.StaticBoxSizer(wx.StaticBox(self.m_panel_equip_info, wx.ID_ANY, u"Equipment Information"),
+                                      wx.VERTICAL)
 
-        txt_name = wx.StaticText(self.m_panel_right, label="client name")
-        txt_name.SetFont(font)
-        CIboxsizer.Add(txt_name, flag=wx.LEFT | wx.TOP, border=5)
-        clientNameSizer = wx.BoxSizer()
-        self.cname = wx.TextCtrl(self.m_panel_right)
-        btn_update_1 = wx.Button(self.m_panel_right, wx.ID_ANY, label='update')
-        clientNameSizer.Add(self.cname, proportion=0, flag=wx.ALL, border=5)
-        clientNameSizer.Add(btn_update_1, proportion=0, flag=wx.ALL, border=5)
-        CIboxsizer.Add(clientNameSizer, flag=wx.ALL | wx.TOP, border=5)
+        self.m_panel65 = wx.Panel(sbSizer11.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize,
+                                  wx.TAB_TRAVERSAL)
+        bSizer58 = wx.BoxSizer(wx.VERTICAL)
 
-        txt_Addre = wx.StaticText(self.m_panel_right, label="client address")
-        txt_Addre.SetFont(font)
-        CIboxsizer.Add(txt_Addre, flag=wx.LEFT | wx.TOP, border=5)
-        clientAddreSizer = wx.BoxSizer()
-        self.cAddre = wx.TextCtrl(self.m_panel_right)
-        btn_update_2 = wx.Button(self.m_panel_right, wx.ID_ANY, label='update')
-        clientAddreSizer.Add(self.cAddre, proportion=0, flag=wx.ALL, border=5)
-        clientAddreSizer.Add(btn_update_2, proportion=0, flag=wx.ALL, border=5)
-        CIboxsizer.Add(clientAddreSizer, flag=wx.ALL | wx.TOP, border=5)
+        self.m_staticText6 = wx.StaticText(self.m_panel65, wx.ID_ANY, u"Chamber 1", wx.DefaultPosition, wx.DefaultSize,
+                                           0)
+        self.m_staticText6.Wrap(-1)
 
-        right_sizer.Add(CIboxsizer, pos=(2, 0), span=(1, 5), flag=wx.EXPAND | wx.TOP | wx.LEFT | wx.RIGHT, border=15)
+        bSizer58.Add(self.m_staticText6, 0, wx.ALL, 5)
 
-        ### button for pdf dcc
-        btn_pdf = wx.Button(self.m_panel_right, wx.CENTER, label='Generate PDF')
-        btn_dcc = wx.Button(self.m_panel_right, wx.ALL, label='Generate DCC')
+        self.m_panel68 = wx.Panel(self.m_panel65, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL)
+        bSizer59 = wx.BoxSizer(wx.HORIZONTAL)
 
-        right_sizer.Add(btn_pdf, pos=(4, 0), flag=wx.ALL, border=15)
-        right_sizer.Add(btn_dcc, pos=(5, 0), flag=wx.ALL, border=15)
+        self.m_staticText7 = wx.StaticText(self.m_panel68, wx.ID_ANY, u"       Model", wx.DefaultPosition,
+                                           wx.DefaultSize, 0)
+        self.m_staticText7.Wrap(-1)
 
-        self.m_panel_right.SetSizer(right_sizer)
-        right_sizer.Fit(self.m_panel_right)
+        bSizer59.Add(self.m_staticText7, 0, wx.ALIGN_CENTER | wx.ALL, 5)
 
+        self.m_textCtrl_model1 = wx.TextCtrl(self.m_panel68, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
+                                             wx.Size(200, -1), 0)
+        self.m_textCtrl_model1.SetMinSize(wx.Size(200, -1))
+        self.m_textCtrl_model1.SetMaxSize(wx.Size(200, -1))
+
+        bSizer59.Add(self.m_textCtrl_model1, 0, wx.ALIGN_CENTER | wx.ALL, 5)
+
+        self.m_panel68.SetSizer(bSizer59)
+        self.m_panel68.Layout()
+        bSizer59.Fit(self.m_panel68)
+        bSizer58.Add(self.m_panel68, 1, wx.EXPAND | wx.ALL, 5)
+
+        self.m_panel69 = wx.Panel(self.m_panel65, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL)
+        bSizer591 = wx.BoxSizer(wx.HORIZONTAL)
+
+        self.m_staticText71 = wx.StaticText(self.m_panel69, wx.ID_ANY, u"       Serial  ", wx.DefaultPosition,
+                                            wx.DefaultSize, 0)
+        self.m_staticText71.Wrap(-1)
+
+        bSizer591.Add(self.m_staticText71, 0, wx.ALIGN_CENTER | wx.ALL, 5)
+
+        self.m_textCtrl_serial1 = wx.TextCtrl(self.m_panel69, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
+                                              wx.Size(200, -1), 0)
+        self.m_textCtrl_serial1.SetMinSize(wx.Size(200, -1))
+        self.m_textCtrl_serial1.SetMaxSize(wx.Size(200, -1))
+
+        bSizer591.Add(self.m_textCtrl_serial1, 0, wx.ALIGN_CENTER | wx.ALL, 5)
+
+        self.m_panel69.SetSizer(bSizer591)
+        self.m_panel69.Layout()
+        bSizer591.Fit(self.m_panel69)
+        bSizer58.Add(self.m_panel69, 1, wx.EXPAND | wx.ALL, 5)
+
+        self.m_panel65.SetSizer(bSizer58)
+        self.m_panel65.Layout()
+        bSizer58.Fit(self.m_panel65)
+        sbSizer11.Add(self.m_panel65, 1, wx.EXPAND | wx.ALL, 1)
+
+        self.m_panel66 = wx.Panel(sbSizer11.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize,
+                                  wx.TAB_TRAVERSAL)
+        bSizer581 = wx.BoxSizer(wx.VERTICAL)
+
+        self.m_staticText61 = wx.StaticText(self.m_panel66, wx.ID_ANY, u"Chamber 2", wx.DefaultPosition, wx.DefaultSize,
+                                            0)
+        self.m_staticText61.Wrap(-1)
+
+        bSizer581.Add(self.m_staticText61, 0, wx.ALL, 5)
+
+        self.m_panel681 = wx.Panel(self.m_panel66, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL)
+        bSizer592 = wx.BoxSizer(wx.HORIZONTAL)
+
+        self.m_staticText72 = wx.StaticText(self.m_panel681, wx.ID_ANY, u"       Model", wx.DefaultPosition,
+                                            wx.DefaultSize, 0)
+        self.m_staticText72.Wrap(-1)
+
+        bSizer592.Add(self.m_staticText72, 0, wx.ALIGN_CENTER | wx.ALL, 5)
+
+        self.m_textCtrl_model2 = wx.TextCtrl(self.m_panel681, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
+                                             wx.Size(200, -1), 0)
+        self.m_textCtrl_model2.SetMinSize(wx.Size(200, -1))
+        self.m_textCtrl_model2.SetMaxSize(wx.Size(200, -1))
+
+        bSizer592.Add(self.m_textCtrl_model2, 0, wx.ALIGN_CENTER | wx.ALL, 5)
+
+        self.m_panel681.SetSizer(bSizer592)
+        self.m_panel681.Layout()
+        bSizer592.Fit(self.m_panel681)
+        bSizer581.Add(self.m_panel681, 1, wx.EXPAND | wx.ALL, 5)
+
+        self.m_panel691 = wx.Panel(self.m_panel66, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL)
+        bSizer5911 = wx.BoxSizer(wx.HORIZONTAL)
+
+        self.m_staticText711 = wx.StaticText(self.m_panel691, wx.ID_ANY, u"       Serial  ", wx.DefaultPosition,
+                                             wx.DefaultSize, 0)
+        self.m_staticText711.Wrap(-1)
+
+        bSizer5911.Add(self.m_staticText711, 0, wx.ALIGN_CENTER | wx.ALL, 5)
+
+        self.m_textCtrl_serial2 = wx.TextCtrl(self.m_panel691, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
+                                              wx.Size(200, -1), 0)
+        self.m_textCtrl_serial2.SetMinSize(wx.Size(200, -1))
+        self.m_textCtrl_serial2.SetMaxSize(wx.Size(200, -1))
+
+        bSizer5911.Add(self.m_textCtrl_serial2, 0, wx.ALIGN_CENTER | wx.ALL, 5)
+
+        self.m_panel691.SetSizer(bSizer5911)
+        self.m_panel691.Layout()
+        bSizer5911.Fit(self.m_panel691)
+        bSizer581.Add(self.m_panel691, 1, wx.EXPAND | wx.ALL, 5)
+
+        self.m_panel66.SetSizer(bSizer581)
+        self.m_panel66.Layout()
+        bSizer581.Fit(self.m_panel66)
+        sbSizer11.Add(self.m_panel66, 1, wx.EXPAND | wx.ALL, 1)
+
+        self.m_panel_equip_info.SetSizer(sbSizer11)
+        self.m_panel_equip_info.Layout()
+        sbSizer11.Fit(self.m_panel_equip_info)
+        bSizer_right.Add(self.m_panel_equip_info, 1, wx.EXPAND | wx.ALL, 10)
+
+        self.m_panel_client_info = wx.Panel(self.m_panel_right, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize,
+                                            wx.TAB_TRAVERSAL)
+        sbSizer12 = wx.StaticBoxSizer(wx.StaticBox(self.m_panel_client_info, wx.ID_ANY, u"Client Information"),
+                                      wx.VERTICAL)
+
+        self.m_panel74 = wx.Panel(sbSizer12.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize,
+                                  wx.TAB_TRAVERSAL)
+        bSizer71 = wx.BoxSizer(wx.VERTICAL)
+
+        self.m_staticText21 = wx.StaticText(self.m_panel74, wx.ID_ANY, u"Client Name", wx.DefaultPosition,
+                                            wx.DefaultSize, 0)
+        self.m_staticText21.Wrap(-1)
+
+        bSizer71.Add(self.m_staticText21, 0, wx.ALL, 5)
+
+        self.m_panel76 = wx.Panel(self.m_panel74, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL)
+        bSizer73 = wx.BoxSizer(wx.HORIZONTAL)
+
+        self.m_textCtrl_client_name = wx.TextCtrl(self.m_panel76, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
+                                                  wx.Size(250, -1), 0)
+        self.m_textCtrl_client_name.SetMinSize(wx.Size(250, -1))
+        self.m_textCtrl_client_name.SetMaxSize(wx.Size(250, -1))
+
+        bSizer73.Add(self.m_textCtrl_client_name, 0, wx.ALL, 5)
+
+        self.m_button_name_update = wx.Button(self.m_panel76, wx.ID_ANY, u"Update", wx.DefaultPosition, wx.Size(80, 30),
+                                              0)
+        self.m_button_name_update.SetMinSize(wx.Size(80, 30))
+        self.m_button_name_update.SetMaxSize(wx.Size(80, 30))
+
+        bSizer73.Add(self.m_button_name_update, 0, wx.ALL, 5)
+
+        self.m_panel76.SetSizer(bSizer73)
+        self.m_panel76.Layout()
+        bSizer73.Fit(self.m_panel76)
+        bSizer71.Add(self.m_panel76, 1, wx.EXPAND | wx.ALL, 5)
+
+        self.m_panel74.SetSizer(bSizer71)
+        self.m_panel74.Layout()
+        bSizer71.Fit(self.m_panel74)
+        sbSizer12.Add(self.m_panel74, 1, wx.EXPAND | wx.ALL, 1)
+
+        self.m_panel75 = wx.Panel(sbSizer12.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize,
+                                  wx.TAB_TRAVERSAL)
+        bSizer711 = wx.BoxSizer(wx.VERTICAL)
+
+        self.m_staticText211 = wx.StaticText(self.m_panel75, wx.ID_ANY, u"Client Address", wx.DefaultPosition,
+                                             wx.DefaultSize, 0)
+        self.m_staticText211.Wrap(-1)
+
+        bSizer711.Add(self.m_staticText211, 0, wx.ALL, 5)
+
+        self.m_panel761 = wx.Panel(self.m_panel75, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL)
+        bSizer731 = wx.BoxSizer(wx.HORIZONTAL)
+
+        self.m_textCtrl_client_address = wx.TextCtrl(self.m_panel761, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
+                                                     wx.Size(250, -1), 0)
+        self.m_textCtrl_client_address.SetMinSize(wx.Size(250, -1))
+        self.m_textCtrl_client_address.SetMaxSize(wx.Size(250, -1))
+
+        bSizer731.Add(self.m_textCtrl_client_address, 0, wx.ALL, 5)
+
+        self.m_button_address_update = wx.Button(self.m_panel761, wx.ID_ANY, u"Update", wx.DefaultPosition,
+                                                 wx.Size(80, 30), 0)
+        self.m_button_address_update.SetMinSize(wx.Size(80, 30))
+        self.m_button_address_update.SetMaxSize(wx.Size(80, 30))
+
+        bSizer731.Add(self.m_button_address_update, 0, wx.ALL, 5)
+
+        self.m_panel761.SetSizer(bSizer731)
+        self.m_panel761.Layout()
+        bSizer731.Fit(self.m_panel761)
+        bSizer711.Add(self.m_panel761, 1, wx.EXPAND | wx.ALL, 5)
+
+        self.m_panel75.SetSizer(bSizer711)
+        self.m_panel75.Layout()
+        bSizer711.Fit(self.m_panel75)
+        sbSizer12.Add(self.m_panel75, 1, wx.EXPAND | wx.ALL, 1)
+
+        self.m_panel_client_info.SetSizer(sbSizer12)
+        self.m_panel_client_info.Layout()
+        sbSizer12.Fit(self.m_panel_client_info)
+        bSizer_right.Add(self.m_panel_client_info, 1, wx.EXPAND | wx.ALL, 10)
+
+        self.m_panel_pdf_dcc = wx.Panel(self.m_panel_right, wx.ID_ANY, wx.DefaultPosition, wx.Size(-1, 150),
+                                        wx.TAB_TRAVERSAL)
+        self.m_panel_pdf_dcc.SetMinSize(wx.Size(-1, 150))
+        self.m_panel_pdf_dcc.SetMaxSize(wx.Size(-1, 150))
+
+        bSizer81 = wx.BoxSizer(wx.VERTICAL)
+
+        self.m_button_pdf = wx.Button(self.m_panel_pdf_dcc, wx.ID_ANY, u"Generate PDF", wx.DefaultPosition,
+                                      wx.Size(200, -1), 0)
+        self.m_button_pdf.SetMinSize(wx.Size(200, -1))
+        self.m_button_pdf.SetMaxSize(wx.Size(200, -1))
+
+        bSizer81.Add(self.m_button_pdf, 0, wx.ALIGN_CENTER | wx.ALL, 15)
+
+        self.m_button_dcc = wx.Button(self.m_panel_pdf_dcc, wx.ID_ANY, u"Generate DCC", wx.DefaultPosition,
+                                      wx.Size(200, -1), 0)
+        self.m_button_dcc.SetMinSize(wx.Size(200, -1))
+        self.m_button_dcc.SetMaxSize(wx.Size(200, -1))
+
+        bSizer81.Add(self.m_button_dcc, 0, wx.ALIGN_CENTER | wx.ALL, 15)
+
+        self.m_panel_pdf_dcc.SetSizer(bSizer81)
+        self.m_panel_pdf_dcc.Layout()
+        bSizer_right.Add(self.m_panel_pdf_dcc, 1, wx.EXPAND | wx.ALL, 5)
+
+        self.m_panel_right.SetSizer(bSizer_right)
+        self.m_panel_right.Layout()
         bSizer_main.Add(self.m_panel_right, 1, wx.EXPAND | wx.ALL, 1)
 
         self.SetSizer(bSizer_main)
