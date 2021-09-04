@@ -11,18 +11,18 @@ class MyFrame(wx.Frame):
     def __init__(self, title = 'App', pos = wx.DefaultPosition, size = wx.Size( 1200,864 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL):
         # super().__init__(None, title = title)
         super().__init__(None, id=wx.ID_ANY, title=u"Digital Calibration Generator", pos=wx.DefaultPosition,
-                         size=wx.Size(1120, 750), style=wx.DEFAULT_FRAME_STYLE | wx.TAB_TRAVERSAL)
+                         size=wx.Size(1100, 850), style=wx.DEFAULT_FRAME_STYLE | wx.TAB_TRAVERSAL)
         self.InitFrame()
 
     def InitFrame(self):
 
-        self.SetSizeHints(wx.Size(1120, 750), wx.Size(1120, 750))
+        self.SetSizeHints(wx.Size(1100, 850), wx.Size(1100, 850))
 
         bSizer_main = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.m_panel_left = wx.Panel(self, wx.ID_ANY, wx.DefaultPosition, wx.Size(800, -1), wx.TAB_TRAVERSAL)
-        self.m_panel_left.SetMinSize(wx.Size(720, -1))
-        self.m_panel_left.SetMaxSize(wx.Size(720, -1))
+        self.m_panel_left = wx.Panel(self, wx.ID_ANY, wx.DefaultPosition, wx.Size(700, -1), wx.TAB_TRAVERSAL)
+        self.m_panel_left.SetMinSize(wx.Size(700, -1))
+        self.m_panel_left.SetMaxSize(wx.Size(700, -1))
 
         bSizer_left = wx.BoxSizer(wx.VERTICAL)
 
@@ -44,7 +44,7 @@ class MyFrame(wx.Frame):
         bSizer15.Add(self.m_staticText_total_run, 0, wx.ALIGN_CENTER | wx.ALL, 5)
 
         self.m_textCtrl_total_run = wx.TextCtrl(self.m_panel28, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
-                                                wx.DefaultSize, 0)
+                                                wx.DefaultSize, wx.TE_READONLY)
         bSizer15.Add(self.m_textCtrl_total_run, 0, wx.ALIGN_CENTER | wx.ALL, 5)
 
         self.m_panel28.SetSizer(bSizer15)
@@ -63,7 +63,7 @@ class MyFrame(wx.Frame):
         bSizer16.Add(self.m_staticText_selected_run, 0, wx.ALIGN_CENTER | wx.ALL, 5)
 
         self.m_textCtrl_selected_run = wx.TextCtrl(self.m_panel281, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
-                                                   wx.DefaultSize, 0)
+                                                   wx.DefaultSize, wx.TE_READONLY)
         bSizer16.Add(self.m_textCtrl_selected_run, 0, wx.ALIGN_CENTER | wx.ALL, 5)
 
         self.m_panel281.SetSizer(bSizer16)
@@ -117,15 +117,13 @@ class MyFrame(wx.Frame):
                                   wx.TAB_TRAVERSAL)
         bSizer27 = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.m_textCtrl_run1_1 = wx.TextCtrl(self.m_panel39, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
-                                             wx.Size(530, -1), 0)
-        self.m_textCtrl_run1_1.SetMinSize(wx.Size(530, -1))
-        self.m_textCtrl_run1_1.SetMaxSize(wx.Size(530, -1))
+        self.m_filePicker_run11 = wx.FilePickerCtrl(self.m_panel39, wx.ID_ANY, wx.EmptyString, u"Select a file",
+                                                    u"*.csv", wx.DefaultPosition, wx.Size(600, -1),
+                                                    wx.FLP_DEFAULT_STYLE)
+        self.m_filePicker_run11.SetMinSize(wx.Size(600, -1))
+        self.m_filePicker_run11.SetMaxSize(wx.Size(600, -1))
 
-        bSizer27.Add(self.m_textCtrl_run1_1, 0, wx.ALIGN_CENTER | wx.ALL, 5)
-
-        self.m_button_run1_1 = wx.Button(self.m_panel39, wx.ID_ANY, u"Select", wx.DefaultPosition, wx.DefaultSize, 0)
-        bSizer27.Add(self.m_button_run1_1, 0, wx.ALIGN_CENTER | wx.ALL, 1)
+        bSizer27.Add(self.m_filePicker_run11, 0, wx.ALL, 1)
 
         self.m_panel39.SetSizer(bSizer27)
         self.m_panel39.Layout()
@@ -136,15 +134,13 @@ class MyFrame(wx.Frame):
                                   wx.TAB_TRAVERSAL)
         bSizer271 = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.m_textCtrl_run1_2 = wx.TextCtrl(self.m_panel40, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
-                                             wx.Size(530, -1), 0)
-        self.m_textCtrl_run1_2.SetMinSize(wx.Size(530, -1))
-        self.m_textCtrl_run1_2.SetMaxSize(wx.Size(530, -1))
+        self.m_filePicker_run12 = wx.FilePickerCtrl(self.m_panel40, wx.ID_ANY, wx.EmptyString, u"Select a file",
+                                                    u"*.csv", wx.DefaultPosition, wx.Size(600, -1),
+                                                    wx.FLP_DEFAULT_STYLE)
+        self.m_filePicker_run12.SetMinSize(wx.Size(600, -1))
+        self.m_filePicker_run12.SetMaxSize(wx.Size(600, -1))
 
-        bSizer271.Add(self.m_textCtrl_run1_2, 0, wx.ALIGN_CENTER | wx.ALL, 5)
-
-        self.m_button_run1_2 = wx.Button(self.m_panel40, wx.ID_ANY, u"Select", wx.DefaultPosition, wx.DefaultSize, 0)
-        bSizer271.Add(self.m_button_run1_2, 0, wx.ALIGN_CENTER | wx.ALL, 1)
+        bSizer271.Add(self.m_filePicker_run12, 0, wx.ALL, 1)
 
         self.m_panel40.SetSizer(bSizer271)
         self.m_panel40.Layout()
@@ -156,20 +152,17 @@ class MyFrame(wx.Frame):
         bSizer24.Fit(self.m_panel_run1_file)
         bSizer_run1_inside.Add(self.m_panel_run1_file, 1, wx.EXPAND | wx.ALL, 1)
 
-        self.m_panel_run1_check = wx.Panel(sbSizer_run1.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.Size(70, -1),
+        self.m_panel_run1_check = wx.Panel(sbSizer_run1.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.Size(-1, -1),
                                            wx.TAB_TRAVERSAL)
-        self.m_panel_run1_check.SetMinSize(wx.Size(70, -1))
-        self.m_panel_run1_check.SetMaxSize(wx.Size(70, -1))
-
         bSizer_run1_check = wx.BoxSizer(wx.HORIZONTAL)
 
         self.m_checkBox_run1 = wx.CheckBox(self.m_panel_run1_check, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
                                            wx.Size(-1, -1), 0)
-        self.m_checkBox_run1.SetValue(True)
-        bSizer_run1_check.Add(self.m_checkBox_run1, 0, wx.ALL, 25)
+        bSizer_run1_check.Add(self.m_checkBox_run1, 0, wx.ALL | wx.EXPAND, 15)
 
         self.m_panel_run1_check.SetSizer(bSizer_run1_check)
         self.m_panel_run1_check.Layout()
+        bSizer_run1_check.Fit(self.m_panel_run1_check)
         bSizer_run1_inside.Add(self.m_panel_run1_check, 1, wx.ALL | wx.EXPAND, 5)
 
         sbSizer_run1.Add(bSizer_run1_inside, 1, wx.EXPAND, 1)
@@ -193,15 +186,13 @@ class MyFrame(wx.Frame):
                                    wx.TAB_TRAVERSAL)
         bSizer272 = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.m_textCtrl_run2_1 = wx.TextCtrl(self.m_panel391, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
-                                             wx.Size(530, -1), 0)
-        self.m_textCtrl_run2_1.SetMinSize(wx.Size(530, -1))
-        self.m_textCtrl_run2_1.SetMaxSize(wx.Size(530, -1))
+        self.m_filePicker_run21 = wx.FilePickerCtrl(self.m_panel391, wx.ID_ANY, wx.EmptyString, u"Select a file",
+                                                    u"*.csv", wx.DefaultPosition, wx.Size(600, -1),
+                                                    wx.FLP_DEFAULT_STYLE)
+        self.m_filePicker_run21.SetMinSize(wx.Size(600, -1))
+        self.m_filePicker_run21.SetMaxSize(wx.Size(600, -1))
 
-        bSizer272.Add(self.m_textCtrl_run2_1, 0, wx.ALIGN_CENTER | wx.ALL, 5)
-
-        self.m_button_run2_1 = wx.Button(self.m_panel391, wx.ID_ANY, u"Select", wx.DefaultPosition, wx.DefaultSize, 0)
-        bSizer272.Add(self.m_button_run2_1, 0, wx.ALIGN_CENTER | wx.ALL, 1)
+        bSizer272.Add(self.m_filePicker_run21, 0, wx.ALL, 1)
 
         self.m_panel391.SetSizer(bSizer272)
         self.m_panel391.Layout()
@@ -212,15 +203,13 @@ class MyFrame(wx.Frame):
                                    wx.TAB_TRAVERSAL)
         bSizer2711 = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.m_textCtrl_run2_2 = wx.TextCtrl(self.m_panel401, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
-                                             wx.Size(530, -1), 0)
-        self.m_textCtrl_run2_2.SetMinSize(wx.Size(530, -1))
-        self.m_textCtrl_run2_2.SetMaxSize(wx.Size(530, -1))
+        self.m_filePicker_run22 = wx.FilePickerCtrl(self.m_panel401, wx.ID_ANY, wx.EmptyString, u"Select a file",
+                                                    u"*.csv", wx.DefaultPosition, wx.Size(600, -1),
+                                                    wx.FLP_DEFAULT_STYLE)
+        self.m_filePicker_run22.SetMinSize(wx.Size(600, -1))
+        self.m_filePicker_run22.SetMaxSize(wx.Size(600, -1))
 
-        bSizer2711.Add(self.m_textCtrl_run2_2, 0, wx.ALIGN_CENTER | wx.ALL, 5)
-
-        self.m_button_run2_2 = wx.Button(self.m_panel401, wx.ID_ANY, u"Select", wx.DefaultPosition, wx.DefaultSize, 0)
-        bSizer2711.Add(self.m_button_run2_2, 0, wx.ALIGN_CENTER | wx.ALL, 1)
+        bSizer2711.Add(self.m_filePicker_run22, 0, wx.ALL, 1)
 
         self.m_panel401.SetSizer(bSizer2711)
         self.m_panel401.Layout()
@@ -242,7 +231,7 @@ class MyFrame(wx.Frame):
         self.m_checkBox_run2 = wx.CheckBox(self.m_panel_run1_check1, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
                                            wx.Size(-1, -1), 0)
         self.m_checkBox_run2.SetValue(True)
-        bSizer_run1_check1.Add(self.m_checkBox_run2, 0, wx.ALL, 25)
+        bSizer_run1_check1.Add(self.m_checkBox_run2, 0, wx.ALL | wx.EXPAND, 15)
 
         self.m_panel_run1_check1.SetSizer(bSizer_run1_check1)
         self.m_panel_run1_check1.Layout()
@@ -269,15 +258,13 @@ class MyFrame(wx.Frame):
                                    wx.TAB_TRAVERSAL)
         bSizer273 = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.m_textCtrl_run3_1 = wx.TextCtrl(self.m_panel392, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
-                                             wx.Size(530, -1), 0)
-        self.m_textCtrl_run3_1.SetMinSize(wx.Size(530, -1))
-        self.m_textCtrl_run3_1.SetMaxSize(wx.Size(530, -1))
+        self.m_filePicker_run31 = wx.FilePickerCtrl(self.m_panel392, wx.ID_ANY, wx.EmptyString, u"Select a file",
+                                                    u"*.csv", wx.DefaultPosition, wx.Size(600, -1),
+                                                    wx.FLP_DEFAULT_STYLE)
+        self.m_filePicker_run31.SetMinSize(wx.Size(600, -1))
+        self.m_filePicker_run31.SetMaxSize(wx.Size(600, -1))
 
-        bSizer273.Add(self.m_textCtrl_run3_1, 0, wx.ALIGN_CENTER | wx.ALL, 5)
-
-        self.m_button_run3_1 = wx.Button(self.m_panel392, wx.ID_ANY, u"Select", wx.DefaultPosition, wx.DefaultSize, 0)
-        bSizer273.Add(self.m_button_run3_1, 0, wx.ALIGN_CENTER | wx.ALL, 1)
+        bSizer273.Add(self.m_filePicker_run31, 0, wx.ALL, 1)
 
         self.m_panel392.SetSizer(bSizer273)
         self.m_panel392.Layout()
@@ -288,15 +275,13 @@ class MyFrame(wx.Frame):
                                    wx.TAB_TRAVERSAL)
         bSizer2712 = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.m_textCtrl_run3_2 = wx.TextCtrl(self.m_panel402, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
-                                             wx.Size(530, -1), 0)
-        self.m_textCtrl_run3_2.SetMinSize(wx.Size(530, -1))
-        self.m_textCtrl_run3_2.SetMaxSize(wx.Size(530, -1))
+        self.m_filePicker_run32 = wx.FilePickerCtrl(self.m_panel402, wx.ID_ANY, wx.EmptyString, u"Select a file",
+                                                    u"*.csv", wx.DefaultPosition, wx.Size(600, -1),
+                                                    wx.FLP_DEFAULT_STYLE)
+        self.m_filePicker_run32.SetMinSize(wx.Size(600, -1))
+        self.m_filePicker_run32.SetMaxSize(wx.Size(600, -1))
 
-        bSizer2712.Add(self.m_textCtrl_run3_2, 0, wx.ALIGN_CENTER | wx.ALL, 5)
-
-        self.m_button_run3_2 = wx.Button(self.m_panel402, wx.ID_ANY, u"Select", wx.DefaultPosition, wx.DefaultSize, 0)
-        bSizer2712.Add(self.m_button_run3_2, 0, wx.ALIGN_CENTER | wx.ALL, 1)
+        bSizer2712.Add(self.m_filePicker_run32, 0, wx.ALL, 1)
 
         self.m_panel402.SetSizer(bSizer2712)
         self.m_panel402.Layout()
@@ -318,7 +303,7 @@ class MyFrame(wx.Frame):
         self.m_checkBox_run3 = wx.CheckBox(self.m_panel_run1_check2, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
                                            wx.Size(-1, -1), 0)
         self.m_checkBox_run3.SetValue(True)
-        bSizer_run1_check2.Add(self.m_checkBox_run3, 0, wx.ALL, 25)
+        bSizer_run1_check2.Add(self.m_checkBox_run3, 0, wx.ALL | wx.EXPAND, 15)
 
         self.m_panel_run1_check2.SetSizer(bSizer_run1_check2)
         self.m_panel_run1_check2.Layout()
@@ -345,15 +330,13 @@ class MyFrame(wx.Frame):
                                    wx.TAB_TRAVERSAL)
         bSizer274 = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.m_textCtrl_run4_1 = wx.TextCtrl(self.m_panel393, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
-                                             wx.Size(530, -1), 0)
-        self.m_textCtrl_run4_1.SetMinSize(wx.Size(530, -1))
-        self.m_textCtrl_run4_1.SetMaxSize(wx.Size(530, -1))
+        self.m_filePicker_run41 = wx.FilePickerCtrl(self.m_panel393, wx.ID_ANY, wx.EmptyString, u"Select a file",
+                                                    u"*.csv", wx.DefaultPosition, wx.Size(600, -1),
+                                                    wx.FLP_DEFAULT_STYLE)
+        self.m_filePicker_run41.SetMinSize(wx.Size(600, -1))
+        self.m_filePicker_run41.SetMaxSize(wx.Size(600, -1))
 
-        bSizer274.Add(self.m_textCtrl_run4_1, 0, wx.ALIGN_CENTER | wx.ALL, 5)
-
-        self.m_button_run4_1 = wx.Button(self.m_panel393, wx.ID_ANY, u"Select", wx.DefaultPosition, wx.DefaultSize, 0)
-        bSizer274.Add(self.m_button_run4_1, 0, wx.ALIGN_CENTER | wx.ALL, 1)
+        bSizer274.Add(self.m_filePicker_run41, 0, wx.ALL, 1)
 
         self.m_panel393.SetSizer(bSizer274)
         self.m_panel393.Layout()
@@ -364,15 +347,13 @@ class MyFrame(wx.Frame):
                                    wx.TAB_TRAVERSAL)
         bSizer2713 = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.m_textCtrl_run4_2 = wx.TextCtrl(self.m_panel403, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
-                                             wx.Size(530, -1), 0)
-        self.m_textCtrl_run4_2.SetMinSize(wx.Size(530, -1))
-        self.m_textCtrl_run4_2.SetMaxSize(wx.Size(530, -1))
+        self.m_filePicker_run42 = wx.FilePickerCtrl(self.m_panel403, wx.ID_ANY, wx.EmptyString, u"Select a file",
+                                                    u"*.csv", wx.DefaultPosition, wx.Size(600, -1),
+                                                    wx.FLP_DEFAULT_STYLE)
+        self.m_filePicker_run42.SetMinSize(wx.Size(600, -1))
+        self.m_filePicker_run42.SetMaxSize(wx.Size(600, -1))
 
-        bSizer2713.Add(self.m_textCtrl_run4_2, 0, wx.ALIGN_CENTER | wx.ALL, 5)
-
-        self.m_button_run4_2 = wx.Button(self.m_panel403, wx.ID_ANY, u"Select", wx.DefaultPosition, wx.DefaultSize, 0)
-        bSizer2713.Add(self.m_button_run4_2, 0, wx.ALIGN_CENTER | wx.ALL, 1)
+        bSizer2713.Add(self.m_filePicker_run42, 0, wx.ALL, 1)
 
         self.m_panel403.SetSizer(bSizer2713)
         self.m_panel403.Layout()
@@ -393,7 +374,7 @@ class MyFrame(wx.Frame):
 
         self.m_checkBox_run4 = wx.CheckBox(self.m_panel_run1_check3, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
                                            wx.Size(-1, -1), 0)
-        bSizer_run1_check3.Add(self.m_checkBox_run4, 0, wx.ALL, 25)
+        bSizer_run1_check3.Add(self.m_checkBox_run4, 0, wx.ALL | wx.EXPAND, 15)
 
         self.m_panel_run1_check3.SetSizer(bSizer_run1_check3)
         self.m_panel_run1_check3.Layout()
@@ -420,15 +401,13 @@ class MyFrame(wx.Frame):
                                    wx.TAB_TRAVERSAL)
         bSizer275 = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.m_textCtrl_run5_1 = wx.TextCtrl(self.m_panel394, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
-                                             wx.Size(530, -1), 0)
-        self.m_textCtrl_run5_1.SetMinSize(wx.Size(530, -1))
-        self.m_textCtrl_run5_1.SetMaxSize(wx.Size(530, -1))
+        self.m_filePicker_run51 = wx.FilePickerCtrl(self.m_panel394, wx.ID_ANY, wx.EmptyString, u"Select a file",
+                                                    u"*.csv", wx.DefaultPosition, wx.Size(600, -1),
+                                                    wx.FLP_DEFAULT_STYLE)
+        self.m_filePicker_run51.SetMinSize(wx.Size(600, -1))
+        self.m_filePicker_run51.SetMaxSize(wx.Size(600, -1))
 
-        bSizer275.Add(self.m_textCtrl_run5_1, 0, wx.ALIGN_CENTER | wx.ALL, 5)
-
-        self.m_button_run5_1 = wx.Button(self.m_panel394, wx.ID_ANY, u"Select", wx.DefaultPosition, wx.DefaultSize, 0)
-        bSizer275.Add(self.m_button_run5_1, 0, wx.ALIGN_CENTER | wx.ALL, 1)
+        bSizer275.Add(self.m_filePicker_run51, 0, wx.ALL, 1)
 
         self.m_panel394.SetSizer(bSizer275)
         self.m_panel394.Layout()
@@ -439,15 +418,13 @@ class MyFrame(wx.Frame):
                                    wx.TAB_TRAVERSAL)
         bSizer2714 = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.m_textCtrl_run5_2 = wx.TextCtrl(self.m_panel404, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
-                                             wx.Size(530, -1), 0)
-        self.m_textCtrl_run5_2.SetMinSize(wx.Size(530, -1))
-        self.m_textCtrl_run5_2.SetMaxSize(wx.Size(530, -1))
+        self.m_filePicker_run52 = wx.FilePickerCtrl(self.m_panel404, wx.ID_ANY, wx.EmptyString, u"Select a file",
+                                                    u"*.csv", wx.DefaultPosition, wx.Size(600, -1),
+                                                    wx.FLP_DEFAULT_STYLE)
+        self.m_filePicker_run52.SetMinSize(wx.Size(600, -1))
+        self.m_filePicker_run52.SetMaxSize(wx.Size(600, -1))
 
-        bSizer2714.Add(self.m_textCtrl_run5_2, 0, wx.ALIGN_CENTER | wx.ALL, 5)
-
-        self.m_button_run5_2 = wx.Button(self.m_panel404, wx.ID_ANY, u"Select", wx.DefaultPosition, wx.DefaultSize, 0)
-        bSizer2714.Add(self.m_button_run5_2, 0, wx.ALIGN_CENTER | wx.ALL, 1)
+        bSizer2714.Add(self.m_filePicker_run52, 0, wx.ALL, 1)
 
         self.m_panel404.SetSizer(bSizer2714)
         self.m_panel404.Layout()
@@ -468,7 +445,7 @@ class MyFrame(wx.Frame):
 
         self.m_checkBox_run5 = wx.CheckBox(self.m_panel_run1_check4, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
                                            wx.Size(-1, -1), 0)
-        bSizer_run1_check4.Add(self.m_checkBox_run5, 0, wx.ALL, 25)
+        bSizer_run1_check4.Add(self.m_checkBox_run5, 0, wx.ALL | wx.EXPAND, 15)
 
         self.m_panel_run1_check4.SetSizer(bSizer_run1_check4)
         self.m_panel_run1_check4.Layout()
@@ -505,7 +482,7 @@ class MyFrame(wx.Frame):
         bSizer57.Add(self.m_staticText_job_no, 0, wx.ALIGN_CENTER | wx.ALL, 5)
 
         self.m_textCtrl_job_no = wx.TextCtrl(self.m_panel_job_no, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
-                                             wx.Size(200, -1), 0)
+                                             wx.Size(200, -1), wx.TE_READONLY)
         self.m_textCtrl_job_no.SetMinSize(wx.Size(200, -1))
         self.m_textCtrl_job_no.SetMaxSize(wx.Size(200, -1))
 
@@ -540,7 +517,7 @@ class MyFrame(wx.Frame):
         bSizer59.Add(self.m_staticText7, 0, wx.ALIGN_CENTER | wx.ALL, 5)
 
         self.m_textCtrl_model1 = wx.TextCtrl(self.m_panel68, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
-                                             wx.Size(200, -1), 0)
+                                             wx.Size(200, -1), wx.TE_READONLY)
         self.m_textCtrl_model1.SetMinSize(wx.Size(200, -1))
         self.m_textCtrl_model1.SetMaxSize(wx.Size(200, -1))
 
@@ -561,7 +538,7 @@ class MyFrame(wx.Frame):
         bSizer591.Add(self.m_staticText71, 0, wx.ALIGN_CENTER | wx.ALL, 5)
 
         self.m_textCtrl_serial1 = wx.TextCtrl(self.m_panel69, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
-                                              wx.Size(200, -1), 0)
+                                              wx.Size(200, -1), wx.TE_READONLY)
         self.m_textCtrl_serial1.SetMinSize(wx.Size(200, -1))
         self.m_textCtrl_serial1.SetMaxSize(wx.Size(200, -1))
 
@@ -597,7 +574,7 @@ class MyFrame(wx.Frame):
         bSizer592.Add(self.m_staticText72, 0, wx.ALIGN_CENTER | wx.ALL, 5)
 
         self.m_textCtrl_model2 = wx.TextCtrl(self.m_panel681, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
-                                             wx.Size(200, -1), 0)
+                                             wx.Size(200, -1), wx.TE_READONLY)
         self.m_textCtrl_model2.SetMinSize(wx.Size(200, -1))
         self.m_textCtrl_model2.SetMaxSize(wx.Size(200, -1))
 
@@ -618,7 +595,7 @@ class MyFrame(wx.Frame):
         bSizer5911.Add(self.m_staticText711, 0, wx.ALIGN_CENTER | wx.ALL, 5)
 
         self.m_textCtrl_serial2 = wx.TextCtrl(self.m_panel691, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
-                                              wx.Size(200, -1), 0)
+                                              wx.Size(200, -1), wx.TE_READONLY)
         self.m_textCtrl_serial2.SetMinSize(wx.Size(200, -1))
         self.m_textCtrl_serial2.SetMaxSize(wx.Size(200, -1))
 
