@@ -1,13 +1,20 @@
 import wx
 import wx.xrc
+import wx.grid as grid
+import numpy as np
+import matplotlib
+from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
+from matplotlib.backends.backend_wx import NavigationToolbar2Wx
+from matplotlib.figure import Figure
 
 class MyApp(wx.App):
     def __init__(self):
         super().__init__(clearSigInt = True)
-        frame = MyFrame()
+        frame = MainFrame()
+        #frame = GraphFrame()
         frame.Show()
 
-class MyFrame(wx.Frame):
+class MainFrame(wx.Frame):
     def __init__(self, title = 'App', pos = wx.DefaultPosition, size = wx.Size( 1200,864 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL):
         # super().__init__(None, title = title)
         super().__init__(None, id=wx.ID_ANY, title=u"Digital Calibration Generator", pos=wx.DefaultPosition,
@@ -77,6 +84,8 @@ class MyFrame(wx.Frame):
 
         self.m_button_compare = wx.Button(self.m_panel282, wx.ID_ANY, u"Compare", wx.DefaultPosition, wx.DefaultSize, 0)
         bSizer17.Add(self.m_button_compare, 0, wx.ALIGN_CENTER | wx.ALL, 12)
+
+        self.Bind(wx.EVT_BUTTON, self.compare, self.m_button_compare)
 
         self.m_panel282.SetSizer(bSizer17)
         self.m_panel282.Layout()
@@ -733,6 +742,66 @@ class MyFrame(wx.Frame):
         self.Layout()
 
         self.Centre(wx.BOTH)
+
+    def compare(self, event):
+        frame = GraphFrame()
+        frame.Show()
+
+class LeftPanelGraph(wx.Panel):
+    def __init__(self,parent):
+        wx.Panel.__init__(self, parent=parent)
+
+        self.figure = Figure()
+        self.axes = self.figure.add_subplot(111)
+        self.canvas = FigureCanvas(self, -1, self.figure)
+        self.sizer = wx.BoxSizer(wx.VERTICAL)
+        self.sizer.Add(self.canvas, 1, wx.EXPAND)
+        self.SetSizer(self.sizer)
+        self.axes.set_xlabel("NK mGy / nC")
+        self.axes.set_ylabel("E_eff / keV ")
+
+    def draw(self):
+        x = np.arange(0,100)
+        y = np.arange(100,200)
+        self.axes.plot(x,y)
+
+class RightPanelGrid(wx.Panel):
+    def __init__(self,parent):
+        wx.Panel.__init__(self, parent=parent)
+
+        self.mygrid =grid.Grid(self)
+        self.mygrid.CreateGrid(30,9)
+
+        self.sizer = wx.BoxSizer(wx.VERTICAL)
+        self.sizer.Add(self.mygrid,1,wx.EXPAND)
+        self.SetSizer(self.sizer)
+        ### update real-time data
+        self.mygrid.SetColLabelValue(0, "Beam quality")
+        self.mygrid.SetColLabelValue(1, "E_eff")
+        self.mygrid.SetColLabelValue(2, "Run1_NK")
+        self.mygrid.SetColLabelValue(3, "Run2_NK")
+        self.mygrid.SetColLabelValue(4, "Run3_NK")
+        self.mygrid.SetColLabelValue(5, "Average")
+        self.mygrid.SetColLabelValue(6, "Run1/Average")
+        self.mygrid.SetColLabelValue(7, "Run2/Average")
+        self.mygrid.SetColLabelValue(8, "Run3/Average")
+        ####
+
+class GraphFrame(wx.Frame):
+    def __init__(self):
+
+        wx.Frame.__init__(self, parent = None, title=u"Graphs Demonstration", size=wx.Size(1200, 600))
+        self.SetMinSize(wx.Size(600, 600))
+        self.SetMaxSize(wx.Size(1450, 600))
+
+        spliter = wx.SplitterWindow(self)
+        leftgraph = LeftPanelGraph(spliter)
+        rightgrid = RightPanelGrid(spliter)
+        spliter.SplitVertically(leftgraph,rightgrid)
+        spliter.SetMinimumPaneSize(600)
+
+        leftgraph.draw()
+
 
 
 if __name__ == '__main__':
