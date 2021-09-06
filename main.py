@@ -69,8 +69,10 @@ class MainFrame(wx.Frame):
 
         bSizer16.Add(self.m_staticText_selected_run, 0, wx.ALIGN_CENTER | wx.ALL, 5)
 
+        selected_run_num = 0
         self.m_textCtrl_selected_run = wx.TextCtrl(self.m_panel281, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
                                                    wx.DefaultSize, wx.TE_READONLY)
+        self.m_textCtrl_selected_run.SetValue(str(selected_run_num))
         bSizer16.Add(self.m_textCtrl_selected_run, 0, wx.ALIGN_CENTER | wx.ALL, 5)
 
         self.m_panel281.SetSizer(bSizer16)
@@ -82,8 +84,12 @@ class MainFrame(wx.Frame):
                                    wx.TAB_TRAVERSAL)
         bSizer17 = wx.BoxSizer(wx.VERTICAL)
 
-        self.m_button_compare = wx.Button(self.m_panel282, wx.ID_ANY, u"Compare", wx.DefaultPosition, wx.DefaultSize, 0)
-        bSizer17.Add(self.m_button_compare, 0, wx.ALIGN_CENTER | wx.ALL, 12)
+        self.m_button_compare = wx.Button(self.m_panel282, wx.ID_ANY, u"Compare", wx.DefaultPosition, wx.Size(180, 40),
+                                          0)
+        self.m_button_compare.SetMinSize(wx.Size(180, 40))
+        self.m_button_compare.SetMaxSize(wx.Size(180, 40))
+
+        bSizer17.Add(self.m_button_compare, 0, wx.ALIGN_CENTER | wx.ALL, 10)
 
         self.Bind(wx.EVT_BUTTON, self.compare, self.m_button_compare)
 
@@ -717,18 +723,18 @@ class MainFrame(wx.Frame):
         bSizer81 = wx.BoxSizer(wx.VERTICAL)
 
         self.m_button_pdf = wx.Button(self.m_panel_pdf_dcc, wx.ID_ANY, u"Generate PDF", wx.DefaultPosition,
-                                      wx.Size(200, -1), 0)
-        self.m_button_pdf.SetMinSize(wx.Size(200, -1))
-        self.m_button_pdf.SetMaxSize(wx.Size(200, -1))
+                                      wx.Size(200, 40), 0)
+        self.m_button_pdf.SetMinSize(wx.Size(200, 40))
+        self.m_button_pdf.SetMaxSize(wx.Size(200, 40))
 
-        bSizer81.Add(self.m_button_pdf, 0, wx.ALIGN_CENTER | wx.ALL, 15)
+        bSizer81.Add(self.m_button_pdf, 0, wx.ALIGN_CENTER | wx.ALL, 10)
 
         self.m_button_dcc = wx.Button(self.m_panel_pdf_dcc, wx.ID_ANY, u"Generate DCC", wx.DefaultPosition,
-                                      wx.Size(200, -1), 0)
-        self.m_button_dcc.SetMinSize(wx.Size(200, -1))
-        self.m_button_dcc.SetMaxSize(wx.Size(200, -1))
+                                      wx.Size(200, 40), 0)
+        self.m_button_dcc.SetMinSize(wx.Size(200, 40))
+        self.m_button_dcc.SetMaxSize(wx.Size(200, 40))
 
-        bSizer81.Add(self.m_button_dcc, 0, wx.ALIGN_CENTER | wx.ALL, 15)
+        bSizer81.Add(self.m_button_dcc, 0, wx.ALIGN_CENTER | wx.ALL, 10)
 
         self.m_panel_pdf_dcc.SetSizer(bSizer81)
         self.m_panel_pdf_dcc.Layout()
