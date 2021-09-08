@@ -87,6 +87,7 @@ class MainFrame(wx.Frame):
         self.m_button_confirm.SetMaxSize(wx.Size(100, 30))
 
         bSizer17.Add(self.m_button_confirm, 0, wx.ALIGN_CENTER | wx.ALL, 5)
+        self.Bind(wx.EVT_BUTTON, self.confirm, self.m_button_confirm)
 
         self.m_button_compare = wx.Button(self.m_panel282, wx.ID_ANY, u"Compare", wx.DefaultPosition, wx.Size(100, 30),
                                           0)
@@ -177,7 +178,6 @@ class MainFrame(wx.Frame):
 
         self.m_checkBox_run1 = wx.CheckBox(self.m_panel_run1_check, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
                                            wx.Size(-1, -1), 0)
-        self.m_checkBox_run1.SetValue(True)
         bSizer_run1_check.Add(self.m_checkBox_run1, 0, wx.ALL | wx.EXPAND, 15)
 
         self.m_panel_run1_check.SetSizer(bSizer_run1_check)
@@ -250,7 +250,6 @@ class MainFrame(wx.Frame):
 
         self.m_checkBox_run2 = wx.CheckBox(self.m_panel_run1_check1, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
                                            wx.Size(-1, -1), 0)
-        self.m_checkBox_run2.SetValue(True)
         bSizer_run1_check1.Add(self.m_checkBox_run2, 0, wx.ALL | wx.EXPAND, 15)
 
         self.m_panel_run1_check1.SetSizer(bSizer_run1_check1)
@@ -322,7 +321,6 @@ class MainFrame(wx.Frame):
 
         self.m_checkBox_run3 = wx.CheckBox(self.m_panel_run1_check2, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
                                            wx.Size(-1, -1), 0)
-        self.m_checkBox_run3.SetValue(True)
         bSizer_run1_check2.Add(self.m_checkBox_run3, 0, wx.ALL | wx.EXPAND, 15)
 
         self.m_panel_run1_check2.SetSizer(bSizer_run1_check2)
@@ -507,6 +505,9 @@ class MainFrame(wx.Frame):
         self.m_textCtrl_job_no.SetMaxSize(wx.Size(200, -1))
 
         bSizer57.Add(self.m_textCtrl_job_no, 0, wx.ALIGN_CENTER | wx.ALL, 3)
+
+        self.m_button_job = wx.Button(self.m_panel_job_no, wx.ID_ANY, u"Generate", wx.DefaultPosition, wx.DefaultSize,0)
+        bSizer57.Add(self.m_button_job, 0, wx.ALL, 5)
 
         self.m_panel_job_no.SetSizer(bSizer57)
         self.m_panel_job_no.Layout()
@@ -733,6 +734,13 @@ class MainFrame(wx.Frame):
                                         wx.TAB_TRAVERSAL)
         bSizer81 = wx.BoxSizer(wx.VERTICAL)
 
+        self.m_button_upload = wx.Button(self.m_panel_pdf_dcc, wx.ID_ANY, u"Upload Data", wx.DefaultPosition,
+                                         wx.Size(200, 30), 0)
+        self.m_button_upload.SetMinSize(wx.Size(200, 30))
+        self.m_button_upload.SetMaxSize(wx.Size(200, 30))
+
+        bSizer81.Add(self.m_button_upload, 0, wx.ALIGN_CENTER | wx.ALL, 6)
+
         self.m_button_pdf = wx.Button(self.m_panel_pdf_dcc, wx.ID_ANY, u"Generate PDF", wx.DefaultPosition,
                                       wx.Size(200, 30), 0)
         self.m_button_pdf.SetMinSize(wx.Size(200, 30))
@@ -746,13 +754,6 @@ class MainFrame(wx.Frame):
         self.m_button_dcc.SetMaxSize(wx.Size(200, 30))
 
         bSizer81.Add(self.m_button_dcc, 0, wx.ALIGN_CENTER | wx.ALL, 6)
-
-        self.m_button_upload = wx.Button(self.m_panel_pdf_dcc, wx.ID_ANY, u"Upload Data", wx.DefaultPosition,
-                                         wx.Size(200, 30), 0)
-        self.m_button_upload.SetMinSize(wx.Size(200, 30))
-        self.m_button_upload.SetMaxSize(wx.Size(200, 30))
-
-        bSizer81.Add(self.m_button_upload, 0, wx.ALIGN_CENTER | wx.ALL, 6)
 
         self.m_panel_pdf_dcc.SetSizer(bSizer81)
         self.m_panel_pdf_dcc.Layout()
@@ -771,6 +772,35 @@ class MainFrame(wx.Frame):
     def compare(self, event):
         frame = GraphFrame()
         frame.Show()
+
+    def confirm(self, event):
+        selected_run_num = 0
+        total_run_num = 0
+
+        if self.m_filePicker_run11.GetPath() != '' and self.m_filePicker_run12.GetPath() != '':
+            total_run_num += 1
+            if self.m_checkBox_run1.GetValue():
+                selected_run_num += 1
+        if self.m_filePicker_run21.GetPath() != '' and self.m_filePicker_run22.GetPath() != '':
+            total_run_num += 1
+            if self.m_checkBox_run2.GetValue():
+                selected_run_num += 1
+        if self.m_filePicker_run31.GetPath() != '' and self.m_filePicker_run32.GetPath() != '':
+            total_run_num += 1
+            if self.m_checkBox_run3.GetValue():
+                selected_run_num += 1
+        if self.m_filePicker_run41.GetPath() != '' and self.m_filePicker_run42.GetPath() != '':
+            total_run_num += 1
+            if self.m_checkBox_run4.GetValue():
+                selected_run_num += 1
+        if self.m_filePicker_run51.GetPath() != '' and self.m_filePicker_run52.GetPath() != '':
+            total_run_num += 1
+            if self.m_checkBox_run5.GetValue():
+                selected_run_num += 1
+
+        self.m_textCtrl_selected_run.SetValue(str(selected_run_num))
+        self.m_textCtrl_total_run.SetValue(str(total_run_num))
+
 
 class LeftPanelGraph(wx.Panel):
     def __init__(self,parent):
