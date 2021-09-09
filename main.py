@@ -55,6 +55,7 @@ class MainFrame(wx.Frame):
 
         self.m_textCtrl_total_run = wx.TextCtrl(self.m_panel28, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
                                                 wx.DefaultSize, wx.TE_READONLY)
+        self.m_textCtrl_total_run.SetValue('0')
         bSizer15.Add(self.m_textCtrl_total_run, 0, wx.ALIGN_CENTER | wx.ALL, 5)
 
         self.m_panel28.SetSizer(bSizer15)
@@ -74,6 +75,7 @@ class MainFrame(wx.Frame):
 
         self.m_textCtrl_selected_run = wx.TextCtrl(self.m_panel281, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
                                                    wx.DefaultSize, wx.TE_READONLY)
+        self.m_textCtrl_selected_run.SetValue('0')
         bSizer16.Add(self.m_textCtrl_selected_run, 0, wx.ALIGN_CENTER | wx.ALL, 5)
 
         self.m_panel281.SetSizer(bSizer16)
@@ -814,19 +816,6 @@ class MainFrame(wx.Frame):
         path_12 = self.m_filePicker_run12.GetPath()  # run1 lab
         if path_11 != '' and path_12 != '':
 
-            client_info_df = pd.read_csv(path_11, skiprows=16, nrows=5, header=None)  # row 17-21
-            # read job number
-            job_no = client_info_df[2][4]  # col3 row5
-            self.m_textCtrl_job_no.SetValue(str(job_no[-5:]))
-
-            # read client info
-            client_name = client_info_df[2][0]
-            client_address1 = client_info_df[2][1]
-            client_address2 = client_info_df[2][2]
-            self.m_textCtrl_client_name.SetValue(client_name)
-            self.m_textCtrl_client_address1.SetValue(client_address1)
-            self.m_textCtrl_client_address2.SetValue(client_address2)
-
             # read client chamber information
             client_chamber_info_df = pd.read_csv(path_11, skiprows=3, nrows=1, header=None)  # row 4
             client_chamber_info = client_chamber_info_df[2][0]
@@ -844,6 +833,24 @@ class MainFrame(wx.Frame):
             lab_chamber_info = lab_chamber_info_df[2][0]
             self.m_textCtrl_model2.SetValue(lab_chamber_info)
             self.m_textCtrl_serial2.SetValue(lab_chamber_info)
+
+            # check where is [DATA]
+            check_df = pd.read_csv(path_11, skiprows=21, nrows=1, header=None)  # row 22
+            if check_df[0][0] == '[DATA]':
+                client_info_df = pd.read_csv(path_11, skiprows=16, nrows=5, header=None)  # row 17-21
+                # read job number
+                job_no = client_info_df[2][4]  # col3 row5
+                self.m_textCtrl_job_no.SetValue(str(job_no[-5:]))
+
+                # read client info
+                client_name = client_info_df[2][0]
+                client_address1 = client_info_df[2][1]
+                client_address2 = client_info_df[2][2]
+                self.m_textCtrl_client_name.SetValue(client_name)
+                self.m_textCtrl_client_address1.SetValue(client_address1)
+                self.m_textCtrl_client_address2.SetValue(client_address2)
+
+
 
 
 class LeftPanelGraph(wx.Panel):
