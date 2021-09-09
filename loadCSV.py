@@ -1,4 +1,4 @@
-import pymysql
+#import pymysqld
 import pandas as pd
 
 
@@ -86,11 +86,17 @@ df_Client_MEX["TM2"]=df_Lab_MEX["T(MC)"]
 df_Client_MEX["TS2"]=df_Lab_MEX["T(SC)"]
 df_Client_MEX["H2"]=df_Lab_MEX["H(%)"]
 
-product = pd.read_csv('KKMaWE.csv', skiprows=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+
 df_Client_MEX["NK"]=df_Lab_MEX[["Current2(pA)"]].apply(lambda x:x["Current2(pA)"]-BgdIC1_Before_Client,axis=1)
 #df_Client_MEX["k"]=
 
-#print(df_Client_MEX)
+# print(df_Client_MEX)
+
+product = pd.read_csv('KKMaWE.csv', skiprows=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+product = product[['Filter', 'Product']]
+
+df_merge_col = pd.merge(df_Client_MEX, product, on='Filter')
+print(df_merge_col)
 
 
 #print(BgdIC1_Before,BgdMC1_Before)
