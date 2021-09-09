@@ -3,19 +3,23 @@ import wx.xrc
 import wx.grid as grid
 import numpy as np
 import matplotlib
+import pandas as pd
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
 from matplotlib.backends.backend_wx import NavigationToolbar2Wx
 from matplotlib.figure import Figure
 
+
 class MyApp(wx.App):
     def __init__(self):
-        super().__init__(clearSigInt = True)
+        super().__init__(clearSigInt=True)
         frame = MainFrame()
-        #frame = GraphFrame()
+        # frame = GraphFrame()
         frame.Show()
 
+
 class MainFrame(wx.Frame):
-    def __init__(self, title = 'App', pos = wx.DefaultPosition, size = wx.Size( 1200,864 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL):
+    def __init__(self, title='App', pos=wx.DefaultPosition, size=wx.Size(1200, 864),
+                 style=wx.DEFAULT_FRAME_STYLE | wx.TAB_TRAVERSAL):
         # super().__init__(None, title = title)
         super().__init__(None, id=wx.ID_ANY, title=u"Digital Calibration Generator", pos=wx.DefaultPosition,
                          size=wx.Size(1100, 700), style=wx.DEFAULT_FRAME_STYLE | wx.TAB_TRAVERSAL)
@@ -506,7 +510,8 @@ class MainFrame(wx.Frame):
 
         bSizer57.Add(self.m_textCtrl_job_no, 0, wx.ALIGN_CENTER | wx.ALL, 3)
 
-        self.m_button_job = wx.Button(self.m_panel_job_no, wx.ID_ANY, u"Generate", wx.DefaultPosition, wx.DefaultSize,0)
+        self.m_button_job = wx.Button(self.m_panel_job_no, wx.ID_ANY, u"Generate", wx.DefaultPosition, wx.DefaultSize,
+                                      0)
         bSizer57.Add(self.m_button_job, 0, wx.ALL, 5)
 
         self.m_panel_job_no.SetSizer(bSizer57)
@@ -650,6 +655,7 @@ class MainFrame(wx.Frame):
         self.m_button_read.SetMaxSize(wx.Size(300, 25))
 
         sbSizer11.Add(self.m_button_read, 0, wx.ALIGN_CENTER | wx.ALL, 5)
+        self.Bind(wx.EVT_BUTTON, self.read, self.m_button_read)
 
         self.m_panel_equip_info.SetSizer(sbSizer11)
         self.m_panel_equip_info.Layout()
@@ -777,6 +783,8 @@ class MainFrame(wx.Frame):
         selected_run_num = 0
         total_run_num = 0
 
+        # if pair of path not empty -> total run + 1
+        # + if check box -> selected run + 1
         if self.m_filePicker_run11.GetPath() != '' and self.m_filePicker_run12.GetPath() != '':
             total_run_num += 1
             if self.m_checkBox_run1.GetValue():
@@ -801,9 +809,45 @@ class MainFrame(wx.Frame):
         self.m_textCtrl_selected_run.SetValue(str(selected_run_num))
         self.m_textCtrl_total_run.SetValue(str(total_run_num))
 
+    def read(self, event):
+        path_11 = self.m_filePicker_run11.GetPath()  # run1 client
+        path_12 = self.m_filePicker_run12.GetPath()  # run1 lab
+        if path_11 != '' and path_12 != '':
+
+            client_info_df = pd.read_csv(path_11, skiprows=16, nrows=5, header=None)  # row 17-21
+            # read job number
+            job_no = client_info_df[2][4]  # col3 row5
+            self.m_textCtrl_job_no.SetValue(str(job_no[-5:]))
+
+            # read client info
+            client_name = client_info_df[2][0]
+            client_address1 = client_info_df[2][1]
+            client_address2 = client_info_df[2][2]
+            self.m_textCtrl_client_name.SetValue(client_name)
+            self.m_textCtrl_client_address1.SetValue(client_address1)
+            self.m_textCtrl_client_address2.SetValue(client_address2)
+
+            # read client chamber information
+            client_chamber_info_df = pd.read_csv(path_11, skiprows=3, nrows=1, header=None)  # row 4
+            client_chamber_info = client_chamber_info_df[2][0]
+            tmp_list = client_chamber_info.split(' ')
+            # last element is serial, rest is model
+            serial_info = tmp_list[-1]
+            model_info = ''
+            for i in range(len(tmp_list) - 1):
+                model_info += tmp_list[i]
+            self.m_textCtrl_model1.SetValue(model_info)
+            self.m_textCtrl_serial1.SetValue(serial_info)
+
+            # read lab chamber info
+            lab_chamber_info_df = pd.read_csv(path_12, skiprows=3, nrows=1, header=None)
+            lab_chamber_info = lab_chamber_info_df[2][0]
+            self.m_textCtrl_model2.SetValue(lab_chamber_info)
+            self.m_textCtrl_serial2.SetValue(lab_chamber_info)
+
 
 class LeftPanelGraph(wx.Panel):
-    def __init__(self,parent):
+    def __init__(self, parent):
         wx.Panel.__init__(self, parent=parent)
 
         self.figure = Figure()
@@ -816,19 +860,20 @@ class LeftPanelGraph(wx.Panel):
         self.axes.set_ylabel("E_eff / keV ")
 
     def draw(self):
-        x = np.arange(0,100)
-        y = np.arange(100,200)
-        self.axes.plot(x,y)
+        x = np.arange(0, 100)
+        y = np.arange(100, 200)
+        self.axes.plot(x, y)
+
 
 class RightPanelGrid(wx.Panel):
-    def __init__(self,parent):
+    def __init__(self, parent):
         wx.Panel.__init__(self, parent=parent)
 
-        self.mygrid =grid.Grid(self)
-        self.mygrid.CreateGrid(30,9)
+        self.mygrid = grid.Grid(self)
+        self.mygrid.CreateGrid(30, 9)
 
         self.sizer = wx.BoxSizer(wx.VERTICAL)
-        self.sizer.Add(self.mygrid,1,wx.EXPAND)
+        self.sizer.Add(self.mygrid, 1, wx.EXPAND)
         self.SetSizer(self.sizer)
         ### update real-time data
         self.mygrid.SetColLabelValue(0, "Beam")
@@ -842,21 +887,20 @@ class RightPanelGrid(wx.Panel):
         self.mygrid.SetColLabelValue(8, "Run3/Avg")
         ####
 
+
 class GraphFrame(wx.Frame):
     def __init__(self):
-
-        wx.Frame.__init__(self, parent = None, title=u"Graphs Demonstration", size=wx.Size(1450, 600))
+        wx.Frame.__init__(self, parent=None, title=u"Graphs Demonstration", size=wx.Size(1450, 600))
         self.SetMinSize(wx.Size(1450, 600))
         self.SetMaxSize(wx.Size(1450, 600))
 
         spliter = wx.SplitterWindow(self)
         leftgraph = LeftPanelGraph(spliter)
         rightgrid = RightPanelGrid(spliter)
-        spliter.SplitVertically(leftgraph,rightgrid)
+        spliter.SplitVertically(leftgraph, rightgrid)
         spliter.SetMinimumPaneSize(600)
 
         leftgraph.draw()
-
 
 
 if __name__ == '__main__':
