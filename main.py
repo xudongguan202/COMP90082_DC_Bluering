@@ -8,8 +8,8 @@ import pandas as pd
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
 from matplotlib.backends.backend_wx import NavigationToolbar2Wx
 from matplotlib.figure import Figure
-from csv import writer
 import csv
+from csv import writer
 
 import shutil
 
@@ -30,6 +30,14 @@ class MainFrame(wx.Frame):
         self.InitFrame()
 
     def InitFrame(self):
+
+        # global var #
+
+        self.confirmed = False  # chech if confirm is clicked
+        self.readed = False
+
+        ##############
+
         self.SetSizeHints(wx.Size(1100, 700), wx.Size(1100, 700))
 
         bSizer_main = wx.BoxSizer(wx.HORIZONTAL)
@@ -126,12 +134,12 @@ class MainFrame(wx.Frame):
 
         self.m_gauge_bar = wx.Gauge(self.m_panel_pbar, wx.ID_ANY, 100, wx.DefaultPosition, wx.Size(500, -1),
                                     wx.GA_HORIZONTAL)
-        self.m_gauge_bar.SetValue(80)
+        self.m_gauge_bar.SetValue(0)
         bSizer18.Add(self.m_gauge_bar, 0, wx.ALL | wx.EXPAND, 5)
 
         self.m_panel_pbar.SetSizer(bSizer18)
         self.m_panel_pbar.Layout()
-        bSizer_left.Add(self.m_panel_pbar, 1, wx.EXPAND | wx.ALL, 5)
+        bSizer_left.Add(self.m_panel_pbar, 1, wx.EXPAND | wx.ALL, 1)
 
         self.m_panel_upload1 = wx.Panel(self.m_panel_left, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize,
                                         wx.TAB_TRAVERSAL)
@@ -783,6 +791,7 @@ class MainFrame(wx.Frame):
         self.Centre(wx.BOTH)
 
     def compare(self, event):
+        # if self.confirmed:
         frame = GraphFrame()
         frame.Show()
 
@@ -796,6 +805,7 @@ class MainFrame(wx.Frame):
             total_run_num += 1
             if self.m_checkBox_run1.GetValue():
                 selected_run_num += 1
+        # rest if
         if self.m_filePicker_run21.GetPath() != '' and self.m_filePicker_run22.GetPath() != '':
             total_run_num += 1
             if self.m_checkBox_run2.GetValue():
@@ -815,11 +825,19 @@ class MainFrame(wx.Frame):
 
         self.m_textCtrl_selected_run.SetValue(str(selected_run_num))
         self.m_textCtrl_total_run.SetValue(str(total_run_num))
+        if total_run_num > 0:
+            self.confirmed = True
 
     def read(self, event):
         path_11 = self.m_filePicker_run11.GetPath()  # run1 client
         path_12 = self.m_filePicker_run12.GetPath()  # run1 lab
-        if path_11 != '' and path_12 != '':
+        if path_11 != '' and path_12 != '' and self.confirmed:
+
+            # set hint
+            self.m_textCtrl_job_no.SetValue('Please generate job number')
+            self.m_textCtrl_client_name.SetHint('Enter client name')
+            self.m_textCtrl_client_address1.SetHint('Enter address line 1')
+            self.m_textCtrl_client_address2.SetHint('Enter address line 2')
 
             # read client chamber information
             client_chamber_info_df = pd.read_csv(path_11, skiprows=3, nrows=1, header=None)  # row 4
@@ -855,6 +873,8 @@ class MainFrame(wx.Frame):
                 self.m_textCtrl_client_address1.SetValue(client_address1)
                 self.m_textCtrl_client_address2.SetValue(client_address2)
 
+            self.readed =True
+
     def update_info(self,event):
         path_11 = self.m_filePicker_run11.GetPath()  # run1 client
         path_12 = self.m_filePicker_run12.GetPath()  # run1 lab
@@ -868,7 +888,7 @@ class MainFrame(wx.Frame):
         oper = ['Operator','','']
         CAL = ['CAL Number','','']
 
-        if path_11 != '' and path_12 != '':
+        if path_11 != '' and path_12 != '' and self.confirmed and self.readed:
             check_df = pd.read_csv(path_11, skiprows=16, nrows=1, header=None)  # row 17
             # there is no client information, add new rows for client information
             if check_df[0][0] == '[DATA]':
