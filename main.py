@@ -1381,7 +1381,6 @@ class LeftPanelGraph(wx.Panel):
             y = NK
             self.axes.scatter(x, y, label='run'+str(i))
             self.axes.set_xlim(xmin = 0)
-            print(len(Beam))
 
 #This class is for Table
 class RightPanelGrid(wx.Panel):
