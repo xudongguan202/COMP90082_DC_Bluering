@@ -99,7 +99,12 @@ product = pd.read_csv('KKMaWE.csv', skiprows=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
 product = product[['Filter', 'Product']]
 
 df_merge_col = pd.merge(df_Client_MEX, product, on='Filter')
-df_merge_col["NK"]=df_merge_col[["Product","R1","R2","T(Air)","H2","T(MC)","TS2","TM2"]].apply(lambda x:x["R2"]*WE*x["Product"]*[(273.15+x["TS2"])/(273.15+x["TM2"])]*(0.995766667+0.000045*x["H2"])/[Ma*x["R1"]*(273.15+x["T(Air)"])/(273.15+x["T(MC)"])],axis=1)
+df_merge_col["NK"]=df_merge_col[["Product","R1","R2","T(Air)","H2","T(MC)","TS2","TM2"]].apply(lambda x:x["R2"]*WE*x["Product"]*((273.15+x["TS2"])/(273.15+x["TM2"]))*(0.995766667+0.000045*x["H2"])/(Ma*x["R1"]*(273.15+x["T(Air)"])/(273.15+x["T(MC)"])),axis=1)
+
+KeV=df_merge_col["kV"].values.tolist()
+Beam=df_merge_col["Filter"].values.tolist()
+NK=df_merge_col["NK"].values.tolist()
+
 
 
 
