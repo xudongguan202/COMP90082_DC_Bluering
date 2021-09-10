@@ -4,6 +4,7 @@ import wx.grid as grid
 import wx.grid as gridlib
 import numpy as np
 import matplotlib
+import matplotlib.pyplot as plt
 import pandas as pd
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
 from matplotlib.backends.backend_wx import NavigationToolbar2Wx
@@ -15,14 +16,10 @@ import shutil
 #import pymysqld
 import pandas as pd
 
-
-
-
-
-def Testr(path_Client,path_Lab,path_Product):
+def Testr(path_Client,path_Lab):
 
     df_Client = pd.read_csv(path_Client, skiprows=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,17,18,19,20,21])
-    df_Lab = pd.read_csv(path_Lab, skiprows=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])
+    df_Lab = pd.read_csv(path_Lab, skiprows=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21])
 
     headLab = pd.read_csv('Raw MEX measurement data 1Lab.csv', usecols=[2], nrows=17)
     headClient = pd.read_csv('Raw MEX measurement data 1Client.csv', usecols=[2], nrows=17)
@@ -91,7 +88,7 @@ def Testr(path_Client,path_Lab,path_Product):
 
     # print(df_Client_MEX)
 
-    product = pd.read_csv(path_Product, skiprows=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+    product = pd.read_csv('KKMaWE.csv', skiprows=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
     product = product[['Filter', 'Product']]
 
     df_merge_col = pd.merge(df_Client_MEX, product, on='Filter')
@@ -107,10 +104,6 @@ def Testr(path_Client,path_Lab,path_Product):
     return KeV,Beam,NK
 
 
-
-
-
-
 class MyApp(wx.App):
     def __init__(self):
         super().__init__(clearSigInt=True)
@@ -118,7 +111,7 @@ class MyApp(wx.App):
         # frame = GraphFrame()
         frame.Show()
 
-
+# This class i the main interface class
 class MainFrame(wx.Frame):
     def __init__(self, title='App', pos=wx.DefaultPosition, size=wx.Size(1200, 864),
                  style=wx.DEFAULT_FRAME_STYLE | wx.TAB_TRAVERSAL):
@@ -889,7 +882,31 @@ class MainFrame(wx.Frame):
         self.Centre(wx.BOTH)
 
     def compare(self, event):
-        # if self.confirmed:
+        #set global value for analysis file path
+        global pathClient
+        global pathLab
+        global selected_run
+
+        pathClient = []
+        pathLab = []
+        selected_run = self.m_textCtrl_selected_run.GetValue()
+
+        if self.m_checkBox_run1.GetValue() == True:
+            pathClient.append(self.m_filePicker_run11.GetPath())
+            pathLab.append(self.m_filePicker_run12.GetPath())
+        if self.m_checkBox_run2.GetValue() == True:
+            pathClient.append(self.m_filePicker_run21.GetPath())
+            pathLab.append(self.m_filePicker_run22.GetPath())
+        if self.m_checkBox_run3.GetValue() == True:
+            pathClient.append(self.m_filePicker_run31.GetPath())
+            pathLab.append(self.m_filePicker_run32.GetPath())
+        if self.m_checkBox_run4.GetValue() == True:
+            pathClient.append(self.m_filePicker_run41.GetPath())
+            pathLab.append(self.m_filePicker_run42.GetPath())
+        if self.m_checkBox_run5.GetValue() == True:
+            pathClient.append(self.m_filePicker_run51.GetPath())
+            pathLab.append(self.m_filePicker_run52.GetPath())
+
         frame = GraphFrame()
         frame.Show()
 
@@ -1344,15 +1361,10 @@ class MainFrame(wx.Frame):
                     for row in line:
                         writer.writerow(row)
 
-
-
-
-
-
+# This class is for scatter plot
 class LeftPanelGraph(wx.Panel):
     def __init__(self, parent):
         wx.Panel.__init__(self, parent=parent)
-
         self.figure = Figure()
         self.axes = self.figure.add_subplot(111)
         self.canvas = FigureCanvas(self, -1, self.figure)
@@ -1363,22 +1375,27 @@ class LeftPanelGraph(wx.Panel):
         self.axes.set_xlabel("E_eff / keV ")
 
     def draw(self):
-        x = KeV
-        y = NK
-        self.axes.scatter(x, y)
+        for i in range(len(pathClient)):
+            KeV, Beam, NK = Testr(pathClient[i], pathLab[i])
+            x = KeV
+            y = NK
+            self.axes.scatter(x, y, label='run'+str(i))
+            self.axes.set_xlim(xmin = 0)
+            print(len(Beam))
 
+#This class is for Table
 class RightPanelGrid(wx.Panel):
     def __init__(self, parent):
         wx.Panel.__init__(self, parent=parent)
-        KeV = df_merge_col["kV"].values.tolist()
-        Beam = df_merge_col["Filter"].values.tolist()
-        NK = df_merge_col["NK"].values.tolist()
 
         self.mygrid = grid.Grid(self)
-        self.mygrid.CreateGrid(len(Beam), 5)
+        tmpKeV, tmpBeam, tmpNK = Testr(pathClient[0], pathLab[0])
+        rowSize = len(tmpBeam)
+        colSize = 2 + 1 + len(pathClient) * 2
+        self.mygrid.CreateGrid(rowSize, colSize)
 
         # get the cell attribute for the top left row
-        for i in range(30):
+        for i in range(rowSize):
             attr = gridlib.GridCellAttr()
             attr.SetReadOnly(True)
             self.mygrid.SetRowAttr(i,attr)
@@ -1394,18 +1411,37 @@ class RightPanelGrid(wx.Panel):
         ### update real-time data
         self.mygrid.SetColLabelValue(0, "Beam")
         self.mygrid.SetColLabelValue(1, "E_eff")
-        self.mygrid.SetColLabelValue(2, "Run1_NK")
-        #self.mygrid.SetColLabelValue(3, "Run2_NK")
-        #self.mygrid.SetColLabelValue(4, "Run3_NK")
-        self.mygrid.SetColLabelValue(3, "Average")
-        self.mygrid.SetColLabelValue(4, "Run1/Avg")
-        #self.mygrid.SetColLabelValue(7, "Run2/Avg")
-        #self.mygrid.SetColLabelValue(8, "Run3/Avg")
-        ####
-        for i in range(len(Beam)):
-            self.mygrid.SetCellValue(i, 0, str(Beam[i]))
-            self.mygrid.SetCellValue(i, 1, str(KeV[i]))
-            self.mygrid.SetCellValue(i, 2, str(NK[i]))
+
+        for i in range(len(pathClient)):
+            self.mygrid.SetColLabelValue(i+2, "Run"+str(i+1)+"_NK")
+        self.mygrid.SetColLabelValue(2+len(pathClient), "Average")
+        for i in range(len(pathClient)):
+            self.mygrid.SetColLabelValue(3+len(pathClient)+i, "Run"+str(i+1)+"/Avg")
+
+        # put data for Beam and KEV_eff
+        for i in range(len(tmpBeam)):
+            self.mygrid.SetCellValue(i, 0, str(tmpBeam[i]))
+            self.mygrid.SetCellValue(i, 1, str(tmpKeV[i]))
+
+        #put data for average
+        average_NK = []
+        for i in range(rowSize):
+            tmp = 0
+            for j in range(len(pathClient)):
+                KeV, Beam, NK = Testr(pathClient[j], pathLab[j])
+                tmp += NK[i]
+            average_NK.append(tmp/len(pathClient))
+
+        for i in range(len(average_NK)):
+            self.mygrid.SetCellValue(i, 2+len(pathClient) ,str(average_NK[i]))
+
+        # put data for Run1/2/3/4 NK, Run/Average
+        for i in range(len(pathClient)):
+            KeV, Beam, NK = Testr(pathClient[i], pathLab[i])
+            for j in range(rowSize):
+                self.mygrid.SetCellValue(j, i + 2, str(NK[j]))
+                self.mygrid.SetCellValue(j, i + 3 + len(pathClient), str(NK[j] / average_NK[j]))
+
 
 class GraphFrame(wx.Frame):
     def __init__(self):
