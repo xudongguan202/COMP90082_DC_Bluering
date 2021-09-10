@@ -896,30 +896,297 @@ class MainFrame(wx.Frame):
     def confirm(self, event):
         selected_run_num = 0
         total_run_num = 0
+        client_file_path_list = []
+        lab_file_path_list = []
+        client_chamber=[]    
+        lab_chamber=[]   
+        client_name=[]
+        address_1=[]
+        address_2=[]
+        operater=[]
+        CAL_Number=[]
+        chamber_flag=True 
+        client_info_flag=True
+
+        # check if user selects a box
+        if self.m_checkBox_run1.GetValue()==self.m_checkBox_run2.GetValue()==self.m_checkBox_run3.GetValue()==self.m_checkBox_run4.GetValue()==self.m_checkBox_run5.GetValue()==False:
+            dlg = wx.MessageDialog(
+                        None,
+                        u"Please select the checkbox you need!",
+                        u"No selected checkbox",
+                        wx.YES_DEFAULT | wx.ICON_WARNING,
+                    )
+            if dlg.ShowModal() == wx.ID_YES:
+                dlg.Destroy()
+
 
         # if pair of path not empty -> total run + 1
         # + if check box -> selected run + 1
-        if self.m_filePicker_run11.GetPath() != '' and self.m_filePicker_run12.GetPath() != '':
-            total_run_num += 1
-            if self.m_checkBox_run1.GetValue():
+        # if there is a file is empty, alert
+        if self.m_checkBox_run1.GetValue():
+            if (
+                self.m_filePicker_run11.GetPath() == ""
+                or self.m_filePicker_run12.GetPath() == ""
+            ):
+                dlg = wx.MessageDialog(
+                    None,
+                    u"Please select the file of Run 1!",
+                    u"File Incomplete",
+                    wx.YES_DEFAULT | wx.ICON_WARNING,
+                )
+                if dlg.ShowModal() == wx.ID_YES:
+                    dlg.Destroy()
+            else:
+                client_file_path_list.append(self.m_filePicker_run11.GetPath())
+                lab_file_path_list.append(self.m_filePicker_run12.GetPath())
                 selected_run_num += 1
-        # rest if
-        if self.m_filePicker_run21.GetPath() != '' and self.m_filePicker_run22.GetPath() != '':
-            total_run_num += 1
-            if self.m_checkBox_run2.GetValue():
+                total_run_num += 1
+                
+
+        if self.m_checkBox_run2.GetValue():
+            if (
+                self.m_filePicker_run21.GetPath() == ""
+                or self.m_filePicker_run22.GetPath() == ""
+            ):
+                dlg = wx.MessageDialog(
+                    None,
+                    u"Please select the file of Run 2!",
+                    u"File Incomplete",
+                    wx.YES_DEFAULT | wx.ICON_WARNING,
+                )
+                if dlg.ShowModal() == wx.ID_YES:
+                    dlg.Destroy()
+            else:
+                client_file_path_list.append(self.m_filePicker_run21.GetPath())
+                lab_file_path_list.append(self.m_filePicker_run22.GetPath())
                 selected_run_num += 1
-        if self.m_filePicker_run31.GetPath() != '' and self.m_filePicker_run32.GetPath() != '':
-            total_run_num += 1
-            if self.m_checkBox_run3.GetValue():
+                total_run_num += 1
+
+        if self.m_checkBox_run3.GetValue():
+            if (
+                self.m_filePicker_run31.GetPath() == ""
+                or self.m_filePicker_run32.GetPath() == ""
+            ):
+                dlg = wx.MessageDialog(
+                    None,
+                    u"Please select the file of Run 3!",
+                    u"File Incomplete",
+                    wx.YES_DEFAULT | wx.ICON_WARNING,
+                )
+                if dlg.ShowModal() == wx.ID_YES:
+                    dlg.Destroy()
+            else:
+                client_file_path_list.append(self.m_filePicker_run31.GetPath())
+                lab_file_path_list.append(self.m_filePicker_run32.GetPath())
                 selected_run_num += 1
-        if self.m_filePicker_run41.GetPath() != '' and self.m_filePicker_run42.GetPath() != '':
-            total_run_num += 1
-            if self.m_checkBox_run4.GetValue():
+                total_run_num += 1
+
+        if self.m_checkBox_run4.GetValue():
+            if (
+                self.m_filePicker_run41.GetPath() == ""
+                or self.m_filePicker_run42.GetPath() == ""
+            ):
+                dlg = wx.MessageDialog(
+                    None,
+                    u"Please select the file of Run 4!",
+                    u"File Incomplete",
+                    wx.YES_DEFAULT | wx.ICON_WARNING,
+                )
+                if dlg.ShowModal() == wx.ID_YES:
+                    dlg.Destroy()
+            else:
+                client_file_path_list.append(self.m_filePicker_run41.GetPath())
+                lab_file_path_list.append(self.m_filePicker_run42.GetPath())
                 selected_run_num += 1
-        if self.m_filePicker_run51.GetPath() != '' and self.m_filePicker_run52.GetPath() != '':
-            total_run_num += 1
-            if self.m_checkBox_run5.GetValue():
+                total_run_num += 1
+
+        if self.m_checkBox_run5.GetValue():
+            if (
+                self.m_filePicker_run51.GetPath() == ""
+                or self.m_filePicker_run52.GetPath() == ""
+            ):
+                dlg = wx.MessageDialog(
+                    None,
+                    u"Please select the file of Run 5!",
+                    u"File Incomplete",
+                    wx.YES_DEFAULT | wx.ICON_WARNING,
+                )
+                if dlg.ShowModal() == wx.ID_YES:
+                    dlg.Destroy()
+            else:
+                client_file_path_list.append(self.m_filePicker_run51.GetPath())
+                lab_file_path_list.append(self.m_filePicker_run52.GetPath())
                 selected_run_num += 1
+                total_run_num += 1
+
+        # check data structure
+        total_file_path_list = client_file_path_list + lab_file_path_list
+        for file_path in total_file_path_list:
+            file = open(file_path)
+            with file as f:
+                reader = csv.reader(f)
+                result = list(reader)
+                label_row1 = result[17]  # get line 18
+                label_row2 = result[22]  # get line 23
+                header = result[:16]  # get first 16 lines
+                label_column = []
+                # validate row
+                standard_row = ['kV', 'mA', 'BarCode', 'XraysOn', 'HVLFilter(mm)', 'Filter', 'FilterReady', 'HVLReady',
+                                    'N', 'Current1(pA)', 'Current2(pA)', 'P(kPa)', 'T(MC)', 'T(Air)', 'T(SC)', 'H(%)',
+                                    'Comment']
+
+                # validate column
+                standard_column = ['[COMET X-RAY MEASUREMENT]', 'Filename', 'Date', 'Chamber', 'Description',
+                                    'Software',
+                                    'Backgrounds', 'Measurements', 'Trolley (mm)', 'SCD (mm)', 'Aperture wheel',
+                                    'Comment',
+                                    'Monitor electrometer range', 'Monitor HV', 'MEFAC-IC electrometer range', 'IC HV']
+                for i in header:
+                    label_column.append(i[0])
+
+                if (standard_row != label_row1 and standard_row != label_row2) or standard_column != label_column :
+                    dlg = wx.MessageDialog(
+                        None,
+                        u"The file: "+file_path+" data structure is not valid!",
+                        u"File Error",
+                        wx.YES_DEFAULT | wx.ICON_WARNING,
+                    )
+                    if dlg.ShowModal() == wx.ID_YES:
+                        dlg.Destroy()
+            file.close()
+
+        # check whether client information and chamber ID are same in all files
+        for file_path in client_file_path_list:
+            file = open(file_path)
+            with file as f:
+                reader = csv.reader(f)
+                result = list(reader)
+                Chamber_row = result[3]  # get line 4
+                client_chamber.append(Chamber_row[2].replace( ' ' , '' ))
+                if result[21][0] == '[DATA]':
+                    client_name_row = result[16]  # get line 17
+                    client_name.append(client_name_row[2])
+                    address_1_row = result[17]
+                    address_1.append(address_1_row[2])
+                    address_2_row = result[18]
+                    address_2.append(address_2_row[2])
+                    operater_row = result[19]
+                    operater.append(operater_row[2])
+                    CAL_Number_row = result[20]
+                    CAL_Number.append(CAL_Number_row[2])
+
+
+        for file_path in lab_file_path_list:
+            file = open(file_path)
+            with file as f:
+                reader = csv.reader(f)
+                result = list(reader)
+                Chamber_row = result[3]  # get line 4
+                lab_chamber.append(Chamber_row[2])
+                if result[21][0] == '[DATA]':
+                    client_name_row = result[16]  # get line 17
+                    client_name.append(client_name_row[2])
+                    address_1_row = result[17]
+                    address_1.append(address_1_row[2])
+                    address_2_row = result[18]
+                    address_2.append(address_2_row[2])
+                    operater_row = result[19]
+                    operater.append(operater_row[2])
+                    CAL_Number_row = result[20]
+                    CAL_Number.append(CAL_Number_row[2])
+
+        for i in range(len(client_chamber)):
+            if i== len(client_chamber)-1:
+                break
+            if client_chamber[i] == client_chamber[i+1]:
+                continue
+            else:
+                chamber_flag=False
+                break
+        
+
+        for i in range(len(lab_chamber)):
+            if i== len(lab_chamber)-1:
+                break
+            if lab_chamber[i] == lab_chamber[i+1]:
+                continue
+            else:
+                chamber_flag=False
+
+
+
+        for i in range(len(client_name)):
+            if len(client_name)== 0:
+                break
+            if i== len(client_name)-1:
+                break
+            if client_name[i] == client_name[i+1]:
+                continue
+            else:
+                client_info_flag=False
+        
+        for i in range(len(address_1)):
+            if len(address_1)== 0:
+                break
+            if i== len(address_1)-1:
+                break
+            if address_1[i] == address_1[i+1]:
+                continue
+            else:
+                client_info_flag=False
+
+        for i in range(len(address_2)):
+            if len(address_2)== 0:
+                break
+            if i== len(address_2)-1:
+                break
+            if address_2[i] == address_2[i+1]:
+                continue
+            else:
+                client_info_flag=False
+
+        for i in range(len(operater)):
+            if len(operater)== 0:
+                break
+            if i== len(operater)-1:
+                break
+            if operater[i] == operater[i+1]:
+                continue
+            else:
+                client_info_flag=False
+        
+        for i in range(len(CAL_Number)):
+            if len(CAL_Number)== 0:
+                break
+            if i== len(CAL_Number)-1:
+                break
+            if CAL_Number[i] == CAL_Number[i+1]:
+                continue
+            else:
+                client_info_flag=False
+        
+
+        if client_info_flag==False:
+            dlg = wx.MessageDialog(
+                        None,
+                        u"Client information is not the same!",
+                        u"Client Information Error",
+                        wx.YES_DEFAULT | wx.ICON_WARNING,
+                    )
+            if dlg.ShowModal() == wx.ID_YES:
+                dlg.Destroy()
+
+        if chamber_flag==False:
+            dlg = wx.MessageDialog(
+                        None,
+                        u"Chamber ID is not the same!",
+                        u"Chamber ID Error",
+                        wx.YES_DEFAULT | wx.ICON_WARNING,
+                    )
+            if dlg.ShowModal() == wx.ID_YES:
+                dlg.Destroy()
+
+
 
         self.m_textCtrl_selected_run.SetValue(str(selected_run_num))
         self.m_textCtrl_total_run.SetValue(str(total_run_num))
