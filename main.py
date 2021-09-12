@@ -23,7 +23,7 @@ def Testr(path_Client,path_Lab):
 
     headLab = pd.read_csv('Raw MEX measurement data 1Lab.csv', usecols=[2], nrows=17)
     headClient = pd.read_csv('Raw MEX measurement data 1Client.csv', usecols=[2], nrows=17)
-    print(headClient)
+    # print(headClient)
 
 
     #提取Client基本信息
@@ -1379,8 +1379,9 @@ class LeftPanelGraph(wx.Panel):
             KeV, Beam, NK = Testr(pathClient[i], pathLab[i])
             x = KeV
             y = NK
-            self.axes.scatter(x, y, label='run'+str(i))
+            self.axes.scatter(x, y, label='Run'+str(i+1))
             self.axes.set_xlim(xmin = 0)
+        self.axes.legend(loc='upper center', fancybox=True, shadow=True, ncol = 5)
 
 #This class is for Table
 class RightPanelGrid(wx.Panel):
@@ -1432,21 +1433,21 @@ class RightPanelGrid(wx.Panel):
             average_NK.append(tmp/len(pathClient))
 
         for i in range(len(average_NK)):
-            self.mygrid.SetCellValue(i, 2+len(pathClient) ,str(average_NK[i]))
+            self.mygrid.SetCellValue(i, 2+len(pathClient) ,str(round(average_NK[i],4)))
 
         # put data for Run1/2/3/4 NK, Run/Average
         for i in range(len(pathClient)):
             KeV, Beam, NK = Testr(pathClient[i], pathLab[i])
             for j in range(rowSize):
-                self.mygrid.SetCellValue(j, i + 2, str(NK[j]))
-                self.mygrid.SetCellValue(j, i + 3 + len(pathClient), str(NK[j] / average_NK[j]))
+                self.mygrid.SetCellValue(j, i + 2, str(round(NK[j],4)))
+                self.mygrid.SetCellValue(j, i + 3 + len(pathClient), str(round(NK[j] / average_NK[j],4)))
 
 
 class GraphFrame(wx.Frame):
     def __init__(self):
         wx.Frame.__init__(self, parent=None, title=u"Graphs Demonstration", size=wx.Size(1200, 600))
         self.SetMinSize(wx.Size(1200, 600))
-        self.SetMaxSize(wx.Size(1200, 600))
+        self.SetMaxSize(wx.Size(1500, 600))
 
         spliter = wx.SplitterWindow(self)
         leftgraph = LeftPanelGraph(spliter)
