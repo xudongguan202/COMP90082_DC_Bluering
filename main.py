@@ -989,8 +989,7 @@ class MainFrame(wx.Frame):
             else:
                 client_file_path_list.append(self.m_filePicker_run21.GetPath())
                 lab_file_path_list.append(self.m_filePicker_run22.GetPath())
-                selected_run_num += 1
-                total_run_num += 1
+                
          
 
         if self.m_checkBox_run3.GetValue():
@@ -1016,8 +1015,7 @@ class MainFrame(wx.Frame):
             else:
                 client_file_path_list.append(self.m_filePicker_run31.GetPath())
                 lab_file_path_list.append(self.m_filePicker_run32.GetPath())
-                selected_run_num += 1
-                total_run_num += 1
+                
      
 
         if self.m_checkBox_run4.GetValue():
@@ -1043,8 +1041,7 @@ class MainFrame(wx.Frame):
             else:
                 client_file_path_list.append(self.m_filePicker_run41.GetPath())
                 lab_file_path_list.append(self.m_filePicker_run42.GetPath())
-                selected_run_num += 1
-                total_run_num += 1
+                
 
 
         if self.m_checkBox_run5.GetValue():
@@ -1070,8 +1067,7 @@ class MainFrame(wx.Frame):
             else:
                 client_file_path_list.append(self.m_filePicker_run51.GetPath())
                 lab_file_path_list.append(self.m_filePicker_run52.GetPath())
-                selected_run_num += 1
-                total_run_num += 1
+
 
         # check data structure
         total_file_path_list = client_file_path_list + lab_file_path_list
