@@ -12,9 +12,6 @@ from matplotlib.figure import Figure
 import csv
 from csv import writer
 
-import shutil
-#import pymysqld
-import pandas as pd
 
 def Testr(path_Client,path_Lab):
 
@@ -113,7 +110,7 @@ class MyApp(wx.App):
 
 # This class i the main interface class
 class MainFrame(wx.Frame):
-    def __init__(self, title='App', pos=wx.DefaultPosition, size=wx.Size(1200, 864),
+    def __init__(self, title='App', pos=wx.DefaultPosition, size=wx.Size(1100, 700),
                  style=wx.DEFAULT_FRAME_STYLE | wx.TAB_TRAVERSAL):
         # super().__init__(None, title = title)
         super().__init__(None, id=wx.ID_ANY, title=u"Digital Calibration Generator", pos=wx.DefaultPosition,
@@ -223,10 +220,10 @@ class MainFrame(wx.Frame):
 
         bSizer18 = wx.BoxSizer(wx.VERTICAL)
 
-        self.m_gauge_bar = wx.Gauge(self.m_panel_pbar, wx.ID_ANY, 100, wx.DefaultPosition, wx.Size(500, -1),
+        MainFrame.m_progress_bar = wx.Gauge(self.m_panel_pbar, wx.ID_ANY, 100, wx.DefaultPosition, wx.Size(500, -1),
                                     wx.GA_HORIZONTAL)
-        self.m_gauge_bar.SetValue(0)
-        bSizer18.Add(self.m_gauge_bar, 0, wx.ALL | wx.EXPAND, 5)
+        MainFrame.m_progress_bar.SetValue(0)
+        bSizer18.Add(MainFrame.m_progress_bar, 0, wx.ALL | wx.EXPAND, 5)
 
         self.m_panel_pbar.SetSizer(bSizer18)
         self.m_panel_pbar.Layout()
@@ -894,6 +891,7 @@ class MainFrame(wx.Frame):
         self.m_filePicker_run52.Bind(wx.EVT_FILEPICKER_CHANGED, self.resetConfirm, self.m_filePicker_run52)
 
     def compare(self, event):
+        MainFrame.m_progress_bar.SetValue(10)
         #set global value for analysis file path
         global pathClient
         global pathLab
@@ -921,6 +919,7 @@ class MainFrame(wx.Frame):
                 pathClient.append(self.m_filePicker_run51.GetPath())
                 pathLab.append(self.m_filePicker_run52.GetPath())
 
+            MainFrame.m_progress_bar.SetValue(20)
             frame = GraphFrame()
             frame.Show()
         else:
@@ -932,6 +931,8 @@ class MainFrame(wx.Frame):
                     )
             if dlg.ShowModal() == wx.ID_YES:
                 dlg.Destroy()
+
+        MainFrame.m_progress_bar.SetValue(100)
 
     def confirm(self, event):
         selected_run_num = 0
@@ -1531,6 +1532,8 @@ class RightPanelGrid(wx.Panel):
                 tmp += NK[i]
             average_NK.append(tmp/len(pathClient))
 
+        MainFrame.m_progress_bar.SetValue(40)
+
         for i in range(len(average_NK)):
             self.mygrid.SetCellValue(i, 2+len(pathClient) ,str(round(average_NK[i],4)))
 
@@ -1540,6 +1543,8 @@ class RightPanelGrid(wx.Panel):
             for j in range(rowSize):
                 self.mygrid.SetCellValue(j, i + 2, str(round(NK[j],4)))
                 self.mygrid.SetCellValue(j, i + 3 + len(pathClient), str(round(NK[j] / average_NK[j],4)))
+
+        MainFrame.m_progress_bar.SetValue(60)
 
 
 class GraphFrame(wx.Frame):
@@ -1555,6 +1560,7 @@ class GraphFrame(wx.Frame):
         spliter.SetMinimumPaneSize(600)
 
         leftgraph.draw()
+        MainFrame.m_progress_bar.SetValue(80)
 
 
 if __name__ == '__main__':
