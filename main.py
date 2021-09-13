@@ -108,7 +108,7 @@ class MyApp(wx.App):
         # frame = GraphFrame()
         frame.Show()
 
-# This class i the main interface class
+# This class is the main interface class
 class MainFrame(wx.Frame):
     def __init__(self, title='App', pos=wx.DefaultPosition, size=wx.Size(1100, 700),
                  style=wx.DEFAULT_FRAME_STYLE | wx.TAB_TRAVERSAL):
@@ -772,6 +772,8 @@ class MainFrame(wx.Frame):
         sbSizer12 = wx.StaticBoxSizer(wx.StaticBox(self.m_panel_client_info, wx.ID_ANY, u"Client Information"),
                                       wx.VERTICAL)
 
+        bSizer44 = wx.BoxSizer(wx.HORIZONTAL)
+
         self.m_panel74 = wx.Panel(sbSizer12.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.Size(-1, 50),
                                   wx.TAB_TRAVERSAL)
         self.m_panel74.SetMinSize(wx.Size(-1, 50))
@@ -786,15 +788,41 @@ class MainFrame(wx.Frame):
         bSizer71.Add(self.m_staticText21, 0, wx.ALL, 2)
 
         self.m_textCtrl_client_name = wx.TextCtrl(self.m_panel74, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
-                                                  wx.Size(350, -1), 0)
-        self.m_textCtrl_client_name.SetMinSize(wx.Size(350, -1))
-        self.m_textCtrl_client_name.SetMaxSize(wx.Size(350, -1))
+                                                  wx.Size(170, -1), 0)
+        self.m_textCtrl_client_name.SetMinSize(wx.Size(170, -1))
+        self.m_textCtrl_client_name.SetMaxSize(wx.Size(170, -1))
 
         bSizer71.Add(self.m_textCtrl_client_name, 0, wx.ALL, 2)
 
         self.m_panel74.SetSizer(bSizer71)
         self.m_panel74.Layout()
-        sbSizer12.Add(self.m_panel74, 1, wx.EXPAND | wx.ALL, 1)
+        bSizer44.Add(self.m_panel74, 1, wx.ALL, 1)
+
+        self.m_panel741 = wx.Panel(sbSizer12.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.Size(-1, 50),
+                                   wx.TAB_TRAVERSAL)
+        self.m_panel741.SetMinSize(wx.Size(-1, 50))
+        self.m_panel741.SetMaxSize(wx.Size(-1, 50))
+
+        bSizer712 = wx.BoxSizer(wx.VERTICAL)
+
+        self.m_staticText212 = wx.StaticText(self.m_panel741, wx.ID_ANY, u"Operator", wx.DefaultPosition,
+                                             wx.DefaultSize, 0)
+        self.m_staticText212.Wrap(-1)
+
+        bSizer712.Add(self.m_staticText212, 0, wx.ALL, 2)
+
+        self.m_textCtrl_operator = wx.TextCtrl(self.m_panel741, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
+                                               wx.Size(170, -1), 0)
+        self.m_textCtrl_operator.SetMinSize(wx.Size(170, -1))
+        self.m_textCtrl_operator.SetMaxSize(wx.Size(170, -1))
+
+        bSizer712.Add(self.m_textCtrl_operator, 0, wx.ALL, 2)
+
+        self.m_panel741.SetSizer(bSizer712)
+        self.m_panel741.Layout()
+        bSizer44.Add(self.m_panel741, 1, wx.ALL, 1)
+
+        sbSizer12.Add(bSizer44, 1, wx.EXPAND, 0)
 
         self.m_panel75 = wx.Panel(sbSizer12.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.Size(-1, 100),
                                   wx.TAB_TRAVERSAL)
@@ -891,7 +919,7 @@ class MainFrame(wx.Frame):
         self.m_filePicker_run52.Bind(wx.EVT_FILEPICKER_CHANGED, self.resetConfirm, self.m_filePicker_run52)
 
     def compare(self, event):
-        MainFrame.m_progress_bar.SetValue(10)
+        MainFrame.m_progress_bar.SetValue(0)
         #set global value for analysis file path
         global pathClient
         global pathLab
@@ -902,6 +930,8 @@ class MainFrame(wx.Frame):
         selected_run = self.m_textCtrl_selected_run.GetValue()
 
         if self.confirmed:
+
+            MainFrame.m_progress_bar.SetValue(10)
 
             if self.m_checkBox_run1.GetValue() == True:
                 pathClient.append(self.m_filePicker_run11.GetPath())
@@ -922,6 +952,9 @@ class MainFrame(wx.Frame):
             MainFrame.m_progress_bar.SetValue(20)
             frame = GraphFrame()
             frame.Show()
+
+            MainFrame.m_progress_bar.SetValue(100)
+
         else:
             dlg = wx.MessageDialog(
                         None,
@@ -931,8 +964,6 @@ class MainFrame(wx.Frame):
                     )
             if dlg.ShowModal() == wx.ID_YES:
                 dlg.Destroy()
-
-        MainFrame.m_progress_bar.SetValue(100)
 
     def confirm(self, event):
 
@@ -1288,6 +1319,7 @@ class MainFrame(wx.Frame):
             self.m_textCtrl_model2.SetValue('')
             self.m_textCtrl_serial2.SetValue('')
             self.m_textCtrl_client_name.SetValue('')
+            self.m_textCtrl_operator.SetValue('')
             self.m_textCtrl_client_address1.SetValue('')
             self.m_textCtrl_client_address2.SetValue('')
 
@@ -1298,6 +1330,7 @@ class MainFrame(wx.Frame):
                 # set hint
                 self.m_textCtrl_job_no.SetValue('Please generate job number')
                 self.m_textCtrl_client_name.SetHint('Enter client name')
+                self.m_textCtrl_operator.SetHint('Enter operator name')
                 self.m_textCtrl_client_address1.SetHint('Enter address line 1')
                 self.m_textCtrl_client_address2.SetHint('Enter address line 2')
 
@@ -1331,7 +1364,9 @@ class MainFrame(wx.Frame):
                     client_name = client_info_df[2][0]
                     client_address1 = client_info_df[2][1]
                     client_address2 = client_info_df[2][2]
+                    operator_name = client_info_df[2][3]
                     self.m_textCtrl_client_name.SetValue(client_name)
+                    self.m_textCtrl_operator.SetValue(operator_name)
                     self.m_textCtrl_client_address1.SetValue(client_address1)
                     self.m_textCtrl_client_address2.SetValue(client_address2)
 
@@ -1353,12 +1388,13 @@ class MainFrame(wx.Frame):
             path_12 = self.m_filePicker_run12.GetPath()  # run1 lab
 
             updated_client_name = self.m_textCtrl_client_name.GetValue()
+            updated_operator_name = self.m_textCtrl_operator.GetValue()
             updated_address1 = self.m_textCtrl_client_address1.GetValue()
             updated_address2 = self.m_textCtrl_client_address2.GetValue()
             client_name = ['Client name','',updated_client_name]
             address1 = ['Address 1','',updated_address1]
             address2 = ['Address 2','',updated_address2]
-            oper = ['Operator','','']
+            oper = ['Operator','',updated_operator_name]
             CAL = ['CAL Number','','']
 
             if path_11 != '' and path_12 != '' and self.confirmed and self.readed:
@@ -1400,6 +1436,7 @@ class MainFrame(wx.Frame):
                     line[16][2] = updated_client_name
                     line[17][2] = updated_address1
                     line[18][2] = updated_address2
+                    line[19][2] = updated_operator_name
 
                     # writing into the file
                     with open(path_11,'w',newline = '') as f:
@@ -1445,6 +1482,7 @@ class MainFrame(wx.Frame):
                     line[16][2] = updated_client_name
                     line[17][2] = updated_address1
                     line[18][2] = updated_address2
+                    line[19][2] = updated_operator_name
 
                     # writing into the file
                     with open(path_12, 'w', newline='') as f:
