@@ -935,6 +935,9 @@ class MainFrame(wx.Frame):
         MainFrame.m_progress_bar.SetValue(100)
 
     def confirm(self, event):
+
+        self.resetConfirm(event)
+
         selected_run_num = 0
         total_run_num = 0
         client_file_path_list = []
@@ -959,6 +962,7 @@ class MainFrame(wx.Frame):
                     )
             if dlg.ShowModal() == wx.ID_YES:
                 dlg.Destroy()
+            return
 
 
         # if pair of path not empty -> total run + 1
@@ -984,6 +988,7 @@ class MainFrame(wx.Frame):
                 )
                 if dlg.ShowModal() == wx.ID_YES:
                     dlg.Destroy()
+                return
             else:
                 client_file_path_list.append(self.m_filePicker_run11.GetPath())
                 lab_file_path_list.append(self.m_filePicker_run12.GetPath())
@@ -1010,6 +1015,7 @@ class MainFrame(wx.Frame):
                 )
                 if dlg.ShowModal() == wx.ID_YES:
                     dlg.Destroy()
+                return
             else:
                 client_file_path_list.append(self.m_filePicker_run21.GetPath())
                 lab_file_path_list.append(self.m_filePicker_run22.GetPath())
@@ -1036,6 +1042,7 @@ class MainFrame(wx.Frame):
                 )
                 if dlg.ShowModal() == wx.ID_YES:
                     dlg.Destroy()
+                return
             else:
                 client_file_path_list.append(self.m_filePicker_run31.GetPath())
                 lab_file_path_list.append(self.m_filePicker_run32.GetPath())
@@ -1062,6 +1069,7 @@ class MainFrame(wx.Frame):
                 )
                 if dlg.ShowModal() == wx.ID_YES:
                     dlg.Destroy()
+                return
             else:
                 client_file_path_list.append(self.m_filePicker_run41.GetPath())
                 lab_file_path_list.append(self.m_filePicker_run42.GetPath())
@@ -1088,6 +1096,7 @@ class MainFrame(wx.Frame):
                 )
                 if dlg.ShowModal() == wx.ID_YES:
                     dlg.Destroy()
+                return
             else:
                 client_file_path_list.append(self.m_filePicker_run51.GetPath())
                 lab_file_path_list.append(self.m_filePicker_run52.GetPath())
@@ -1127,6 +1136,7 @@ class MainFrame(wx.Frame):
                     )
                     if dlg.ShowModal() == wx.ID_YES:
                         dlg.Destroy()
+                    return
             file.close()
 
         # check whether client information and chamber ID are same in all files
@@ -1249,6 +1259,7 @@ class MainFrame(wx.Frame):
                     )
             if dlg.ShowModal() == wx.ID_YES:
                 dlg.Destroy()
+            return
 
         if chamber_flag==False:
             dlg = wx.MessageDialog(
@@ -1259,8 +1270,7 @@ class MainFrame(wx.Frame):
                     )
             if dlg.ShowModal() == wx.ID_YES:
                 dlg.Destroy()
-
-
+            return
 
         self.m_textCtrl_selected_run.SetValue(str(selected_run_num))
         self.m_textCtrl_total_run.SetValue(str(total_run_num))
@@ -1270,6 +1280,17 @@ class MainFrame(wx.Frame):
     def read(self, event):
 
         if self.confirmed:
+
+            # reset empty
+            self.m_textCtrl_job_no.SetValue('')
+            self.m_textCtrl_model1.SetValue('')
+            self.m_textCtrl_serial1.SetValue('')
+            self.m_textCtrl_model2.SetValue('')
+            self.m_textCtrl_serial2.SetValue('')
+            self.m_textCtrl_client_name.SetValue('')
+            self.m_textCtrl_client_address1.SetValue('')
+            self.m_textCtrl_client_address2.SetValue('')
+
             path_11 = self.m_filePicker_run11.GetPath()  # run1 client
             path_12 = self.m_filePicker_run12.GetPath()  # run1 lab
             if path_11 != '' and path_12 != '' and self.confirmed:
