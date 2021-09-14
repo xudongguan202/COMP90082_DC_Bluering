@@ -11,6 +11,7 @@ from matplotlib.backends.backend_wx import NavigationToolbar2Wx
 from matplotlib.figure import Figure
 import csv
 from csv import writer
+import re
 
 
 def Testr(path_Client,path_Lab):
@@ -606,7 +607,7 @@ class MainFrame(wx.Frame):
         bSizer57.Add(self.m_staticText_job_no, 0, wx.ALIGN_CENTER | wx.ALL, 3)
 
         self.m_textCtrl_job_no = wx.TextCtrl(self.m_panel_job_no, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
-                                             wx.Size(200, -1), wx.TE_READONLY)
+                                             wx.Size(200, -1))
         self.m_textCtrl_job_no.SetMinSize(wx.Size(200, -1))
         self.m_textCtrl_job_no.SetMaxSize(wx.Size(200, -1))
 
@@ -968,6 +969,9 @@ class MainFrame(wx.Frame):
     def confirm(self, event):
 
         self.resetConfirm(event)
+        MainFrame.m_progress_bar.SetValue(0)
+        self.m_textCtrl_selected_run.SetValue('0')
+        self.m_textCtrl_total_run.SetValue('0')
 
         selected_run_num = 0
         total_run_num = 0
@@ -1328,7 +1332,7 @@ class MainFrame(wx.Frame):
             if path_11 != '' and path_12 != '' and self.confirmed:
 
                 # set hint
-                self.m_textCtrl_job_no.SetValue('Please generate job number')
+                self.m_textCtrl_job_no.SetHint('Please generate job number')
                 self.m_textCtrl_client_name.SetHint('Enter client name')
                 self.m_textCtrl_operator.SetHint('Enter operator name')
                 self.m_textCtrl_client_address1.SetHint('Enter address line 1')
@@ -1358,7 +1362,8 @@ class MainFrame(wx.Frame):
                     client_info_df = pd.read_csv(path_11, skiprows=16, nrows=5, header=None)  # row 17-21
                     # read job number
                     job_no = client_info_df[2][4]  # col3 row5
-                    self.m_textCtrl_job_no.SetValue(str(job_no[-5:]))
+                    job_no = re.sub("[^0-9]", "", str(job_no))
+                    self.m_textCtrl_job_no.SetValue(job_no)
 
                     # read client info
                     client_name = client_info_df[2][0]
@@ -1384,8 +1389,19 @@ class MainFrame(wx.Frame):
     def update_info(self,event):
 
         if self.confirmed and self.readed:
-            path_11 = self.m_filePicker_run11.GetPath()  # run1 client
-            path_12 = self.m_filePicker_run12.GetPath()  # run1 lab
+
+            path_client_lst = []
+            path_lab_lst = []
+            path_client_lst.append(self.m_filePicker_run11.GetPath())
+            path_client_lst.append(self.m_filePicker_run21.GetPath())
+            path_client_lst.append(self.m_filePicker_run31.GetPath())
+            path_client_lst.append(self.m_filePicker_run41.GetPath())
+            path_client_lst.append(self.m_filePicker_run51.GetPath())
+            path_lab_lst.append(self.m_filePicker_run12.GetPath())
+            path_lab_lst.append(self.m_filePicker_run22.GetPath())
+            path_lab_lst.append(self.m_filePicker_run32.GetPath())
+            path_lab_lst.append(self.m_filePicker_run42.GetPath())
+            path_lab_lst.append(self.m_filePicker_run52.GetPath())
 
             updated_client_name = self.m_textCtrl_client_name.GetValue()
             updated_operator_name = self.m_textCtrl_operator.GetValue()
@@ -1397,98 +1413,101 @@ class MainFrame(wx.Frame):
             oper = ['Operator','',updated_operator_name]
             CAL = ['CAL Number','','']
 
-            if path_11 != '' and path_12 != '' and self.confirmed and self.readed:
-                check_df = pd.read_csv(path_11, skiprows=16, nrows=1, header=None)  # row 17
-                # there is no client information, add new rows for client information
-                if check_df[0][0] == '[DATA]':
-                    line = []
-                    # reading the csv file
-                    with open(path_11, 'rt') as f:
-                        data = csv.reader(f)
-                        for row in data:
-                            line.append(row)
+            for i in range(len(path_client_lst)):
+                path_client = path_client_lst[i]
+                path_lab = path_lab_lst[i]
+                if path_client != '' and path_lab != '':
+                    check_df = pd.read_csv(path_client, skiprows=16, nrows=1, header=None)  # row 17
+                    # there is no client information, add new rows for client information
+                    if check_df[0][0] == '[DATA]':
+                        line = []
+                        # reading the csv file
+                        with open(path_client, 'rt') as f:
+                            data = csv.reader(f)
+                            for row in data:
+                                line.append(row)
 
-                    # rewrite rows
-                    with open(path_11,'w',newline = '') as f:
-                        writer = csv.writer(f)
-                        i = 0
-                        for row in line:
-                            if i == 16:
-                                writer.writerow(client_name)
-                                writer.writerow(address1)
-                                writer.writerow(address2)
-                                writer.writerow(oper)
-                                writer.writerow(CAL)
-                                i = i + 5
-                            writer.writerow(row)
-                            i += 1
-                        f.close()
-                # there already client information exist, change data
-                if check_df[0][0] != '[DATA]':
-                    line = []
-                    # reading the csv file
-                    with open(path_11, 'rt') as f:
-                        data = csv.reader(f)
-                        for row in data:
-                            line.append(row)
+                        # rewrite rows
+                        with open(path_client,'w',newline = '') as f:
+                            writer = csv.writer(f)
+                            i = 0
+                            for row in line:
+                                if i == 16:
+                                    writer.writerow(client_name)
+                                    writer.writerow(address1)
+                                    writer.writerow(address2)
+                                    writer.writerow(oper)
+                                    writer.writerow(CAL)
+                                    i = i + 5
+                                writer.writerow(row)
+                                i += 1
+                            f.close()
+                    # there already client information exist, change data
+                    if check_df[0][0] != '[DATA]':
+                        line = []
+                        # reading the csv file
+                        with open(path_client, 'rt') as f:
+                            data = csv.reader(f)
+                            for row in data:
+                                line.append(row)
 
-                    # updating the column value/data
-                    line[16][2] = updated_client_name
-                    line[17][2] = updated_address1
-                    line[18][2] = updated_address2
-                    line[19][2] = updated_operator_name
+                        # updating the column value/data
+                        line[16][2] = updated_client_name
+                        line[17][2] = updated_address1
+                        line[18][2] = updated_address2
+                        line[19][2] = updated_operator_name
 
-                    # writing into the file
-                    with open(path_11,'w',newline = '') as f:
-                        writer = csv.writer(f)
-                        for row in line:
-                            writer.writerow(row)
+                        # writing into the file
+                        with open(path_client,'w',newline = '') as f:
+                            writer = csv.writer(f)
+                            for row in line:
+                                writer.writerow(row)
 
-                check_df = pd.read_csv(path_12, skiprows=16, nrows=1, header=None)  # row 17
-                # there is no client information, add new rows for client information
-                if check_df[0][0] == '[DATA]':
-                    line = []
-                    # reading the csv file
-                    with open(path_12, 'rt') as f:
-                        data = csv.reader(f)
-                        for row in data:
-                            line.append(row)
+                    check_df = pd.read_csv(path_lab, skiprows=16, nrows=1, header=None)  # row 17
+                    # there is no client information, add new rows for client information
+                    if check_df[0][0] == '[DATA]':
+                        line = []
+                        # reading the csv file
+                        with open(path_lab, 'rt') as f:
+                            data = csv.reader(f)
+                            for row in data:
+                                line.append(row)
 
-                    # rewrite rows
-                    with open(path_12, 'w', newline='') as f:
-                        writer = csv.writer(f)
-                        i = 0
-                        for row in line:
-                            if i == 16:
-                                writer.writerow(client_name)
-                                writer.writerow(address1)
-                                writer.writerow(address2)
-                                writer.writerow(oper)
-                                writer.writerow(CAL)
-                                i = i + 5
-                            writer.writerow(row)
-                            i += 1
-                        f.close()
-                # there already client information exist, change data
-                if check_df[0][0] != '[DATA]':
-                    line = []
-                    # reading the csv file
-                    with open(path_12, 'rt') as f:
-                        data = csv.reader(f)
-                        for row in data:
-                            line.append(row)
+                        # rewrite rows
+                        with open(path_lab, 'w', newline='') as f:
+                            writer = csv.writer(f)
+                            i = 0
+                            for row in line:
+                                if i == 16:
+                                    writer.writerow(client_name)
+                                    writer.writerow(address1)
+                                    writer.writerow(address2)
+                                    writer.writerow(oper)
+                                    writer.writerow(CAL)
+                                    i = i + 5
+                                writer.writerow(row)
+                                i += 1
+                            f.close()
+                    # there already client information exist, change data
+                    if check_df[0][0] != '[DATA]':
+                        line = []
+                        # reading the csv file
+                        with open(path_lab, 'rt') as f:
+                            data = csv.reader(f)
+                            for row in data:
+                                line.append(row)
 
-                    # updating the column value/data
-                    line[16][2] = updated_client_name
-                    line[17][2] = updated_address1
-                    line[18][2] = updated_address2
-                    line[19][2] = updated_operator_name
+                        # updating the column value/data
+                        line[16][2] = updated_client_name
+                        line[17][2] = updated_address1
+                        line[18][2] = updated_address2
+                        line[19][2] = updated_operator_name
 
-                    # writing into the file
-                    with open(path_12, 'w', newline='') as f:
-                        writer = csv.writer(f)
-                        for row in line:
-                            writer.writerow(row)
+                        # writing into the file
+                        with open(path_lab, 'w', newline='') as f:
+                            writer = csv.writer(f)
+                            for row in line:
+                                writer.writerow(row)
             dlg = wx.MessageDialog(
                         None,
                         u"Successfully updated client information!",
@@ -1506,6 +1525,7 @@ class MainFrame(wx.Frame):
                     )
             if dlg.ShowModal() == wx.ID_YES:
                 dlg.Destroy()
+            return
         elif not self.readed:
             dlg = wx.MessageDialog(
                         None,
@@ -1515,6 +1535,7 @@ class MainFrame(wx.Frame):
                     )
             if dlg.ShowModal() == wx.ID_YES:
                 dlg.Destroy()
+            return
 
     def resetConfirm(self,event):
         self.confirmed = False
