@@ -1545,7 +1545,7 @@ class MainFrame(wx.Frame):
 
     def upload_csv(self,event):
         # key in your DataBase password
-        db = pymysql.connect(host='localhost', user='root', password='password', database='bluering')
+        db = pymysql.connect(host='localhost', user='root', password='961011Bmw-', database='bluering')
 
         cursor = db.cursor()
         if self.confirmed and self.readed:
@@ -1564,7 +1564,15 @@ class MainFrame(wx.Frame):
             results = cursor.fetchall()
 
             if results != ():
-                print("This chamber have been already stored in database!")
+                #print("This chamber have been already stored in database!")
+                dlg = wx.MessageDialog(
+                    None,
+                    u"The chamber ID has been already exist in database",
+                    u"repeat chamber ID",
+                    wx.YES_DEFAULT | wx.ICON_WARNING,
+                )
+                if dlg.ShowModal() == wx.ID_YES:
+                    dlg.Destroy()
             elif df.iloc[15][0] == "[DATA]":
                 Filename = df.iloc[0][2]
                 Date = df.iloc[1][2]
@@ -1588,8 +1596,7 @@ class MainFrame(wx.Frame):
                 print(Filename)
                 # sql="""INSERT INTO header(filename,Date,chamber,model,serial,description,software,backgrounds,measurements,Trolley,SCD,aperturewheel,Comment,monitorelectrometerrange,monitorhv,MEFAC_ICElectrometerRange,ic_hv) VALUES (Filename,Date,chamber,model,serial,description,software,backgrounds,measurements ,Trolley,SCD,aperturewheel,Comment,monitorelectrometerrange,monitorhv,MEFAC_ICElectrometerRange,ic_hv)"""
                 sql = "INSERT INTO header(filename,Date,chamber,model,serial,description,software,backgrounds,measurements,Trolley,SCD,aperturewheel,Comment,monitorelectrometerrange,monitorhv,MEFAC_ICElectrometerRange,ic_hv) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')" % \
-                      (
-                      Filename, Date, chamber, model, serial, description, software, backgrounds, measurements, Trolley,
+                      (Filename, Date, chamber, model, serial, description, software, backgrounds, measurements, Trolley,
                       SCD, aperturewheel, Comment, monitorelectrometerrange, monitorhv, MEFAC_ICElectrometerRange,
                       ic_hv)
                 # sql = "INSERT INTO header(filename,Date,chamber,model,serial,description) VALUES (('%s','%s','%s','%s','%s','%s')
@@ -1712,7 +1719,15 @@ class MainFrame(wx.Frame):
             results = cursor.fetchall()
 
             if results != ():
-                print("This chamber have been already stored in database!")
+                #print("This chamber have been already stored in database!")
+                dlg = wx.MessageDialog(
+                    None,
+                    u"The chamber ID has been already exist in database",
+                    u"repeat chamber ID",
+                    wx.YES_DEFAULT | wx.ICON_WARNING,
+                )
+                if dlg.ShowModal() == wx.ID_YES:
+                    dlg.Destroy()
             elif df.iloc[15][0] == "[DATA]":
                 Filename = df.iloc[0][2]
                 Date = df.iloc[1][2]
@@ -1851,7 +1866,15 @@ class MainFrame(wx.Frame):
 
             # close connection
             db.close()
-            print("Success!")
+            #print("Success!")
+            dlg = wx.MessageDialog(
+                None,
+                u"You have already store all the data to database",
+                u"successful stored",
+                wx.YES_DEFAULT | wx.ICON_WARNING,
+            )
+            if dlg.ShowModal() == wx.ID_YES:
+                dlg.Destroy()
             return
         elif not self.confirmed:
             dlg = wx.MessageDialog(
