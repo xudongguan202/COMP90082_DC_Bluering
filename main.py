@@ -2040,8 +2040,9 @@ class DatabaseFrame(wx.Frame):
 
         bSizer3.Add(self.m_staticText1, 0, wx.ALIGN_CENTER | wx.ALL, 5)
 
-        self.m_textCtrl1 = wx.TextCtrl(self.m_panel2, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size(-1, -1), 0)
-        bSizer3.Add(self.m_textCtrl1, 0, wx.ALIGN_CENTER | wx.ALL, 5)
+        self.m_textCtrl_job = wx.TextCtrl(self.m_panel2, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size(-1, -1), 0)
+        self.m_textCtrl_job.SetHint('Enter job ID')
+        bSizer3.Add(self.m_textCtrl_job, 0, wx.ALIGN_CENTER | wx.ALL, 5)
 
         self.m_panel2.SetSizer(bSizer3)
         self.m_panel2.Layout()
@@ -2057,9 +2058,10 @@ class DatabaseFrame(wx.Frame):
 
         bSizer31.Add(self.m_staticText11, 0, wx.ALIGN_CENTER | wx.ALL, 5)
 
-        self.m_textCtrl11 = wx.TextCtrl(self.m_panel3, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size(-1, -1),
+        self.m_textCtrl_client = wx.TextCtrl(self.m_panel3, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size(-1, -1),
                                         0)
-        bSizer31.Add(self.m_textCtrl11, 0, wx.ALIGN_CENTER | wx.ALL, 5)
+        self.m_textCtrl_client.SetHint('Enter client name')
+        bSizer31.Add(self.m_textCtrl_client, 0, wx.ALIGN_CENTER | wx.ALL, 5)
 
         self.m_panel3.SetSizer(bSizer31)
         self.m_panel3.Layout()
@@ -2075,9 +2077,10 @@ class DatabaseFrame(wx.Frame):
 
         bSizer32.Add(self.m_staticText12, 0, wx.ALIGN_CENTER | wx.ALL, 5)
 
-        self.m_textCtrl12 = wx.TextCtrl(self.m_panel4, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size(-1, -1),
+        self.m_textCtrl_chamber = wx.TextCtrl(self.m_panel4, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size(-1, -1),
                                         0)
-        bSizer32.Add(self.m_textCtrl12, 0, wx.ALIGN_CENTER | wx.ALL, 5)
+        self.m_textCtrl_chamber.SetHint('Enter chamber ID')
+        bSizer32.Add(self.m_textCtrl_chamber, 0, wx.ALIGN_CENTER | wx.ALL, 5)
 
         self.m_panel4.SetSizer(bSizer32)
         self.m_panel4.Layout()
