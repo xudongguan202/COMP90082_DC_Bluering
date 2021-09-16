@@ -1317,7 +1317,8 @@ class MainFrame(wx.Frame):
         if chamber_flag==False:
             dlg = wx.MessageDialog(
                         None,
-                        u"Chamber ID is not the same!",
+                        u"Chamber ID is not valid! "
+                        u"\nPlease check the chamber information and put file_CLIENT in field 1 and file_LAB in field 2.",
                         u"Chamber ID Error",
                         wx.YES_DEFAULT | wx.ICON_WARNING,
                     )
