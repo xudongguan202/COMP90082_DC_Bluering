@@ -1,5 +1,4 @@
 import wx
-from wx.core import CheckBox
 import wx.xrc
 import wx.grid as grid
 import wx.grid as gridlib
@@ -1233,7 +1232,7 @@ class MainFrame(wx.Frame):
                 reader = csv.reader(f)
                 result = list(reader)
                 Chamber_row = result[3]  # get line 4
-                lab_chamber.append(Chamber_row[2])
+                lab_chamber.append(Chamber_row[2].replace( ' ' , '' ))
                 if result[21][0] == '[DATA]':
                     client_name_row = result[16]  # get line 17
                     client_name.append(client_name_row[2])
@@ -1257,9 +1256,9 @@ class MainFrame(wx.Frame):
         
 
         for i in range(len(lab_chamber)):
-            if i== len(lab_chamber)-1:
+            if i== len(lab_chamber):
                 break
-            if lab_chamber[i] == lab_chamber[i+1]:
+            if lab_chamber[i] == "MEFAC":
                 continue
             else:
                 chamber_flag=False
