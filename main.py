@@ -1,4 +1,5 @@
 import wx
+from wx.core import CheckBox
 import wx.xrc
 import wx.grid as grid
 import wx.grid as gridlib
@@ -931,32 +932,56 @@ class MainFrame(wx.Frame):
         pathClient = []
         pathLab = []
         selected_run = self.m_textCtrl_selected_run.GetValue()
+        client_info=True
+
+
+              
+        for file_path in total_file_path_list:
+            file = open(file_path)
+            with file as f:
+                reader = csv.reader(f)
+                result = list(reader)
+                if result[16][0] == '[DATA]':
+                    client_info=False
+                    break
+
 
         if self.confirmed:
+            if client_info==True:
+                MainFrame.m_progress_bar.SetValue(10)
 
-            MainFrame.m_progress_bar.SetValue(10)
+                if self.m_checkBox_run1.GetValue() == True:
+                    pathClient.append(self.m_filePicker_run11.GetPath())
+                    pathLab.append(self.m_filePicker_run12.GetPath())
+                if self.m_checkBox_run2.GetValue() == True:
+                    pathClient.append(self.m_filePicker_run21.GetPath())
+                    pathLab.append(self.m_filePicker_run22.GetPath())
+                if self.m_checkBox_run3.GetValue() == True:
+                    pathClient.append(self.m_filePicker_run31.GetPath())
+                    pathLab.append(self.m_filePicker_run32.GetPath())
+                if self.m_checkBox_run4.GetValue() == True:
+                    pathClient.append(self.m_filePicker_run41.GetPath())
+                    pathLab.append(self.m_filePicker_run42.GetPath())
+                if self.m_checkBox_run5.GetValue() == True:
+                    pathClient.append(self.m_filePicker_run51.GetPath())
+                    pathLab.append(self.m_filePicker_run52.GetPath())
 
-            if self.m_checkBox_run1.GetValue() == True:
-                pathClient.append(self.m_filePicker_run11.GetPath())
-                pathLab.append(self.m_filePicker_run12.GetPath())
-            if self.m_checkBox_run2.GetValue() == True:
-                pathClient.append(self.m_filePicker_run21.GetPath())
-                pathLab.append(self.m_filePicker_run22.GetPath())
-            if self.m_checkBox_run3.GetValue() == True:
-                pathClient.append(self.m_filePicker_run31.GetPath())
-                pathLab.append(self.m_filePicker_run32.GetPath())
-            if self.m_checkBox_run4.GetValue() == True:
-                pathClient.append(self.m_filePicker_run41.GetPath())
-                pathLab.append(self.m_filePicker_run42.GetPath())
-            if self.m_checkBox_run5.GetValue() == True:
-                pathClient.append(self.m_filePicker_run51.GetPath())
-                pathLab.append(self.m_filePicker_run52.GetPath())
+                MainFrame.m_progress_bar.SetValue(20)
+                frame = GraphFrame()
+                frame.Show()
 
-            MainFrame.m_progress_bar.SetValue(20)
-            frame = GraphFrame()
-            frame.Show()
+                MainFrame.m_progress_bar.SetValue(100)
+            else :
+                dlg = wx.MessageDialog(
+                        None,
+                        u"Please complete the client information in all files!",
+                        u"Incomplete",
+                        wx.YES_DEFAULT | wx.ICON_WARNING,
+                    )
+                if dlg.ShowModal() == wx.ID_YES:
+                    dlg.Destroy()
+                    
 
-            MainFrame.m_progress_bar.SetValue(100)
 
         else:
             dlg = wx.MessageDialog(
@@ -968,6 +993,8 @@ class MainFrame(wx.Frame):
             if dlg.ShowModal() == wx.ID_YES:
                 dlg.Destroy()
 
+
+        
     def confirm(self, event):
 
         self.resetConfirm(event)
@@ -975,8 +1002,11 @@ class MainFrame(wx.Frame):
         self.m_textCtrl_selected_run.SetValue('0')
         self.m_textCtrl_total_run.SetValue('0')
 
+        global total_file_path_list
+
         selected_run_num = 0
         total_run_num = 0
+        total_file_path_list=[]
         client_file_path_list = []
         lab_file_path_list = []
         client_chamber=[]    
