@@ -622,8 +622,11 @@ class MainFrame(wx.Frame):
         self.m_panel_job_no.Layout()
         bSizer_right.Add(self.m_panel_job_no, 1, wx.EXPAND | wx.ALL, 5)
 
-        self.m_panel_equip_info = wx.Panel(self.m_panel_right, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize,
+        self.m_panel_equip_info = wx.Panel(self.m_panel_right, wx.ID_ANY, wx.DefaultPosition, wx.Size(-1, 210),
                                            wx.TAB_TRAVERSAL)
+        self.m_panel_equip_info.SetMinSize(wx.Size(-1, 210))
+        self.m_panel_equip_info.SetMaxSize(wx.Size(-1, 210))
+
         sbSizer11 = wx.StaticBoxSizer(wx.StaticBox(self.m_panel_equip_info, wx.ID_ANY, u"Equipment Information"),
                                       wx.VERTICAL)
 
@@ -723,30 +726,6 @@ class MainFrame(wx.Frame):
         self.m_panel681.Layout()
         bSizer592.Fit(self.m_panel681)
         bSizer581.Add(self.m_panel681, 1, wx.EXPAND | wx.ALL, 2)
-
-        self.m_panel691 = wx.Panel(self.m_panel66, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL)
-        bSizer5911 = wx.BoxSizer(wx.HORIZONTAL)
-
-        self.m_staticText711 = wx.StaticText(self.m_panel691, wx.ID_ANY, u"       Serial  ", wx.DefaultPosition,
-                                             wx.Size(100, -1), 0)
-        self.m_staticText711.Wrap(-1)
-
-        self.m_staticText711.SetMinSize(wx.Size(100, -1))
-        self.m_staticText711.SetMaxSize(wx.Size(100, -1))
-
-        bSizer5911.Add(self.m_staticText711, 0, wx.ALIGN_CENTER | wx.ALL, 1)
-
-        self.m_textCtrl_serial2 = wx.TextCtrl(self.m_panel691, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
-                                              wx.Size(200, -1), wx.TE_READONLY)
-        self.m_textCtrl_serial2.SetMinSize(wx.Size(200, -1))
-        self.m_textCtrl_serial2.SetMaxSize(wx.Size(200, -1))
-
-        bSizer5911.Add(self.m_textCtrl_serial2, 0, wx.ALIGN_CENTER | wx.ALL, 1)
-
-        self.m_panel691.SetSizer(bSizer5911)
-        self.m_panel691.Layout()
-        bSizer5911.Fit(self.m_panel691)
-        bSizer581.Add(self.m_panel691, 1, wx.EXPAND | wx.ALL, 2)
 
         self.m_panel66.SetSizer(bSizer581)
         self.m_panel66.Layout()
@@ -878,22 +857,30 @@ class MainFrame(wx.Frame):
         self.m_button_upload.SetMinSize(wx.Size(200, 30))
         self.m_button_upload.SetMaxSize(wx.Size(200, 30))
 
-        bSizer81.Add(self.m_button_upload, 0, wx.ALIGN_CENTER | wx.ALL, 6)
+        bSizer81.Add(self.m_button_upload, 0, wx.ALIGN_CENTER | wx.ALL, 4)
         self.Bind(wx.EVT_BUTTON, self.upload_csv, self.m_button_upload)
+
+        self.m_button_download = wx.Button(self.m_panel_pdf_dcc, wx.ID_ANY, u"Download Data", wx.DefaultPosition,
+                                         wx.Size(200, 30), 0)
+        self.m_button_download.SetMinSize(wx.Size(200, 30))
+        self.m_button_download.SetMaxSize(wx.Size(200, 30))
+
+        bSizer81.Add(self.m_button_download, 0, wx.ALIGN_CENTER | wx.ALL, 4)
+        self.Bind(wx.EVT_BUTTON, self.download_csv, self.m_button_download)
 
         self.m_button_pdf = wx.Button(self.m_panel_pdf_dcc, wx.ID_ANY, u"Generate PDF", wx.DefaultPosition,
                                       wx.Size(200, 30), 0)
         self.m_button_pdf.SetMinSize(wx.Size(200, 30))
         self.m_button_pdf.SetMaxSize(wx.Size(200, 30))
 
-        bSizer81.Add(self.m_button_pdf, 0, wx.ALIGN_CENTER | wx.ALL, 6)
+        bSizer81.Add(self.m_button_pdf, 0, wx.ALIGN_CENTER | wx.ALL, 4)
 
         self.m_button_dcc = wx.Button(self.m_panel_pdf_dcc, wx.ID_ANY, u"Generate DCC", wx.DefaultPosition,
                                       wx.Size(200, 30), 0)
         self.m_button_dcc.SetMinSize(wx.Size(200, 30))
         self.m_button_dcc.SetMaxSize(wx.Size(200, 30))
 
-        bSizer81.Add(self.m_button_dcc, 0, wx.ALIGN_CENTER | wx.ALL, 6)
+        bSizer81.Add(self.m_button_dcc, 0, wx.ALIGN_CENTER | wx.ALL, 4)
 
         self.m_panel_pdf_dcc.SetSizer(bSizer81)
         self.m_panel_pdf_dcc.Layout()
@@ -1323,7 +1310,6 @@ class MainFrame(wx.Frame):
             self.m_textCtrl_model1.SetValue('')
             self.m_textCtrl_serial1.SetValue('')
             self.m_textCtrl_model2.SetValue('')
-            self.m_textCtrl_serial2.SetValue('')
             self.m_textCtrl_client_name.SetValue('')
             self.m_textCtrl_operator.SetValue('')
             self.m_textCtrl_client_address1.SetValue('')
@@ -1348,15 +1334,15 @@ class MainFrame(wx.Frame):
                 serial_info = tmp_list[-1]
                 model_info = ''
                 for i in range(len(tmp_list) - 1):
+                    model_info += " "
                     model_info += tmp_list[i]
-                self.m_textCtrl_model1.SetValue(model_info)
+                self.m_textCtrl_model1.SetValue(model_info[1:])
                 self.m_textCtrl_serial1.SetValue(serial_info)
 
                 # read lab chamber info
                 lab_chamber_info_df = pd.read_csv(path_12, skiprows=3, nrows=1, header=None)
                 lab_chamber_info = lab_chamber_info_df[2][0]
                 self.m_textCtrl_model2.SetValue(lab_chamber_info)
-                self.m_textCtrl_serial2.SetValue(lab_chamber_info)
 
                 # check where is [DATA]
                 check_df = pd.read_csv(path_11, skiprows=21, nrows=1, header=None)  # row 22
@@ -1895,6 +1881,10 @@ class MainFrame(wx.Frame):
             if dlg.ShowModal() == wx.ID_YES:
                 dlg.Destroy()
 
+    def download_csv(self, event):
+        frame = DatabaseFrame()
+        frame.Show()
+
 # This class is for scatter plot
 class LeftPanelGraph(wx.Panel):
     def __init__(self, parent):
@@ -1995,6 +1985,124 @@ class GraphFrame(wx.Frame):
 
         leftgraph.draw()
         MainFrame.m_progress_bar.SetValue(80)
+
+class DatabaseFrame(wx.Frame):
+
+    def __init__(self,):
+        wx.Frame.__init__(self, parent=None, id=wx.ID_ANY, title=u"Database Management", pos=wx.DefaultPosition,
+                          size=wx.Size(700, 500), style=wx.DEFAULT_FRAME_STYLE | wx.TAB_TRAVERSAL)
+
+        self.SetSizeHints(wx.Size(700, 500), wx.Size(700, 500))
+
+        bSizer1 = wx.BoxSizer(wx.VERTICAL)
+
+        self.m_panel1 = wx.Panel(self, wx.ID_ANY, wx.DefaultPosition, wx.Size(-1, 50), wx.TAB_TRAVERSAL)
+        self.m_panel1.SetMinSize(wx.Size(-1, 50))
+        self.m_panel1.SetMaxSize(wx.Size(-1, 50))
+
+        bSizer2 = wx.BoxSizer(wx.HORIZONTAL)
+
+        self.m_panel2 = wx.Panel(self.m_panel1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL)
+        bSizer3 = wx.BoxSizer(wx.HORIZONTAL)
+
+        self.m_staticText1 = wx.StaticText(self.m_panel2, wx.ID_ANY, u"Job ID", wx.DefaultPosition, wx.DefaultSize, 0)
+        self.m_staticText1.Wrap(-1)
+
+        bSizer3.Add(self.m_staticText1, 0, wx.ALIGN_CENTER | wx.ALL, 5)
+
+        self.m_textCtrl1 = wx.TextCtrl(self.m_panel2, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size(-1, -1), 0)
+        bSizer3.Add(self.m_textCtrl1, 0, wx.ALIGN_CENTER | wx.ALL, 5)
+
+        self.m_panel2.SetSizer(bSizer3)
+        self.m_panel2.Layout()
+        bSizer3.Fit(self.m_panel2)
+        bSizer2.Add(self.m_panel2, 1, wx.EXPAND | wx.ALL, 1)
+
+        self.m_panel3 = wx.Panel(self.m_panel1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL)
+        bSizer31 = wx.BoxSizer(wx.HORIZONTAL)
+
+        self.m_staticText11 = wx.StaticText(self.m_panel3, wx.ID_ANY, u"Client Name", wx.DefaultPosition,
+                                            wx.DefaultSize, 0)
+        self.m_staticText11.Wrap(-1)
+
+        bSizer31.Add(self.m_staticText11, 0, wx.ALIGN_CENTER | wx.ALL, 5)
+
+        self.m_textCtrl11 = wx.TextCtrl(self.m_panel3, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size(-1, -1),
+                                        0)
+        bSizer31.Add(self.m_textCtrl11, 0, wx.ALIGN_CENTER | wx.ALL, 5)
+
+        self.m_panel3.SetSizer(bSizer31)
+        self.m_panel3.Layout()
+        bSizer31.Fit(self.m_panel3)
+        bSizer2.Add(self.m_panel3, 1, wx.EXPAND | wx.ALL, 5)
+
+        self.m_panel4 = wx.Panel(self.m_panel1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL)
+        bSizer32 = wx.BoxSizer(wx.HORIZONTAL)
+
+        self.m_staticText12 = wx.StaticText(self.m_panel4, wx.ID_ANY, u"Chamber ID", wx.DefaultPosition, wx.DefaultSize,
+                                            0)
+        self.m_staticText12.Wrap(-1)
+
+        bSizer32.Add(self.m_staticText12, 0, wx.ALIGN_CENTER | wx.ALL, 5)
+
+        self.m_textCtrl12 = wx.TextCtrl(self.m_panel4, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size(-1, -1),
+                                        0)
+        bSizer32.Add(self.m_textCtrl12, 0, wx.ALIGN_CENTER | wx.ALL, 5)
+
+        self.m_panel4.SetSizer(bSizer32)
+        self.m_panel4.Layout()
+        bSizer32.Fit(self.m_panel4)
+        bSizer2.Add(self.m_panel4, 1, wx.EXPAND | wx.ALL, 5)
+
+        self.m_button_search = wx.Button(self.m_panel1, wx.ID_ANY, u"Search", wx.DefaultPosition, wx.Size(70, -1), 0)
+        self.m_button_search.SetMinSize(wx.Size(70, -1))
+        self.m_button_search.SetMaxSize(wx.Size(70, -1))
+
+        bSizer2.Add(self.m_button_search, 0, wx.ALIGN_CENTER | wx.ALL, 8)
+        self.Bind(wx.EVT_BUTTON, self.search, self.m_button_search)
+
+        self.m_panel1.SetSizer(bSizer2)
+        self.m_panel1.Layout()
+        bSizer1.Add(self.m_panel1, 1, wx.EXPAND | wx.ALL, 0)
+
+        self.m_panel5 = wx.Panel(self, wx.ID_ANY, wx.DefaultPosition, wx.Size(-1, 420), wx.TAB_TRAVERSAL)
+        self.m_panel5.SetMinSize(wx.Size(-1, 420))
+        self.m_panel5.SetMaxSize(wx.Size(-1, 420))
+
+        bSizer9 = wx.BoxSizer(wx.VERTICAL)
+
+        self.m_treeCtrl = wx.TreeCtrl(self.m_panel5, wx.ID_ANY, wx.DefaultPosition, wx.Size(-1, 350),
+                                        wx.TR_DEFAULT_STYLE | wx.TR_MULTIPLE | wx.TR_TWIST_BUTTONS)
+        self.m_treeCtrl.SetMinSize(wx.Size(-1, 350))
+        self.m_treeCtrl.SetMaxSize(wx.Size(-1, 350))
+
+        bSizer9.Add(self.m_treeCtrl, 0, wx.ALL | wx.EXPAND, 5)
+
+        self.m_button_db_download = wx.Button(self.m_panel5, wx.ID_ANY, u"Download CSV", wx.DefaultPosition,
+                                              wx.Size(200, 30), 0)
+        self.m_button_db_download.SetMinSize(wx.Size(200, 30))
+        self.m_button_db_download.SetMaxSize(wx.Size(200, 30))
+        bSizer9.Add(self.m_button_db_download, 0, wx.ALIGN_CENTER | wx.ALL, 5)
+        self.Bind(wx.EVT_BUTTON, self.download_db, self.m_button_db_download)
+
+        self.m_panel5.SetSizer(bSizer9)
+        self.m_panel5.Layout()
+        bSizer1.Add(self.m_panel5, 1, wx.EXPAND | wx.ALL, 0)
+
+        self.SetSizer(bSizer1)
+        self.Layout()
+
+        self.Centre(wx.BOTH)
+
+    def search(self, event):
+        self.root = self.m_treeCtrl.AddRoot('Something goes here')
+        self.m_treeCtrl.SetItemData(self.root, ('key', 'value'))
+        os = self.m_treeCtrl.AppendItem(self.root, 'Operating Systems')
+        self.m_treeCtrl.Expand(self.root)
+        return
+
+    def download_db(self, event):
+        return
 
 
 if __name__ == '__main__':
