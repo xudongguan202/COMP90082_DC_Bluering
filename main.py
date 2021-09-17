@@ -2177,7 +2177,7 @@ class MainFrame(wx.Frame):
             dlg = wx.MessageDialog(
                 None,
                 u"Please read your data files!",
-                u"Not readed",
+                u"Not read",
                 wx.YES_DEFAULT | wx.ICON_WARNING,
             )
             if dlg.ShowModal() == wx.ID_YES:
@@ -2258,14 +2258,12 @@ class MainFrame(wx.Frame):
                     measurements = df.iloc[6][2]
                     Trolley = df.iloc[7][2]
                     SCD = df.iloc[8][2]
-                    aperturewheel = df.iloc[9][2]
+                    aperture_wheel = df.iloc[9][2]
                     Comment = df.iloc[10][2]
                     monitorelectrometerrange = df.iloc[11][2]
-                    monitorhv = df.iloc[12][2]
+                    monitor_hv = df.iloc[12][2]
                     MEFAC_ICElectrometerRange = df.iloc[13][2]
                     ic_hv = df.iloc[14][2]
-                    print(Filename)
-                    # sql="""INSERT INTO header(filename,Date,chamber,model,serial,description,software,backgrounds,measurements,Trolley,SCD,aperturewheel,Comment,monitorelectrometerrange,monitorhv,MEFAC_ICElectrometerRange,ic_hv) VALUES (Filename,Date,chamber,model,serial,description,software,backgrounds,measurements ,Trolley,SCD,aperturewheel,Comment,monitorelectrometerrange,monitorhv,MEFAC_ICElectrometerRange,ic_hv)"""
                     sql = (
                         "INSERT INTO header(filename,Date,chamber,model,serial,description,software,backgrounds,measurements,Trolley,SCD,aperturewheel,Comment,monitorelectrometerrange,monitorhv,MEFAC_ICElectrometerRange,ic_hv) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')"
                         % (
@@ -2280,15 +2278,14 @@ class MainFrame(wx.Frame):
                             measurements,
                             Trolley,
                             SCD,
-                            aperturewheel,
+                            aperture_wheel,
                             Comment,
                             monitorelectrometerrange,
-                            monitorhv,
+                            monitor_hv,
                             MEFAC_ICElectrometerRange,
                             ic_hv,
                         )
                     )
-                    # sql = "INSERT INTO header(filename,Date,chamber,model,serial,description) VALUES (('%s','%s','%s','%s','%s','%s')
                     # excute sql
                     cursor.execute(sql)
                     # commit to database
@@ -2304,7 +2301,7 @@ class MainFrame(wx.Frame):
                         XraysOn = df2.iloc[i]["XraysOn"]
                         HVLFilter = df2.iloc[i]["HVLFilter(mm)"]
                         Filter = df2.iloc[i]["Filter"]
-                        FilterReady = df2.iloc[i]["FilterReady"]
+                        Filter_Ready = df2.iloc[i]["FilterReady"]
                         HVLReady = df2.iloc[i]["HVLReady"]
                         N = df2.iloc[i]["N"]
                         Current1 = df2.iloc[i]["Current1(pA)"]
@@ -2325,7 +2322,7 @@ class MainFrame(wx.Frame):
                                 XraysOn,
                                 HVLFilter,
                                 Filter,
-                                FilterReady,
+                                Filter_Ready,
                                 HVLReady,
                                 N,
                                 Current1,
@@ -2363,13 +2360,13 @@ class MainFrame(wx.Frame):
                     measurements = df.iloc[6][2]
                     Trolley = int(df.iloc[7][2])
                     SCD = int(df.iloc[8][2])
-                    aperturewheel = df.iloc[9][2]
+                    aperture_wheel = df.iloc[9][2]
                     Comment = df.iloc[10][2]
                     monitorelectrometerrange = df.iloc[11][2]
-                    monitorhv = df.iloc[12][2]
+                    monitor_hv = df.iloc[12][2]
                     MEFAC_ICElectrometerRange = df.iloc[13][2]
                     ic_hv = df.iloc[14][2]
-                    clientname = df.iloc[15][2]
+                    client_name = df.iloc[15][2]
                     address1 = df.iloc[16][2]
                     address2 = df.iloc[17][2]
                     operator = df.iloc[18][2]
@@ -2388,13 +2385,13 @@ class MainFrame(wx.Frame):
                             measurements,
                             Trolley,
                             SCD,
-                            aperturewheel,
+                            aperture_wheel,
                             Comment,
                             monitorelectrometerrange,
-                            monitorhv,
+                            monitor_hv,
                             MEFAC_ICElectrometerRange,
                             ic_hv,
-                            clientname,
+                            client_name,
                             address1,
                             address2,
                             operator,
@@ -2500,14 +2497,13 @@ class MainFrame(wx.Frame):
                     measurements = df.iloc[6][2]
                     Trolley = df.iloc[7][2]
                     SCD = df.iloc[8][2]
-                    aperturewheel = df.iloc[9][2]
+                    aperture_wheel = df.iloc[9][2]
                     Comment = df.iloc[10][2]
                     monitorelectrometerrange = df.iloc[11][2]
-                    monitorhv = df.iloc[12][2]
+                    monitor_hv = df.iloc[12][2]
                     MEFAC_ICElectrometerRange = df.iloc[13][2]
                     ic_hv = df.iloc[14][2]
                     print(Filename)
-                    # sql="""INSERT INTO header(filename,Date,chamber,model,serial,description,software,backgrounds,measurements,Trolley,SCD,aperturewheel,Comment,monitorelectrometerrange,monitorhv,MEFAC_ICElectrometerRange,ic_hv) VALUES (Filename,Date,chamber,model,serial,description,software,backgrounds,measurements ,Trolley,SCD,aperturewheel,Comment,monitorelectrometerrange,monitorhv,MEFAC_ICElectrometerRange,ic_hv)"""
                     sql = (
                         "INSERT INTO header(filename,Date,chamber,model,serial,description,software,backgrounds,measurements,Trolley,SCD,aperturewheel,Comment,monitorelectrometerrange,monitorhv,MEFAC_ICElectrometerRange,ic_hv) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')"
                         % (
@@ -2522,10 +2518,10 @@ class MainFrame(wx.Frame):
                             measurements,
                             Trolley,
                             SCD,
-                            aperturewheel,
+                            aperture_wheel,
                             Comment,
                             monitorelectrometerrange,
-                            monitorhv,
+                            monitor_hv,
                             MEFAC_ICElectrometerRange,
                             ic_hv,
                         )
@@ -2604,13 +2600,13 @@ class MainFrame(wx.Frame):
                     measurements = df.iloc[6][2]
                     Trolley = int(df.iloc[7][2])
                     SCD = int(df.iloc[8][2])
-                    aperturewheel = df.iloc[9][2]
+                    aperture_wheel = df.iloc[9][2]
                     Comment = df.iloc[10][2]
                     monitorelectrometerrange = df.iloc[11][2]
-                    monitorhv = df.iloc[12][2]
+                    monitor_hv = df.iloc[12][2]
                     MEFAC_ICElectrometerRange = df.iloc[13][2]
                     ic_hv = df.iloc[14][2]
-                    clientname = df.iloc[15][2]
+                    client_name = df.iloc[15][2]
                     address1 = df.iloc[16][2]
                     address2 = df.iloc[17][2]
                     operator = df.iloc[18][2]
@@ -2629,13 +2625,13 @@ class MainFrame(wx.Frame):
                             measurements,
                             Trolley,
                             SCD,
-                            aperturewheel,
+                            aperture_wheel,
                             Comment,
                             monitorelectrometerrange,
-                            monitorhv,
+                            monitor_hv,
                             MEFAC_ICElectrometerRange,
                             ic_hv,
-                            clientname,
+                            client_name,
                             address1,
                             address2,
                             operator,
