@@ -2198,7 +2198,7 @@ class MainFrame(wx.Frame):
 
         # key in your DataBase password
         db = pymysql.connect(
-            host="localhost", user="root", password="961011Bmw-", database="bluering"
+            host="localhost", user="root", password="password", database="bluering"
         )
 
         cursor = db.cursor()
@@ -2283,7 +2283,7 @@ class MainFrame(wx.Frame):
                             monitorelectrometerrange,
                             monitor_hv,
                             mEFAC_ICElectrometerRange,
-                            ic_hv,
+                            ic_hv
                         )
                     )
                     # excute sql
@@ -2331,7 +2331,7 @@ class MainFrame(wx.Frame):
                                 t_MC,
                                 t_Air,
                                 t_SC,
-                                h,
+                                h
                             )
                         )
                         try:
@@ -2395,7 +2395,7 @@ class MainFrame(wx.Frame):
                             address1,
                             address2,
                             operator,
-                            calnumber,
+                            calnumber
                         )
                     )
                     try:
@@ -2448,7 +2448,7 @@ class MainFrame(wx.Frame):
                                 t_MC,
                                 t_Air,
                                 t_SC,
-                                h,
+                                h
                             )
                         )
                         try:
@@ -2522,7 +2522,7 @@ class MainFrame(wx.Frame):
                                 monitorelectrometerrange,
                                 monitor_hv,
                                 mEFAC_ICElectrometerRange,
-                                ic_hv,
+                                ic_hv
                             )
                     )
                     # excute sql
@@ -2570,7 +2570,7 @@ class MainFrame(wx.Frame):
                                     t_MC,
                                     t_Air,
                                     t_SC,
-                                    h,
+                                    h
                                 )
                         )
                         try:
@@ -2634,7 +2634,7 @@ class MainFrame(wx.Frame):
                                 address1,
                                 address2,
                                 operator,
-                                calnumber,
+                                calnumber
                             )
                     )
                     try:
@@ -2687,7 +2687,7 @@ class MainFrame(wx.Frame):
                                     t_MC,
                                     t_Air,
                                     t_SC,
-                                    h,
+                                    h
                                 )
                         )
                         try:
