@@ -2245,8 +2245,8 @@ class MainFrame(wx.Frame):
                     if dlg.ShowModal() == wx.ID_YES:
                         dlg.Destroy()
                 elif df.iloc[15][0] == "[DATA]":
-                    Filename = df.iloc[0][2]
-                    Date = df.iloc[1][2]
+                    filename = df.iloc[0][2]
+                    date = df.iloc[1][2]
                     chamber = df.iloc[2][2]
                     chamber2 = chamber.split()
                     model = " "
@@ -2256,19 +2256,19 @@ class MainFrame(wx.Frame):
                     software = df.iloc[4][2]
                     backgrounds = df.iloc[5][2]
                     measurements = df.iloc[6][2]
-                    Trolley = df.iloc[7][2]
-                    SCD = df.iloc[8][2]
+                    trolley = df.iloc[7][2]
+                    sCD = df.iloc[8][2]
                     aperture_wheel = df.iloc[9][2]
-                    Comment = df.iloc[10][2]
+                    comment = df.iloc[10][2]
                     monitorelectrometerrange = df.iloc[11][2]
                     monitor_hv = df.iloc[12][2]
-                    MEFAC_ICElectrometerRange = df.iloc[13][2]
+                    mEFAC_ICElectrometerRange = df.iloc[13][2]
                     ic_hv = df.iloc[14][2]
                     sql = (
                         "INSERT INTO header(filename,Date,chamber,model,serial,description,software,backgrounds,measurements,Trolley,SCD,aperturewheel,Comment,monitorelectrometerrange,monitorhv,MEFAC_ICElectrometerRange,ic_hv) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')"
                         % (
-                            Filename,
-                            Date,
+                            filename,
+                            date,
                             chamber,
                             model,
                             serial,
@@ -2276,13 +2276,13 @@ class MainFrame(wx.Frame):
                             software,
                             backgrounds,
                             measurements,
-                            Trolley,
-                            SCD,
+                            trolley,
+                            sCD,
                             aperture_wheel,
-                            Comment,
+                            comment,
                             monitorelectrometerrange,
                             monitor_hv,
-                            MEFAC_ICElectrometerRange,
+                            mEFAC_ICElectrometerRange,
                             ic_hv,
                         )
                     )
@@ -2297,41 +2297,41 @@ class MainFrame(wx.Frame):
                     for i in range(len(df2)):
                         kV = df2.iloc[i]["kV"]
                         mA = df2.iloc[i]["mA"]
-                        BarCode = df2.iloc[i]["BarCode"]
-                        XraysOn = df2.iloc[i]["XraysOn"]
-                        HVLFilter = df2.iloc[i]["HVLFilter(mm)"]
-                        Filter = df2.iloc[i]["Filter"]
-                        Filter_Ready = df2.iloc[i]["FilterReady"]
-                        HVLReady = df2.iloc[i]["HVLReady"]
-                        N = df2.iloc[i]["N"]
-                        Current1 = df2.iloc[i]["Current1(pA)"]
-                        Current2 = df2.iloc[i]["Current2(pA)"]
-                        P = df2.iloc[i]["P(kPa)"]
-                        T_MC = df2.iloc[i]["T(MC)"]
-                        T_Air = df2.iloc[i]["T(Air)"]
-                        T_SC = df2.iloc[i]["T(SC)"]
-                        H = df2.iloc[i]["H(%)"]
+                        barCode = df2.iloc[i]["BarCode"]
+                        xraysOn = df2.iloc[i]["XraysOn"]
+                        hVLFilter = df2.iloc[i]["HVLFilter(mm)"]
+                        filter = df2.iloc[i]["Filter"]
+                        filter_Ready = df2.iloc[i]["FilterReady"]
+                        hVLReady = df2.iloc[i]["HVLReady"]
+                        n = df2.iloc[i]["N"]
+                        current1 = df2.iloc[i]["Current1(pA)"]
+                        current2 = df2.iloc[i]["Current2(pA)"]
+                        p = df2.iloc[i]["P(kPa)"]
+                        t_MC = df2.iloc[i]["T(MC)"]
+                        t_Air = df2.iloc[i]["T(Air)"]
+                        t_SC = df2.iloc[i]["T(SC)"]
+                        h = df2.iloc[i]["H(%)"]
                         sql = (
                             "INSERT INTO body(filename,chamber,kv,ma,barcode,xrayson,HVLFilter,filter,filterready,hvlready,n,Current1,Current2,P,T_MC,T_Air,T_SC,H) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')"
                             % (
-                                Filename,
+                                filename,
                                 chamber,
                                 kV,
                                 mA,
-                                BarCode,
-                                XraysOn,
-                                HVLFilter,
-                                Filter,
-                                Filter_Ready,
-                                HVLReady,
-                                N,
-                                Current1,
-                                Current2,
-                                P,
-                                T_MC,
-                                T_Air,
-                                T_SC,
-                                H,
+                                barCode,
+                                xraysOn,
+                                hVLFilter,
+                                filter,
+                                filter_Ready,
+                                hVLReady,
+                                n,
+                                current1,
+                                current2,
+                                p,
+                                t_MC,
+                                t_Air,
+                                t_SC,
+                                h,
                             )
                         )
                         try:
@@ -2346,9 +2346,9 @@ class MainFrame(wx.Frame):
                             print("fail")
 
                 elif df.iloc[20][0] == "[DATA]":
-                    print("elif")
-                    Filename = df.iloc[0][2]
-                    Date = df.iloc[1][2]
+                    #print("elif")
+                    filename = df.iloc[0][2]
+                    date = df.iloc[1][2]
                     chamber = df.iloc[2][2]
                     chamber2 = chamber.split()
                     model = " "
@@ -2358,13 +2358,13 @@ class MainFrame(wx.Frame):
                     software = df.iloc[4][2]
                     backgrounds = df.iloc[5][2]
                     measurements = df.iloc[6][2]
-                    Trolley = int(df.iloc[7][2])
-                    SCD = int(df.iloc[8][2])
+                    trolley = int(df.iloc[7][2])
+                    sCD = int(df.iloc[8][2])
                     aperture_wheel = df.iloc[9][2]
-                    Comment = df.iloc[10][2]
+                    comment = df.iloc[10][2]
                     monitorelectrometerrange = df.iloc[11][2]
                     monitor_hv = df.iloc[12][2]
-                    MEFAC_ICElectrometerRange = df.iloc[13][2]
+                    mEFAC_ICElectrometerRange = df.iloc[13][2]
                     ic_hv = df.iloc[14][2]
                     client_name = df.iloc[15][2]
                     address1 = df.iloc[16][2]
@@ -2374,8 +2374,8 @@ class MainFrame(wx.Frame):
                     sql = (
                         "INSERT INTO header(filename,Date,chamber,model,serial,description,software,backgrounds,measurements,Trolley,SCD,aperturewheel,Comment,monitorelectrometerrange,monitorhv,MEFAC_ICElectrometerRange,ic_hv,clientname,address1,address2,operator,calnumber) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')"
                         % (
-                            Filename,
-                            Date,
+                            filename,
+                            date,
                             chamber,
                             model,
                             serial,
@@ -2383,13 +2383,13 @@ class MainFrame(wx.Frame):
                             software,
                             backgrounds,
                             measurements,
-                            Trolley,
-                            SCD,
+                            trolley,
+                            sCD,
                             aperture_wheel,
-                            Comment,
+                            comment,
                             monitorelectrometerrange,
                             monitor_hv,
-                            MEFAC_ICElectrometerRange,
+                            mEFAC_ICElectrometerRange,
                             ic_hv,
                             client_name,
                             address1,
@@ -2414,41 +2414,41 @@ class MainFrame(wx.Frame):
                     for i in range(len(df2)):
                         kV = int(df2.iloc[i]["kV"])
                         mA = int(df2.iloc[i]["mA"])
-                        BarCode = df2.iloc[i]["BarCode"]
-                        XraysOn = df2.iloc[i]["XraysOn"]
-                        HVLFilter = df2.iloc[i]["HVLFilter(mm)"]
-                        Filter = df2.iloc[i]["Filter"]
-                        FilterReady = df2.iloc[i]["FilterReady"]
-                        HVLReady = df2.iloc[i]["HVLReady"]
-                        N = df2.iloc[i]["N"]
-                        Current1 = float(df2.iloc[i]["Current1(pA)"])
-                        Current2 = float(df2.iloc[i]["Current2(pA)"])
-                        P = float(df2.iloc[i]["P(kPa)"])
-                        T_MC = float(df2.iloc[i]["T(MC)"])
-                        T_Air = float(df2.iloc[i]["T(Air)"])
-                        T_SC = float(df2.iloc[i]["T(SC)"])
-                        H = float(df2.iloc[i]["H(%)"])
+                        barCode = df2.iloc[i]["BarCode"]
+                        xraysOn = df2.iloc[i]["XraysOn"]
+                        hLFilter = df2.iloc[i]["HVLFilter(mm)"]
+                        filter = df2.iloc[i]["Filter"]
+                        filterReady = df2.iloc[i]["FilterReady"]
+                        hVLReady = df2.iloc[i]["HVLReady"]
+                        n = df2.iloc[i]["N"]
+                        current1 = float(df2.iloc[i]["Current1(pA)"])
+                        current2 = float(df2.iloc[i]["Current2(pA)"])
+                        p = float(df2.iloc[i]["P(kPa)"])
+                        t_MC = float(df2.iloc[i]["T(MC)"])
+                        t_Air = float(df2.iloc[i]["T(Air)"])
+                        t_SC = float(df2.iloc[i]["T(SC)"])
+                        h = float(df2.iloc[i]["H(%)"])
                         sql = (
                             "INSERT INTO body(filename,chamber,kv,ma,barcode,xrayson,HVLFilter,filter,filterready,hvlready,n,Current1,Current2,P,T_MC,T_Air,T_SC,H) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')"
                             % (
-                                Filename,
+                                filename,
                                 chamber,
                                 kV,
                                 mA,
-                                BarCode,
-                                XraysOn,
-                                HVLFilter,
-                                Filter,
-                                FilterReady,
-                                HVLReady,
-                                N,
-                                Current1,
-                                Current2,
-                                P,
-                                T_MC,
-                                T_Air,
-                                T_SC,
-                                H,
+                                barCode,
+                                xraysOn,
+                                hVLFilter,
+                                filter,
+                                filterReady,
+                                hVLReady,
+                                n,
+                                current1,
+                                current2,
+                                p,
+                                t_MC,
+                                t_Air,
+                                t_SC,
+                                h,
                             )
                         )
                         try:
@@ -2484,8 +2484,8 @@ class MainFrame(wx.Frame):
                     if dlg.ShowModal() == wx.ID_YES:
                         dlg.Destroy()
                 elif df.iloc[15][0] == "[DATA]":
-                    Filename = df.iloc[0][2]
-                    Date = df.iloc[1][2]
+                    filename = df.iloc[0][2]
+                    date = df.iloc[1][2]
                     chamber = df.iloc[2][2]
                     chamber2 = chamber.split()
                     model = " "
@@ -2495,36 +2495,35 @@ class MainFrame(wx.Frame):
                     software = df.iloc[4][2]
                     backgrounds = df.iloc[5][2]
                     measurements = df.iloc[6][2]
-                    Trolley = df.iloc[7][2]
-                    SCD = df.iloc[8][2]
+                    trolley = df.iloc[7][2]
+                    sCD = df.iloc[8][2]
                     aperture_wheel = df.iloc[9][2]
-                    Comment = df.iloc[10][2]
+                    comment = df.iloc[10][2]
                     monitorelectrometerrange = df.iloc[11][2]
                     monitor_hv = df.iloc[12][2]
-                    MEFAC_ICElectrometerRange = df.iloc[13][2]
+                    mEFAC_ICElectrometerRange = df.iloc[13][2]
                     ic_hv = df.iloc[14][2]
-                    print(Filename)
                     sql = (
-                        "INSERT INTO header(filename,Date,chamber,model,serial,description,software,backgrounds,measurements,Trolley,SCD,aperturewheel,Comment,monitorelectrometerrange,monitorhv,MEFAC_ICElectrometerRange,ic_hv) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')"
-                        % (
-                            Filename,
-                            Date,
-                            chamber,
-                            model,
-                            serial,
-                            description,
-                            software,
-                            backgrounds,
-                            measurements,
-                            Trolley,
-                            SCD,
-                            aperture_wheel,
-                            Comment,
-                            monitorelectrometerrange,
-                            monitor_hv,
-                            MEFAC_ICElectrometerRange,
-                            ic_hv,
-                        )
+                            "INSERT INTO header(filename,Date,chamber,model,serial,description,software,backgrounds,measurements,Trolley,SCD,aperturewheel,Comment,monitorelectrometerrange,monitorhv,MEFAC_ICElectrometerRange,ic_hv) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')"
+                            % (
+                                filename,
+                                date,
+                                chamber,
+                                model,
+                                serial,
+                                description,
+                                software,
+                                backgrounds,
+                                measurements,
+                                trolley,
+                                sCD,
+                                aperture_wheel,
+                                comment,
+                                monitorelectrometerrange,
+                                monitor_hv,
+                                mEFAC_ICElectrometerRange,
+                                ic_hv,
+                            )
                     )
                     # excute sql
                     cursor.execute(sql)
@@ -2537,42 +2536,42 @@ class MainFrame(wx.Frame):
                     for i in range(len(df2)):
                         kV = df2.iloc[i]["kV"]
                         mA = df2.iloc[i]["mA"]
-                        BarCode = df2.iloc[i]["BarCode"]
-                        XraysOn = df2.iloc[i]["XraysOn"]
-                        HVLFilter = df2.iloc[i]["HVLFilter(mm)"]
-                        Filter = df2.iloc[i]["Filter"]
-                        FilterReady = df2.iloc[i]["FilterReady"]
-                        HVLReady = df2.iloc[i]["HVLReady"]
-                        N = df2.iloc[i]["N"]
-                        Current1 = df2.iloc[i]["Current1(pA)"]
-                        Current2 = df2.iloc[i]["Current2(pA)"]
-                        P = df2.iloc[i]["P(kPa)"]
-                        T_MC = df2.iloc[i]["T(MC)"]
-                        T_Air = df2.iloc[i]["T(Air)"]
-                        T_SC = df2.iloc[i]["T(SC)"]
-                        H = df2.iloc[i]["H(%)"]
+                        barCode = df2.iloc[i]["BarCode"]
+                        xraysOn = df2.iloc[i]["XraysOn"]
+                        hVLFilter = df2.iloc[i]["HVLFilter(mm)"]
+                        filter = df2.iloc[i]["Filter"]
+                        filter_Ready = df2.iloc[i]["FilterReady"]
+                        hVLReady = df2.iloc[i]["HVLReady"]
+                        n = df2.iloc[i]["N"]
+                        current1 = df2.iloc[i]["Current1(pA)"]
+                        current2 = df2.iloc[i]["Current2(pA)"]
+                        p = df2.iloc[i]["P(kPa)"]
+                        t_MC = df2.iloc[i]["T(MC)"]
+                        t_Air = df2.iloc[i]["T(Air)"]
+                        t_SC = df2.iloc[i]["T(SC)"]
+                        h = df2.iloc[i]["H(%)"]
                         sql = (
-                            "INSERT INTO body(filename,chamber,kv,ma,barcode,xrayson,HVLFilter,filter,filterready,hvlready,n,Current1,Current2,P,T_MC,T_Air,T_SC,H) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')"
-                            % (
-                                Filename,
-                                chamber,
-                                kV,
-                                mA,
-                                BarCode,
-                                XraysOn,
-                                HVLFilter,
-                                Filter,
-                                FilterReady,
-                                HVLReady,
-                                N,
-                                Current1,
-                                Current2,
-                                P,
-                                T_MC,
-                                T_Air,
-                                T_SC,
-                                H,
-                            )
+                                "INSERT INTO body(filename,chamber,kv,ma,barcode,xrayson,HVLFilter,filter,filterready,hvlready,n,Current1,Current2,P,T_MC,T_Air,T_SC,H) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')"
+                                % (
+                                    filename,
+                                    chamber,
+                                    kV,
+                                    mA,
+                                    barCode,
+                                    xraysOn,
+                                    hVLFilter,
+                                    filter,
+                                    filter_Ready,
+                                    hVLReady,
+                                    n,
+                                    current1,
+                                    current2,
+                                    p,
+                                    t_MC,
+                                    t_Air,
+                                    t_SC,
+                                    h,
+                                )
                         )
                         try:
                             # excute sql
@@ -2586,9 +2585,9 @@ class MainFrame(wx.Frame):
                             print("fail")
 
                 elif df.iloc[20][0] == "[DATA]":
-                    print("elif")
-                    Filename = df.iloc[0][2]
-                    Date = df.iloc[1][2]
+                    # print("elif")
+                    filename = df.iloc[0][2]
+                    date = df.iloc[1][2]
                     chamber = df.iloc[2][2]
                     chamber2 = chamber.split()
                     model = " "
@@ -2598,13 +2597,13 @@ class MainFrame(wx.Frame):
                     software = df.iloc[4][2]
                     backgrounds = df.iloc[5][2]
                     measurements = df.iloc[6][2]
-                    Trolley = int(df.iloc[7][2])
-                    SCD = int(df.iloc[8][2])
+                    trolley = int(df.iloc[7][2])
+                    sCD = int(df.iloc[8][2])
                     aperture_wheel = df.iloc[9][2]
-                    Comment = df.iloc[10][2]
+                    comment = df.iloc[10][2]
                     monitorelectrometerrange = df.iloc[11][2]
                     monitor_hv = df.iloc[12][2]
-                    MEFAC_ICElectrometerRange = df.iloc[13][2]
+                    mEFAC_ICElectrometerRange = df.iloc[13][2]
                     ic_hv = df.iloc[14][2]
                     client_name = df.iloc[15][2]
                     address1 = df.iloc[16][2]
@@ -2612,33 +2611,32 @@ class MainFrame(wx.Frame):
                     operator = df.iloc[18][2]
                     calnumber = df.iloc[19][2]
                     sql = (
-                        "INSERT INTO header(filename,Date,chamber,model,serial,description,software,backgrounds,measurements,Trolley,SCD,aperturewheel,Comment,monitorelectrometerrange,monitorhv,MEFAC_ICElectrometerRange,ic_hv,clientname,address1,address2,operator,calnumber) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')"
-                        % (
-                            Filename,
-                            Date,
-                            chamber,
-                            model,
-                            serial,
-                            description,
-                            software,
-                            backgrounds,
-                            measurements,
-                            Trolley,
-                            SCD,
-                            aperture_wheel,
-                            Comment,
-                            monitorelectrometerrange,
-                            monitor_hv,
-                            MEFAC_ICElectrometerRange,
-                            ic_hv,
-                            client_name,
-                            address1,
-                            address2,
-                            operator,
-                            calnumber,
-                        )
+                            "INSERT INTO header(filename,Date,chamber,model,serial,description,software,backgrounds,measurements,Trolley,SCD,aperturewheel,Comment,monitorelectrometerrange,monitorhv,MEFAC_ICElectrometerRange,ic_hv,clientname,address1,address2,operator,calnumber) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')"
+                            % (
+                                filename,
+                                date,
+                                chamber,
+                                model,
+                                serial,
+                                description,
+                                software,
+                                backgrounds,
+                                measurements,
+                                trolley,
+                                sCD,
+                                aperture_wheel,
+                                comment,
+                                monitorelectrometerrange,
+                                monitor_hv,
+                                mEFAC_ICElectrometerRange,
+                                ic_hv,
+                                client_name,
+                                address1,
+                                address2,
+                                operator,
+                                calnumber,
+                            )
                     )
-                    # sql=""
                     try:
                         # excute sql
                         cursor.execute(sql)
@@ -2655,42 +2653,42 @@ class MainFrame(wx.Frame):
                     for i in range(len(df2)):
                         kV = int(df2.iloc[i]["kV"])
                         mA = int(df2.iloc[i]["mA"])
-                        BarCode = df2.iloc[i]["BarCode"]
-                        XraysOn = df2.iloc[i]["XraysOn"]
-                        HVLFilter = df2.iloc[i]["HVLFilter(mm)"]
-                        Filter = df2.iloc[i]["Filter"]
-                        FilterReady = df2.iloc[i]["FilterReady"]
-                        HVLReady = df2.iloc[i]["HVLReady"]
-                        N = df2.iloc[i]["N"]
-                        Current1 = float(df2.iloc[i]["Current1(pA)"])
-                        Current2 = float(df2.iloc[i]["Current2(pA)"])
-                        P = float(df2.iloc[i]["P(kPa)"])
-                        T_MC = float(df2.iloc[i]["T(MC)"])
-                        T_Air = float(df2.iloc[i]["T(Air)"])
-                        T_SC = float(df2.iloc[i]["T(SC)"])
-                        H = float(df2.iloc[i]["H(%)"])
+                        barCode = df2.iloc[i]["BarCode"]
+                        xraysOn = df2.iloc[i]["XraysOn"]
+                        hLFilter = df2.iloc[i]["HVLFilter(mm)"]
+                        filter = df2.iloc[i]["Filter"]
+                        filterReady = df2.iloc[i]["FilterReady"]
+                        hVLReady = df2.iloc[i]["HVLReady"]
+                        n = df2.iloc[i]["N"]
+                        current1 = float(df2.iloc[i]["Current1(pA)"])
+                        current2 = float(df2.iloc[i]["Current2(pA)"])
+                        p = float(df2.iloc[i]["P(kPa)"])
+                        t_MC = float(df2.iloc[i]["T(MC)"])
+                        t_Air = float(df2.iloc[i]["T(Air)"])
+                        t_SC = float(df2.iloc[i]["T(SC)"])
+                        h = float(df2.iloc[i]["H(%)"])
                         sql = (
-                            "INSERT INTO body(filename,chamber,kv,ma,barcode,xrayson,HVLFilter,filter,filterready,hvlready,n,Current1,Current2,P,T_MC,T_Air,T_SC,H) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')"
-                            % (
-                                Filename,
-                                chamber,
-                                kV,
-                                mA,
-                                BarCode,
-                                XraysOn,
-                                HVLFilter,
-                                Filter,
-                                FilterReady,
-                                HVLReady,
-                                N,
-                                Current1,
-                                Current2,
-                                P,
-                                T_MC,
-                                T_Air,
-                                T_SC,
-                                H,
-                            )
+                                "INSERT INTO body(filename,chamber,kv,ma,barcode,xrayson,HVLFilter,filter,filterready,hvlready,n,Current1,Current2,P,T_MC,T_Air,T_SC,H) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')"
+                                % (
+                                    filename,
+                                    chamber,
+                                    kV,
+                                    mA,
+                                    barCode,
+                                    xraysOn,
+                                    hVLFilter,
+                                    filter,
+                                    filterReady,
+                                    hVLReady,
+                                    n,
+                                    current1,
+                                    current2,
+                                    p,
+                                    t_MC,
+                                    t_Air,
+                                    t_SC,
+                                    h,
+                                )
                         )
                         try:
                             # excute sql
