@@ -57,8 +57,10 @@ with open(file, "w", newline="") as f:
     writer.writerow(['Operator', '', operator])
     writer.writerow(['CAL Number', '', calnumber])
     writer.writerow(['[DATA]'])
+    writer.writerow(['kV','mA','BarCode','XraysOn','HVLFilter(mm)','Filter','FilterReady','HVLReady','N','Current1(pA)','Current2(pA)','P(kPa)','T(MC)','T(Air)','T(SC)','H(%)'])
 
-sql = "SELECT * from body WHERE chamber_ID = %s" % chamber_ID
+#sql = "SELECT * from body WHERE chamber_ID = %s" % chamber_ID
+sql = "SELECT kv,ma,barcode,xrayson,HVLFilter,filter,filterready,hvlready,n,Current1,Current2,P,T_MC,T_Air,T_SC,H from body WHERE chamber_ID = %s" % chamber_ID
 
 cursor.execute(sql)
 rows = cursor.fetchall()
