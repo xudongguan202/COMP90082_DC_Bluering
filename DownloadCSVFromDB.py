@@ -5,7 +5,7 @@ import pymysql
 db = pymysql.connect(host='localhost',user='root',password='password',database='bluering')
 
 cursor = db.cursor()
-chamber_ID=9
+chamber_ID=10
 file = '/tmp/file.csv'
 
 sql = "SELECT * from header WHERE chamber_ID = %s" % chamber_ID
@@ -36,6 +36,7 @@ calnumber = rows[0][23]
 
 with open(file, "w", newline="") as f:
     writer = csv.writer(f)
+    writer.writerow(['[COMET X-RAY MEASUREMENT]'])
     writer.writerow(['Filename','',filename])
     writer.writerow(['Date','',date])
     writer.writerow(['Chamber', '', chamber])
