@@ -2709,39 +2709,22 @@ class DatabaseFrame(wx.Frame):
 
         bSizer1 = wx.BoxSizer(wx.VERTICAL)
 
-        self.m_panel1 = wx.Panel(
-            self, wx.ID_ANY, wx.DefaultPosition, wx.Size(-1, 50), wx.TAB_TRAVERSAL
-        )
+        self.m_panel1 = wx.Panel(self, wx.ID_ANY, wx.DefaultPosition, wx.Size(-1, 50), wx.TAB_TRAVERSAL)
         self.m_panel1.SetMinSize(wx.Size(-1, 50))
         self.m_panel1.SetMaxSize(wx.Size(-1, 50))
 
         bSizer2 = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.m_panel2 = wx.Panel(
-            self.m_panel1,
-            wx.ID_ANY,
-            wx.DefaultPosition,
-            wx.DefaultSize,
-            wx.TAB_TRAVERSAL,
-        )
+        self.m_panel2 = wx.Panel(self.m_panel1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL)
         bSizer3 = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.m_staticText1 = wx.StaticText(
-            self.m_panel2, wx.ID_ANY, u"Job ID", wx.DefaultPosition, wx.DefaultSize, 0
-        )
+        self.m_staticText1 = wx.StaticText(self.m_panel2, wx.ID_ANY, u"Job ID", wx.DefaultPosition, wx.DefaultSize, 0)
         self.m_staticText1.Wrap(-1)
 
         bSizer3.Add(self.m_staticText1, 0, wx.ALIGN_CENTER | wx.ALL, 5)
 
-        self.m_textCtrl_job = wx.TextCtrl(
-            self.m_panel2,
-            wx.ID_ANY,
-            wx.EmptyString,
-            wx.DefaultPosition,
-            wx.Size(-1, -1),
-            0,
-        )
-        self.m_textCtrl_job.SetHint("Enter job ID")
+        self.m_textCtrl_job = wx.TextCtrl(self.m_panel2, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size(-1, -1),
+                                          0)
         bSizer3.Add(self.m_textCtrl_job, 0, wx.ALIGN_CENTER | wx.ALL, 5)
 
         self.m_panel2.SetSizer(bSizer3)
@@ -2749,73 +2732,35 @@ class DatabaseFrame(wx.Frame):
         bSizer3.Fit(self.m_panel2)
         bSizer2.Add(self.m_panel2, 1, wx.EXPAND | wx.ALL, 1)
 
-        self.m_panel3 = wx.Panel(
-            self.m_panel1,
-            wx.ID_ANY,
-            wx.DefaultPosition,
-            wx.DefaultSize,
-            wx.TAB_TRAVERSAL,
-        )
+        self.m_panel3 = wx.Panel(self.m_panel1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL)
         bSizer31 = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.m_staticText11 = wx.StaticText(
-            self.m_panel3,
-            wx.ID_ANY,
-            u"Client Name",
-            wx.DefaultPosition,
-            wx.DefaultSize,
-            0,
-        )
+        self.m_staticText11 = wx.StaticText(self.m_panel3, wx.ID_ANY, u"Client Name", wx.DefaultPosition,
+                                            wx.DefaultSize, 0)
         self.m_staticText11.Wrap(-1)
 
         bSizer31.Add(self.m_staticText11, 0, wx.ALIGN_CENTER | wx.ALL, 5)
 
-        self.m_textCtrl_client = wx.TextCtrl(
-            self.m_panel3,
-            wx.ID_ANY,
-            wx.EmptyString,
-            wx.DefaultPosition,
-            wx.Size(-1, -1),
-            0,
-        )
-        self.m_textCtrl_client.SetHint("Enter client name")
-        bSizer31.Add(self.m_textCtrl_client, 0, wx.ALIGN_CENTER | wx.ALL, 5)
+        self.m_textCtrl_name = wx.TextCtrl(self.m_panel3, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
+                                           wx.Size(-1, -1), 0)
+        bSizer31.Add(self.m_textCtrl_name, 0, wx.ALIGN_CENTER | wx.ALL, 5)
 
         self.m_panel3.SetSizer(bSizer31)
         self.m_panel3.Layout()
         bSizer31.Fit(self.m_panel3)
         bSizer2.Add(self.m_panel3, 1, wx.EXPAND | wx.ALL, 5)
 
-        self.m_panel4 = wx.Panel(
-            self.m_panel1,
-            wx.ID_ANY,
-            wx.DefaultPosition,
-            wx.DefaultSize,
-            wx.TAB_TRAVERSAL,
-        )
+        self.m_panel4 = wx.Panel(self.m_panel1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL)
         bSizer32 = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.m_staticText12 = wx.StaticText(
-            self.m_panel4,
-            wx.ID_ANY,
-            u"Chamber ID",
-            wx.DefaultPosition,
-            wx.DefaultSize,
-            0,
-        )
+        self.m_staticText12 = wx.StaticText(self.m_panel4, wx.ID_ANY, u"Chamber ID", wx.DefaultPosition, wx.DefaultSize,
+                                            0)
         self.m_staticText12.Wrap(-1)
 
         bSizer32.Add(self.m_staticText12, 0, wx.ALIGN_CENTER | wx.ALL, 5)
 
-        self.m_textCtrl_chamber = wx.TextCtrl(
-            self.m_panel4,
-            wx.ID_ANY,
-            wx.EmptyString,
-            wx.DefaultPosition,
-            wx.Size(-1, -1),
-            0,
-        )
-        self.m_textCtrl_chamber.SetHint("Enter chamber ID")
+        self.m_textCtrl_chamber = wx.TextCtrl(self.m_panel4, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
+                                              wx.Size(-1, -1), 0)
         bSizer32.Add(self.m_textCtrl_chamber, 0, wx.ALIGN_CENTER | wx.ALL, 5)
 
         self.m_panel4.SetSizer(bSizer32)
@@ -2823,51 +2768,43 @@ class DatabaseFrame(wx.Frame):
         bSizer32.Fit(self.m_panel4)
         bSizer2.Add(self.m_panel4, 1, wx.EXPAND | wx.ALL, 5)
 
-        self.m_button_search = wx.Button(
-            self.m_panel1, wx.ID_ANY, u"Search", wx.DefaultPosition, wx.Size(70, -1), 0
-        )
+        self.m_button_search = wx.Button(self.m_panel1, wx.ID_ANY, u"Search", wx.DefaultPosition, wx.Size(70, -1), 0)
         self.m_button_search.SetMinSize(wx.Size(70, -1))
         self.m_button_search.SetMaxSize(wx.Size(70, -1))
 
         bSizer2.Add(self.m_button_search, 0, wx.ALIGN_CENTER | wx.ALL, 8)
-        self.Bind(wx.EVT_BUTTON, self.search, self.m_button_search)
 
         self.m_panel1.SetSizer(bSizer2)
         self.m_panel1.Layout()
         bSizer1.Add(self.m_panel1, 1, wx.EXPAND | wx.ALL, 0)
 
-        self.m_panel5 = wx.Panel(
-            self, wx.ID_ANY, wx.DefaultPosition, wx.Size(-1, 420), wx.TAB_TRAVERSAL
-        )
-        self.m_panel5.SetMinSize(wx.Size(-1, 420))
-        self.m_panel5.SetMaxSize(wx.Size(-1, 420))
+        self.m_panel5 = wx.Panel(self, wx.ID_ANY, wx.DefaultPosition, wx.Size(-1, 450), wx.TAB_TRAVERSAL)
+        self.m_panel5.SetMinSize(wx.Size(-1, 450))
+        self.m_panel5.SetMaxSize(wx.Size(-1, 450))
 
         bSizer9 = wx.BoxSizer(wx.VERTICAL)
 
-        self.m_treeCtrl = wx.TreeCtrl(
-            self.m_panel5,
-            wx.ID_ANY,
-            wx.DefaultPosition,
-            wx.Size(-1, 350),
-            wx.TR_DEFAULT_STYLE | wx.TR_MULTIPLE | wx.TR_TWIST_BUTTONS,
-        )
-        self.m_treeCtrl.SetMinSize(wx.Size(-1, 350))
-        self.m_treeCtrl.SetMaxSize(wx.Size(-1, 350))
+        self.m_treeCtrl = wx.TreeCtrl(self.m_panel5, wx.ID_ANY, wx.DefaultPosition, wx.Size(-1, 320),
+                                      wx.TR_DEFAULT_STYLE | wx.TR_MULTIPLE | wx.TR_TWIST_BUTTONS)
+        self.m_treeCtrl.SetMinSize(wx.Size(-1, 320))
+        self.m_treeCtrl.SetMaxSize(wx.Size(-1, 320))
 
         bSizer9.Add(self.m_treeCtrl, 0, wx.ALL | wx.EXPAND, 5)
 
-        self.m_button_db_download = wx.Button(
-            self.m_panel5,
-            wx.ID_ANY,
-            u"Download CSV",
-            wx.DefaultPosition,
-            wx.Size(200, 30),
-            0,
-        )
+        self.m_dirPicker_download = wx.DirPickerCtrl(self.m_panel5, wx.ID_ANY, wx.EmptyString, u"Select a folder",
+                                                     wx.DefaultPosition, wx.Size(750, -1),
+                                                     wx.DIRP_DEFAULT_STYLE | wx.DIRP_DIR_MUST_EXIST)
+        self.m_dirPicker_download.SetMinSize(wx.Size(750, -1))
+        self.m_dirPicker_download.SetMaxSize(wx.Size(750, -1))
+
+        bSizer9.Add(self.m_dirPicker_download, 0, wx.ALIGN_CENTER | wx.ALL, 5)
+
+        self.m_button_db_download = wx.Button(self.m_panel5, wx.ID_ANY, u"Download CSV", wx.DefaultPosition,
+                                              wx.Size(200, 30), 0)
         self.m_button_db_download.SetMinSize(wx.Size(200, 30))
         self.m_button_db_download.SetMaxSize(wx.Size(200, 30))
+
         bSizer9.Add(self.m_button_db_download, 0, wx.ALIGN_CENTER | wx.ALL, 5)
-        self.Bind(wx.EVT_BUTTON, self.download_db, self.m_button_db_download)
 
         self.m_panel5.SetSizer(bSizer9)
         self.m_panel5.Layout()
@@ -2878,14 +2815,37 @@ class DatabaseFrame(wx.Frame):
 
         self.Centre(wx.BOTH)
 
+        # bind button and function
+        self.Bind(wx.EVT_BUTTON, self.download_db, self.m_button_db_download)
+        self.Bind(wx.EVT_BUTTON, self.search, self.m_button_search)
+
     def search(self, event):
-        self.root = self.m_treeCtrl.AddRoot("Something goes here")
-        self.m_treeCtrl.SetItemData(self.root, ("key", "value"))
-        os = self.m_treeCtrl.AppendItem(self.root, "Operating Systems")
-        self.m_treeCtrl.Expand(self.root)
+        if self.m_textCtrl_job.GetValue() == '' and self.m_textCtrl_name.GetValue() == '' and self.m_textCtrl_chamber.GetValue() == '':
+            dlg = wx.MessageDialog(
+                None,
+                u"Please fill in the searching condition",
+                u"Not condition",
+                wx.YES_DEFAULT | wx.ICON_WARNING,
+            )
+            if dlg.ShowModal() == wx.ID_YES:
+                dlg.Destroy()
+        else:
+            self.root = self.m_treeCtrl.AddRoot("Something goes here")
+            self.m_treeCtrl.SetItemData(self.root, ("key", "value"))
+            os = self.m_treeCtrl.AppendItem(self.root, "Operating Systems")
+            self.m_treeCtrl.Expand(self.root)
         return
 
     def download_db(self, event):
+        if self.m_dirPicker_download.GetPath() == '':
+            dlg = wx.MessageDialog(
+                None,
+                u"Please select save directory!",
+                u"Not select directory",
+                wx.YES_DEFAULT | wx.ICON_WARNING,
+            )
+            if dlg.ShowModal() == wx.ID_YES:
+                dlg.Destroy()
         return
 
 
