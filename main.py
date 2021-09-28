@@ -312,7 +312,6 @@ class MainFrame(wx.Frame):
         self.m_button_confirm.SetMaxSize(wx.Size(100, 30))
 
         bSizer17.Add(self.m_button_confirm, 0, wx.ALIGN_CENTER | wx.ALL, 5)
-        self.Bind(wx.EVT_BUTTON, self.confirm, self.m_button_confirm)
 
         self.m_button_compare = wx.Button(
             self.m_panel282,
@@ -327,7 +326,6 @@ class MainFrame(wx.Frame):
 
         bSizer17.Add(self.m_button_compare, 0, wx.ALIGN_CENTER | wx.ALL, 5)
 
-        self.Bind(wx.EVT_BUTTON, self.compare, self.m_button_compare)
 
         self.m_panel282.SetSizer(bSizer17)
         self.m_panel282.Layout()
@@ -1220,7 +1218,6 @@ class MainFrame(wx.Frame):
         self.m_button_read.SetMaxSize(wx.Size(300, 25))
 
         sbSizer11.Add(self.m_button_read, 0, wx.ALIGN_CENTER | wx.ALL, 5)
-        self.Bind(wx.EVT_BUTTON, self.read, self.m_button_read)
 
         self.m_panel_equip_info.SetSizer(sbSizer11)
         self.m_panel_equip_info.Layout()
@@ -1394,7 +1391,6 @@ class MainFrame(wx.Frame):
         self.m_button_update.SetMaxSize(wx.Size(300, 25))
 
         sbSizer12.Add(self.m_button_update, 0, wx.ALIGN_CENTER | wx.ALL, 5)
-        self.Bind(wx.EVT_BUTTON, self.update_info, self.m_button_update)
 
         self.m_panel_client_info.SetSizer(sbSizer12)
         self.m_panel_client_info.Layout()
@@ -1421,7 +1417,6 @@ class MainFrame(wx.Frame):
         self.m_button_upload.SetMaxSize(wx.Size(200, 30))
 
         bSizer81.Add(self.m_button_upload, 0, wx.ALIGN_CENTER | wx.ALL, 4)
-        self.Bind(wx.EVT_BUTTON, self.upload_csv, self.m_button_upload)
 
         self.m_button_download = wx.Button(
             self.m_panel_pdf_dcc,
@@ -1435,7 +1430,6 @@ class MainFrame(wx.Frame):
         self.m_button_download.SetMaxSize(wx.Size(200, 30))
 
         bSizer81.Add(self.m_button_download, 0, wx.ALIGN_CENTER | wx.ALL, 4)
-        self.Bind(wx.EVT_BUTTON, self.download_csv, self.m_button_download)
 
         self.m_button_pdf = wx.Button(
             self.m_panel_pdf_dcc,
@@ -1476,6 +1470,16 @@ class MainFrame(wx.Frame):
         self.Layout()
 
         self.Centre(wx.BOTH)
+
+        # Bind button event
+        self.Bind(wx.EVT_BUTTON, self.confirm, self.m_button_confirm)
+        self.Bind(wx.EVT_BUTTON, self.compare, self.m_button_compare)
+        self.Bind(wx.EVT_BUTTON, self.read, self.m_button_read)
+        self.Bind(wx.EVT_BUTTON, self.update_info, self.m_button_update)
+        self.Bind(wx.EVT_BUTTON, self.upload_csv, self.m_button_upload)
+        self.Bind(wx.EVT_BUTTON, self.download_csv, self.m_button_download)
+        self.Bind(wx.EVT_BUTTON, self.download_csv, self.m_button_download)
+        self.Bind(wx.EVT_BUTTON, self.generate_jobid, self.m_button_job)
 
         # reset confirm bind
         self.m_filePicker_run11.Bind(
@@ -2580,6 +2584,29 @@ class MainFrame(wx.Frame):
         frame = DatabaseFrame()
         frame.Show()
 
+    def generate_jobid(self, event):
+        if self.confirmed and self.readed:
+            return
+        elif not self.confirmed:
+            dlg = wx.MessageDialog(
+                None,
+                u"Please confirm your data files!",
+                u"Not confirmed",
+                wx.YES_DEFAULT | wx.ICON_WARNING,
+            )
+            if dlg.ShowModal() == wx.ID_YES:
+                dlg.Destroy()
+        elif not self.readed:
+            dlg = wx.MessageDialog(
+                None,
+                u"Please read your data files!",
+                u"Not readed",
+                wx.YES_DEFAULT | wx.ICON_WARNING,
+            )
+            if dlg.ShowModal() == wx.ID_YES:
+                dlg.Destroy()
+        return
+
 
 # This class is for scatter plot
 class LeftPanelGraph(wx.Panel):
@@ -2690,7 +2717,7 @@ class GraphFrame(wx.Frame):
         leftgraph.draw()
         MainFrame.m_progress_bar.SetValue(80)
 
-
+# This class if for searching and downloading from database
 class DatabaseFrame(wx.Frame):
     def __init__(
         self,
@@ -2909,7 +2936,8 @@ class DatabaseFrame(wx.Frame):
         else:
             self.root = self.m_treeCtrl.AddRoot("Something goes here")
             self.m_treeCtrl.SetItemData(self.root, ("key", "value"))
-            os = self.m_treeCtrl.AppendItem(self.root, "Operating Systems")
+            self.os1 = self.m_treeCtrl.AppendItem(self.root, "Operating Systems")
+            self.os2 = self.m_treeCtrl.AppendItem(self.root, "Operating Systems 2")
             self.m_treeCtrl.Expand(self.root)
         return
 
@@ -2923,6 +2951,11 @@ class DatabaseFrame(wx.Frame):
             )
             if dlg.ShowModal() == wx.ID_YES:
                 dlg.Destroy()
+        else:
+            selections = self.m_treeCtrl.GetSelections()
+            print(selections)
+            if self.os1 in selections:
+                print('yes')
         return
 
 
