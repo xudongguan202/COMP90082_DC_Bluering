@@ -1598,7 +1598,6 @@ class MainFrame(wx.Frame):
         client_name = []
         address_1 = []
         address_2 = []
-        operator = []
         CAL_Number = []
         chamber_flag = True
         client_info_flag = True
@@ -1833,8 +1832,6 @@ class MainFrame(wx.Frame):
                     address_1.append(address_1_row[2])
                     address_2_row = result[18]
                     address_2.append(address_2_row[2])
-                    operator_row = result[19]
-                    operator.append(operator_row[2])
                     CAL_Number_row = result[20]
                     CAL_Number.append(CAL_Number_row[2])
 
@@ -1852,8 +1849,6 @@ class MainFrame(wx.Frame):
                     address_1.append(address_1_row[2])
                     address_2_row = result[18]
                     address_2.append(address_2_row[2])
-                    operator_row = result[19]
-                    operator.append(operator_row[2])
                     CAL_Number_row = result[20]
                     CAL_Number.append(CAL_Number_row[2])
 
@@ -1900,16 +1895,6 @@ class MainFrame(wx.Frame):
             if i == len(address_2) - 1:
                 break
             if address_2[i] == address_2[i + 1]:
-                continue
-            else:
-                client_info_flag = False
-
-        for i in range(len(operator)):
-            if len(operator) == 0:
-                break
-            if i == len(operator) - 1:
-                break
-            if operator[i] == operator[i + 1]:
                 continue
             else:
                 client_info_flag = False
