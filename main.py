@@ -190,6 +190,7 @@ class MainFrame(wx.Frame):
 
         self.confirmed = False  # chech if confirm is clicked
         self.readed = False
+        self.updated = False
 
         ##############
 
@@ -2167,6 +2168,8 @@ class MainFrame(wx.Frame):
             )
             if dlg.ShowModal() == wx.ID_YES:
                 dlg.Destroy()
+
+            self.updated = True
         elif not self.confirmed:
             dlg = wx.MessageDialog(
                 None,
@@ -2191,6 +2194,7 @@ class MainFrame(wx.Frame):
     def resetConfirm(self, event):
         self.confirmed = False
         self.readed = False
+        self.updated = False
 
     def upload_csv(self, event):
         global pathClient
@@ -2202,11 +2206,11 @@ class MainFrame(wx.Frame):
 
         # key in your DataBase password
         db = pymysql.connect(
-            host="localhost", user="root", password="961011Bmw-", database="bluering"
+            host="localhost", user="root", password="Bluering123.", database="bluering"
         )
 
         cursor = db.cursor()
-        if self.confirmed and self.readed:
+        if self.confirmed and self.readed and self.m_textCtrl_client_name.GetValue() != '':
             # path_11 = self.m_filePicker_run11.GetPath()  # run1 client
             # path_12 = self.m_filePicker_run12.GetPath()  # run1 lab
 
@@ -2393,6 +2397,9 @@ class MainFrame(wx.Frame):
                             # commit to database
                             db.commit()
                             print("processing...")
+                            if progress <= 50:
+                                progress = progress + 1
+                                MainFrame.m_progress_bar.SetValue(progress)
                         except:
                             # if fail rollback
                             db.rollback()
@@ -2532,12 +2539,15 @@ class MainFrame(wx.Frame):
                             # commit to database
                             db.commit()
                             print("processing...")
+                            if progress < 100:
+                                progress = progress + 1
+                                MainFrame.m_progress_bar.SetValue(progress)
                         except:
                             # if fail rollback
                             db.rollback()
                             print("fail")
-                    progress = progress + 10
-                    MainFrame.m_progress_bar.SetValue(progress)
+                    # progress = progress + 10
+                    # MainFrame.m_progress_bar.SetValue(progress)
                 else:
                     dlg = wx.MessageDialog(
                         None,
@@ -2575,6 +2585,15 @@ class MainFrame(wx.Frame):
                 None,
                 u"Please read your data files!",
                 u"Not readed",
+                wx.YES_DEFAULT | wx.ICON_WARNING,
+            )
+            if dlg.ShowModal() == wx.ID_YES:
+                dlg.Destroy()
+        else:
+            dlg = wx.MessageDialog(
+                None,
+                u"Please update informations!",
+                u"No client information",
                 wx.YES_DEFAULT | wx.ICON_WARNING,
             )
             if dlg.ShowModal() == wx.ID_YES:
@@ -2934,10 +2953,12 @@ class DatabaseFrame(wx.Frame):
             if dlg.ShowModal() == wx.ID_YES:
                 dlg.Destroy()
         else:
-            self.root = self.m_treeCtrl.AddRoot("Something goes here")
+            self.root = self.m_treeCtrl.AddRoot("jobid+name")
             self.m_treeCtrl.SetItemData(self.root, ("key", "value"))
-            self.os1 = self.m_treeCtrl.AppendItem(self.root, "Operating Systems")
-            self.os2 = self.m_treeCtrl.AppendItem(self.root, "Operating Systems 2")
+            self.os1 = self.m_treeCtrl.AppendItem(self.root, "chamber")
+            self.os2 = self.m_treeCtrl.AppendItem(self.os1, "run1")
+            self.os3 = self.m_treeCtrl.AppendItem(self.os2, "lab")
+            self.os4 = self.m_treeCtrl.AppendItem(self.os2, "client")
             self.m_treeCtrl.Expand(self.root)
         return
 
