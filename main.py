@@ -14,6 +14,13 @@ from csv import writer
 import re
 import pymysql
 
+# lib use for pdf generate session
+from fpdf import FPDF
+import plotly
+import plotly.express as px
+import os
+from wx.lib.colourchooser import canvas
+
 
 def Testr(path_Client, path_Lab):
 
@@ -1481,6 +1488,7 @@ class MainFrame(wx.Frame):
         self.Bind(wx.EVT_BUTTON, self.download_csv, self.m_button_download)
         self.Bind(wx.EVT_BUTTON, self.download_csv, self.m_button_download)
         self.Bind(wx.EVT_BUTTON, self.generate_jobid, self.m_button_job)
+        self.Bind(wx.EVT_BUTTON, self.generate_pdf, self.m_button_pdf)
 
         # reset confirm bind
         self.m_filePicker_run11.Bind(
@@ -2611,8 +2619,18 @@ class MainFrame(wx.Frame):
                 dlg.Destroy()
         return
 
+    def generate_pdf(self,event):
+        pdf = FPDF(orientation='P', unit='mm', format='A4')
+        pdf.add_page()
+        # set style and size of font
+        #pdf.set_font("Arial", size=15)
+        
 
-# This class is for scatter plot
+        # save the pdf with name .pdf
+        pdf.output("Calibration Report.pdf")
+
+
+    # This class is for scatter plot
 class LeftPanelGraph(wx.Panel):
     def __init__(self, parent):
         wx.Panel.__init__(self, parent=parent)
