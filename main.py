@@ -16,6 +16,7 @@ import pymysql
 
 # lib use for pdf generate session
 from fpdf import FPDF
+from datetime import datetime
 import plotly
 import plotly.express as px
 import os
@@ -1971,6 +1972,11 @@ class MainFrame(wx.Frame):
                 self.m_textCtrl_client_address1.SetHint("Enter address line 1")
                 self.m_textCtrl_client_address2.SetHint("Enter address line 2")
 
+                data_df =  pd.read_csv(
+                    path_11, skiprows=2, nrows=1, header=None
+                )
+                global test_date
+                test_date=data_df[2][0]
                 # read client chamber information
                 client_chamber_info_df = pd.read_csv(
                     path_11, skiprows=3, nrows=1, header=None
@@ -2679,30 +2685,61 @@ class MainFrame(wx.Frame):
         pdf.set_xy(10.0, 85.0)
         pdf.set_font('Arial', 'B', 12)
         pdf.cell(200, 10, txt="Client", ln=1, border=0)
+        pdf.set_xy(100.0, 85.0)
+        pdf.set_font('Arial', size = 12)
+        pdf.cell(200, 10, txt=self.m_textCtrl_client_name.GetValue(), ln=1, border=0)
+        pdf.set_xy(100.0, 90.0)
+        pdf.set_font('Arial', size=12)
+        pdf.cell(200, 10, txt=self.m_textCtrl_client_address1.GetValue(), ln=1, border=0)
+        pdf.set_xy(100.0, 95.0)
+        pdf.set_font('Arial', size=12)
+        pdf.cell(200, 10, txt=self.m_textCtrl_client_address2.GetValue(), ln=1, border=0)
+
         # Ionisation chamber
         pdf.set_xy(10.0, 110.0)
-        pdf.set_font('Arial', 'B', 12)
+        pdf.set_font('Arial', size = 12)
         pdf.cell(200, 10, txt="Ionisation chamber", ln=1, border=0)
+        pdf.set_xy(100.0, 110.0)
+        pdf.set_font('Arial', size = 12)
+        pdf.cell(200, 10, txt=self.m_textCtrl_model1.GetValue()+', serial number '+self.m_textCtrl_serial1.GetValue(), ln=1, border=0)
+
         # Period of tests
         pdf.set_xy(10.0, 120.0)
         pdf.set_font('Arial', 'B', 12)
         pdf.cell(200, 10, txt="Period of tests", ln=1, border=0)
+        pdf.set_xy(100.0, 120.0)
+        pdf.set_font('Arial', size = 12)
+        pdf.cell(200, 10, txt=test_date, ln=1, border=0)
+
         # Previous calibration
         pdf.set_xy(10.0, 130.0)
         pdf.set_font('Arial', 'B', 12)
-        pdf.cell(200, 10, txt="Period calibration", ln=1, border=0)
+        pdf.cell(200, 10, txt="Previous calibration", ln=1, border=0)
+        pdf.set_xy(100.0, 130.0)
+        pdf.set_font('Arial', size = 12)
+        pdf.cell(200, 10, txt="Not previously calibrated at ARPANSA", ln=1, border=0)
+
         # Test and report by
         pdf.set_xy(10.0, 140.0)
         pdf.set_font('Arial', 'B', 12)
         pdf.cell(200, 10, txt="Test and report by", ln=1, border=0)
+        pdf.set_xy(100.0, 140.0)
+        pdf.set_font('Arial', size = 12)
+        pdf.cell(200, 10, txt=self.m_textCtrl_operator.GetValue(), ln=1, border=0)
+
         # report date
         pdf.set_xy(10.0, 150.0)
         pdf.set_font('Arial', 'B', 12)
         pdf.cell(200, 10, txt="Report date", ln=1, border=0)
+        pdf.set_xy(100.0, 150.0)
+        pdf.set_font('Arial', size =  12)
+        pdf.cell(200, 10, txt=str(datetime.date(datetime.now())), ln=1, border=0)
+
         # inquiries detail line1
         pdf.set_xy(10.0, 160.0)
         pdf.set_font('Arial', size=12)
         pdf.cell(200, 10, txt="Direct inquiries to                                                Chris Oliver", ln=1, border=0)
+
         # inquiries detail line2
         pdf.set_xy(10.0, 170.0) #1
         pdf.set_font('Arial', 'B', 12)
@@ -2716,6 +2753,7 @@ class MainFrame(wx.Frame):
         pdf.set_xy(115.0, 170.0) #4
         pdf.set_font('Arial', size=12)
         pdf.cell(10, 10, txt="psdl@arpansa.gov.au", ln=1, border=0)
+
         # signed part: line 1
         pdf.set_xy(10.0, 190.0)
         pdf.set_font('Arial', size=12)
@@ -2725,6 +2763,7 @@ class MainFrame(wx.Frame):
         pdf.set_xy(10.0, 200.0)
         pdf.set_font('Arial', size=12)
         pdf.cell(210, 10, txt="Duncan Butler, Director, Primary Standards Dosimetry Laboratory", ln=1, border=0)
+
         # page end footer line2
         pdf.set_xy(10.0, 210.0)
         pdf.set_font('Arial', size=12)
@@ -2733,6 +2772,7 @@ class MainFrame(wx.Frame):
         # Footer image
         pdf.set_xy(20.0, 220.0)
         pdf.image('./imgReference/page_1_footer.png', w=160.0, h=45.0)
+
         # Footer info
         pdf.set_xy(180.0, 275.0)
         pdf.set_font('Arial', 'I',8)
