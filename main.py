@@ -2628,169 +2628,191 @@ class MainFrame(wx.Frame):
     def generate_pdf(self,event):
         pdf = FPDF(orientation='P', unit='mm', format='A4')
 
-        ############################################### Page 1 ###########################################
-        pdf.add_page()
-        # set style and size of font
-        #pdf.set_font("Arial", size=15)
-        pdf_w = 210
-        pdf_h = 297
-        pdf.set_line_width(0.0)
+        create_pdf = True
 
-        # create border for pdf
-        pdf.line(5.0, 5.0, 205.0, 5.0)  # top one
-        pdf.line(5.0, 292.0, 205.0, 292.0)  # bottom one
-        pdf.line(5.0, 5.0, 5.0, 292.0)  # left one
-        pdf.line(205.0, 5.0, 205.0, 292.0)  # right one
+        # Client information is not null
+        if self.m_textCtrl_client_name.GetValue() == "" or self.m_textCtrl_client_address1.GetValue() == "" or self.m_textCtrl_client_address2.GetValue() == "":
+            create_pdf = False
+            dlg = wx.MessageDialog(
+                None,
+                u"No client infomation! Please click on the button 'Read Infomation' or fill in the information.",
+                u"No client infomation!",
+                wx.YES_DEFAULT | wx.ICON_WARNING,
+            )
+            if dlg.ShowModal() == wx.ID_YES:
+                dlg.Destroy()
+        else:
+            create_pdf = True
 
-        # Page Heading section
-        # set heading img
-        pdf.set_xy(15.0,10.0)
-        pdf.image('./imgReference/Heading.png',  w=160.0, h=20.0)
+        if create_pdf:
+            ############################################### Page 1 ###########################################
+            pdf.add_page()
+            # set style and size of font
+            # pdf.set_font("Arial", size=15)
+            pdf_w = 210
+            pdf_h = 297
+            pdf.set_line_width(0.0)
 
-        #detail line 1
-        pdf.set_xy(10.0, 30.0)
-        pdf.set_font('Arial', 'B', 12)
-        pdf.cell(200, 10, txt="Primary Standards Dosimetry Laboratory,  Medical Radiation Services",ln=1, align='C',border=0)
-        #detail line 2
-        pdf.set_xy(10.0, 35.0)
-        pdf.set_font('Arial',size =  10)
-        pdf.cell(200, 10, txt="619 Lower Plenty Road,  Yallambie,  Victoria 3085,  Australia", ln=1, align='C',border=0)
-        #detail line 3
-        pdf.set_xy(10.0, 40.0)
-        pdf.set_font('Arial', size=10)
-        pdf.cell(200, 10, txt="Tel: +613 9433 2211    Fax: +613 9432 1835", ln=1, align='C',border=0)
-        #detail line 4
-        pdf.set_xy(10.0, 45.0)
-        pdf.set_font('Arial', size=10)
-        pdf.cell(200, 10, txt="E-mail: psdl@arpansa.gov.au    Web: www.arpansa.gov.au", ln=1, align='C', border=0)
-        #line: end of page heading details
-        pdf.line(5.0, 55.0, 205.0, 55.0)
+            # create border for pdf
+            pdf.line(5.0, 5.0, 205.0, 5.0)  # top one
+            pdf.line(5.0, 292.0, 205.0, 292.0)  # bottom one
+            pdf.line(5.0, 5.0, 5.0, 292.0)  # left one
+            pdf.line(205.0, 5.0, 205.0, 292.0)  # right one
 
-        # heading for body
-        # heading line 1
-        pdf.set_xy(10.0, 60.0)
-        pdf.set_font('Arial', 'U'+'B', 14)
-        pdf.cell(200, 10, txt="CALIBRATION REPORT", ln=1, align='C',border=0)
-        # heading line 2
-        pdf.set_xy(10.0, 65.0)
-        pdf.set_font('Arial', 'B', 10)
-        pdf.cell(200, 10, txt="on a therapy ionisation chamber for", ln=1, align='C', border=0)
-        # heading line 3
-        pdf.set_xy(10.0, 70.0)
-        pdf.set_font('Arial', 'B', 12)
-        pdf.cell(200, 10, txt="MEDIUM-ENERGY KILOVOLTAGE X-RAYS", ln=1, align='C', border=0)
+            # Page Heading section
+            # set heading img
+            pdf.set_xy(15.0, 10.0)
+            pdf.image('./imgReference/Heading.png', w=160.0, h=20.0)
 
-        #information section
-        # Client
-        pdf.set_xy(10.0, 85.0)
-        pdf.set_font('Arial', 'B', 12)
-        pdf.cell(200, 10, txt="Client", ln=1, border=0)
-        pdf.set_xy(100.0, 85.0)
-        pdf.set_font('Arial', size = 12)
-        pdf.cell(200, 10, txt=self.m_textCtrl_client_name.GetValue(), ln=1, border=0)
-        pdf.set_xy(100.0, 90.0)
-        pdf.set_font('Arial', size=12)
-        pdf.cell(200, 10, txt=self.m_textCtrl_client_address1.GetValue(), ln=1, border=0)
-        pdf.set_xy(100.0, 95.0)
-        pdf.set_font('Arial', size=12)
-        pdf.cell(200, 10, txt=self.m_textCtrl_client_address2.GetValue(), ln=1, border=0)
+            # detail line 1
+            pdf.set_xy(10.0, 30.0)
+            pdf.set_font('Arial', 'B', 12)
+            pdf.cell(200, 10, txt="Primary Standards Dosimetry Laboratory,  Medical Radiation Services", ln=1,
+                     align='C', border=0)
+            # detail line 2
+            pdf.set_xy(10.0, 35.0)
+            pdf.set_font('Arial', size=10)
+            pdf.cell(200, 10, txt="619 Lower Plenty Road,  Yallambie,  Victoria 3085,  Australia", ln=1, align='C',
+                     border=0)
+            # detail line 3
+            pdf.set_xy(10.0, 40.0)
+            pdf.set_font('Arial', size=10)
+            pdf.cell(200, 10, txt="Tel: +613 9433 2211    Fax: +613 9432 1835", ln=1, align='C', border=0)
+            # detail line 4
+            pdf.set_xy(10.0, 45.0)
+            pdf.set_font('Arial', size=10)
+            pdf.cell(200, 10, txt="E-mail: psdl@arpansa.gov.au    Web: www.arpansa.gov.au", ln=1, align='C', border=0)
+            # line: end of page heading details
+            pdf.line(5.0, 55.0, 205.0, 55.0)
 
-        # Ionisation chamber
-        pdf.set_xy(10.0, 110.0)
-        pdf.set_font('Arial', size = 12)
-        pdf.cell(200, 10, txt="Ionisation chamber", ln=1, border=0)
-        pdf.set_xy(100.0, 110.0)
-        pdf.set_font('Arial', size = 12)
-        pdf.cell(200, 10, txt=self.m_textCtrl_model1.GetValue()+', serial number '+self.m_textCtrl_serial1.GetValue(), ln=1, border=0)
+            # heading for body
+            # heading line 1
+            pdf.set_xy(10.0, 60.0)
+            pdf.set_font('Arial', 'U' + 'B', 14)
+            pdf.cell(200, 10, txt="CALIBRATION REPORT", ln=1, align='C', border=0)
+            # heading line 2
+            pdf.set_xy(10.0, 65.0)
+            pdf.set_font('Arial', 'B', 10)
+            pdf.cell(200, 10, txt="on a therapy ionisation chamber for", ln=1, align='C', border=0)
+            # heading line 3
+            pdf.set_xy(10.0, 70.0)
+            pdf.set_font('Arial', 'B', 12)
+            pdf.cell(200, 10, txt="MEDIUM-ENERGY KILOVOLTAGE X-RAYS", ln=1, align='C', border=0)
 
-        # Period of tests
-        pdf.set_xy(10.0, 120.0)
-        pdf.set_font('Arial', 'B', 12)
-        pdf.cell(200, 10, txt="Period of tests", ln=1, border=0)
-        pdf.set_xy(100.0, 120.0)
-        pdf.set_font('Arial', size = 12)
-        pdf.cell(200, 10, txt=test_date, ln=1, border=0)
+            # information section
+            # Client
+            pdf.set_xy(10.0, 85.0)
+            pdf.set_font('Arial', 'B', 12)
+            pdf.cell(200, 10, txt="Client", ln=1, border=0)
+            pdf.set_xy(100.0, 85.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt=self.m_textCtrl_client_name.GetValue(), ln=1, border=0)
+            pdf.set_xy(100.0, 90.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt=self.m_textCtrl_client_address1.GetValue(), ln=1, border=0)
+            pdf.set_xy(100.0, 95.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt=self.m_textCtrl_client_address2.GetValue(), ln=1, border=0)
 
-        # Previous calibration
-        pdf.set_xy(10.0, 130.0)
-        pdf.set_font('Arial', 'B', 12)
-        pdf.cell(200, 10, txt="Previous calibration", ln=1, border=0)
-        pdf.set_xy(100.0, 130.0)
-        pdf.set_font('Arial', size = 12)
-        pdf.cell(200, 10, txt="Not previously calibrated at ARPANSA", ln=1, border=0)
+            # Ionisation chamber
+            pdf.set_xy(10.0, 110.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="Ionisation chamber", ln=1, border=0)
+            pdf.set_xy(100.0, 110.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10,
+                     txt=self.m_textCtrl_model1.GetValue() + ', serial number ' + self.m_textCtrl_serial1.GetValue(),
+                     ln=1, border=0)
 
-        # Test and report by
-        pdf.set_xy(10.0, 140.0)
-        pdf.set_font('Arial', 'B', 12)
-        pdf.cell(200, 10, txt="Test and report by", ln=1, border=0)
-        pdf.set_xy(100.0, 140.0)
-        pdf.set_font('Arial', size = 12)
-        pdf.cell(200, 10, txt=self.m_textCtrl_operator.GetValue(), ln=1, border=0)
+            # Period of tests
+            pdf.set_xy(10.0, 120.0)
+            pdf.set_font('Arial', 'B', 12)
+            pdf.cell(200, 10, txt="Period of tests", ln=1, border=0)
+            pdf.set_xy(100.0, 120.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt=test_date, ln=1, border=0)
 
-        # report date
-        pdf.set_xy(10.0, 150.0)
-        pdf.set_font('Arial', 'B', 12)
-        pdf.cell(200, 10, txt="Report date", ln=1, border=0)
-        pdf.set_xy(100.0, 150.0)
-        pdf.set_font('Arial', size =  12)
-        pdf.cell(200, 10, txt=str(datetime.date(datetime.now())), ln=1, border=0)
+            # Previous calibration
+            pdf.set_xy(10.0, 130.0)
+            pdf.set_font('Arial', 'B', 12)
+            pdf.cell(200, 10, txt="Previous calibration", ln=1, border=0)
+            pdf.set_xy(100.0, 130.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="Not previously calibrated at ARPANSA", ln=1, border=0)
 
-        # inquiries detail line1
-        pdf.set_xy(10.0, 160.0)
-        pdf.set_font('Arial', size=12)
-        pdf.cell(200, 10, txt="Direct inquiries to                                                Chris Oliver", ln=1, border=0)
+            # Test and report by
+            pdf.set_xy(10.0, 140.0)
+            pdf.set_font('Arial', 'B', 12)
+            pdf.cell(200, 10, txt="Test and report by", ln=1, border=0)
+            pdf.set_xy(100.0, 140.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt=self.m_textCtrl_operator.GetValue(), ln=1, border=0)
 
-        # inquiries detail line2
-        pdf.set_xy(10.0, 170.0) #1
-        pdf.set_font('Arial', 'B', 12)
-        pdf.cell(10, 10, txt="Tel:", ln=1, border=0)
-        pdf.set_xy(20.0, 170.0) #2
-        pdf.set_font('Arial', size = 12)
-        pdf.cell(10, 10, txt="(03) 9433 2333", ln=1, border=0)
-        pdf.set_xy(100.0, 170.0) #3
-        pdf.set_font('Arial', 'B', 12)
-        pdf.cell(10, 10, txt="Email:", ln=1, border=0)
-        pdf.set_xy(115.0, 170.0) #4
-        pdf.set_font('Arial', size=12)
-        pdf.cell(10, 10, txt="psdl@arpansa.gov.au", ln=1, border=0)
+            # report date
+            pdf.set_xy(10.0, 150.0)
+            pdf.set_font('Arial', 'B', 12)
+            pdf.cell(200, 10, txt="Report date", ln=1, border=0)
+            pdf.set_xy(100.0, 150.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt=str(datetime.date(datetime.now())), ln=1, border=0)
 
-        # signed part: line 1
-        pdf.set_xy(10.0, 190.0)
-        pdf.set_font('Arial', size=12)
-        pdf.cell(10, 10, txt="Signed:  ___________________  (Authorised Signatory)          Date:", ln=1, border=0)
+            # inquiries detail line1
+            pdf.set_xy(10.0, 160.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="Direct inquiries to                                                Chris Oliver",
+                     ln=1, border=0)
 
-        # page end footer line1
-        pdf.set_xy(10.0, 200.0)
-        pdf.set_font('Arial', size=12)
-        pdf.cell(210, 10, txt="Duncan Butler, Director, Primary Standards Dosimetry Laboratory", ln=1, border=0)
+            # inquiries detail line2
+            pdf.set_xy(10.0, 170.0)  # 1
+            pdf.set_font('Arial', 'B', 12)
+            pdf.cell(10, 10, txt="Tel:", ln=1, border=0)
+            pdf.set_xy(20.0, 170.0)  # 2
+            pdf.set_font('Arial', size=12)
+            pdf.cell(10, 10, txt="(03) 9433 2333", ln=1, border=0)
+            pdf.set_xy(100.0, 170.0)  # 3
+            pdf.set_font('Arial', 'B', 12)
+            pdf.cell(10, 10, txt="Email:", ln=1, border=0)
+            pdf.set_xy(115.0, 170.0)  # 4
+            pdf.set_font('Arial', size=12)
+            pdf.cell(10, 10, txt="psdl@arpansa.gov.au", ln=1, border=0)
 
-        # page end footer line2
-        pdf.set_xy(10.0, 210.0)
-        pdf.set_font('Arial', size=12)
-        pdf.cell(210, 10, txt="per C-M Larsson, CEO of ARPANSA", ln=1, border=0)
+            # signed part: line 1
+            pdf.set_xy(10.0, 190.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(10, 10, txt="Signed:  ___________________  (Authorised Signatory)          Date:", ln=1, border=0)
 
-        # Footer image
-        pdf.set_xy(20.0, 220.0)
-        pdf.image('./imgReference/page_1_footer.png', w=160.0, h=45.0)
+            # page end footer line1
+            pdf.set_xy(10.0, 200.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(210, 10, txt="Duncan Butler, Director, Primary Standards Dosimetry Laboratory", ln=1, border=0)
 
-        # Footer info
-        pdf.set_xy(180.0, 275.0)
-        pdf.set_font('Arial', 'I',8)
-        pdf.cell(210, 0, txt="page 1 of 6", ln=1, border=0)
+            # page end footer line2
+            pdf.set_xy(10.0, 210.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(210, 10, txt="per C-M Larsson, CEO of ARPANSA", ln=1, border=0)
 
-        ############################################### Page 2 ###########################################
-        pdf.add_page()
-        pdf.line(5.0, 5.0, 205.0, 5.0)  # top one
-        pdf.line(5.0, 292.0, 205.0, 292.0)  # bottom one
-        pdf.line(5.0, 5.0, 5.0, 292.0)  # left one
-        pdf.line(205.0, 5.0, 205.0, 292.0)  # right one
+            # Footer image
+            pdf.set_xy(20.0, 220.0)
+            pdf.image('./imgReference/page_1_footer.png', w=160.0, h=45.0)
 
-        pdf.set_xy(10.0, 10.0)
-        pdf.set_font('Arial', 'B'+'U', 12)
-        pdf.cell(200, 10, txt="GENERAL COMMENTS", ln=1, align='C',border=0)
+            # Footer info
+            pdf.set_xy(180.0, 275.0)
+            pdf.set_font('Arial', 'I', 8)
+            pdf.cell(210, 0, txt="page 1 of 6", ln=1, border=0)
 
-        # save the pdf with name .pdf
-        pdf.output("Calibration Report.pdf")
+            ############################################### Page 2 ###########################################
+            pdf.add_page()
+            pdf.line(5.0, 5.0, 205.0, 5.0)  # top one
+            pdf.line(5.0, 292.0, 205.0, 292.0)  # bottom one
+            pdf.line(5.0, 5.0, 5.0, 292.0)  # left one
+            pdf.line(205.0, 5.0, 205.0, 292.0)  # right one
+
+            pdf.set_xy(10.0, 10.0)
+            pdf.set_font('Arial', 'B' + 'U', 12)
+            pdf.cell(200, 10, txt="GENERAL COMMENTS", ln=1, align='C', border=0)
+
+            # save the pdf with name .pdf
+            pdf.output("Calibration Report.pdf")
 
 
 
