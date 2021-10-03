@@ -21,6 +21,16 @@ import plotly
 import plotly.express as px
 import os
 from wx.lib.colourchooser import canvas
+import wx.lib.sized_controls as sc
+from wx.lib.pdfviewer import pdfViewer, pdfButtonPanel
+import wx
+import wx.lib.sized_controls as sc
+
+from wx.lib.pdfviewer import pdfViewer, pdfButtonPanel
+import PyPDF2
+from PyPDF2 import PdfFileReader
+from PyPDF2.pdf import ContentStream, PageObject
+from PyPDF2.filters import ASCII85Decode, FlateDecode
 
 
 def Testr(path_Client, path_Lab):
@@ -2814,10 +2824,13 @@ class MainFrame(wx.Frame):
             # save the pdf with name .pdf
             pdf.output("Calibration Report.pdf")
 
-
+            frame = PdfViewerFrame()
+            frame.Show()
 
 
     # This class is for scatter plot
+
+
 class LeftPanelGraph(wx.Panel):
     def __init__(self, parent):
         wx.Panel.__init__(self, parent=parent)
@@ -3168,6 +3181,29 @@ class DatabaseFrame(wx.Frame):
             if self.os1 in selections:
                 print('yes')
         return
+
+class PdfViewerFrame(sc.SizedFrame):
+    def __init__(self):
+        sc.SizedFrame.__init__(
+            self, parent=None, title=u"Pdf viewer", size=wx.Size(800, 600)
+        )
+        paneCont = self.GetContentsPane()
+        self.buttonpanel = pdfButtonPanel(paneCont, wx.NewId(),
+                                          wx.DefaultPosition, wx.DefaultSize, 0)
+        self.buttonpanel.SetSizerProps(expand=True)
+        self.viewer = pdfViewer(paneCont, wx.NewId(), wx.DefaultPosition,
+                                wx.DefaultSize,
+                                wx.HSCROLL | wx.VSCROLL | wx.SUNKEN_BORDER)
+        self.viewer.UsePrintDirect = False
+        self.viewer.SetSizerProps(expand=True, proportion=1)
+
+        # introduce buttonpanel and viewer to each other
+        self.buttonpanel.viewer = self.viewer
+        self.viewer.buttonpanel = self.buttonpanel
+
+        self.viewer.UsePrintDirect = False
+        self.viewer.LoadFile(r"Calibration Report.pdf")
+        self.viewer.Show()
 
 
 if __name__ == "__main__":
