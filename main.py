@@ -1,7 +1,6 @@
 import wx
 import wx.xrc
 import wx.grid as grid
-import wx.grid as gridlib
 import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
@@ -23,10 +22,7 @@ import os
 from wx.lib.colourchooser import canvas
 import wx.lib.sized_controls as sc
 from wx.lib.pdfviewer import pdfViewer, pdfButtonPanel
-import wx
-import wx.lib.sized_controls as sc
 
-from wx.lib.pdfviewer import pdfViewer, pdfButtonPanel
 import PyPDF2
 from PyPDF2 import PdfFileReader
 from PyPDF2.pdf import ContentStream, PageObject
@@ -2866,7 +2862,7 @@ class RightPanelGrid(wx.Panel):
 
         # get the cell attribute for the top left row
         for i in range(rowSize):
-            attr = gridlib.GridCellAttr()
+            attr = grid.GridCellAttr()
             attr.SetReadOnly(True)
             self.mygrid.SetRowAttr(i, attr)
 
@@ -3142,6 +3138,7 @@ class DatabaseFrame(wx.Frame):
         self.Bind(wx.EVT_BUTTON, self.search, self.m_button_search)
 
     def search(self, event):
+
         if (
             self.m_textCtrl_job.GetValue() == ""
             and self.m_textCtrl_name.GetValue() == ""
@@ -3156,13 +3153,77 @@ class DatabaseFrame(wx.Frame):
             if dlg.ShowModal() == wx.ID_YES:
                 dlg.Destroy()
         else:
-            self.root = self.m_treeCtrl.AddRoot("jobid+name")
-            self.m_treeCtrl.SetItemData(self.root, ("key", "value"))
-            self.os1 = self.m_treeCtrl.AppendItem(self.root, "chamber")
-            self.os2 = self.m_treeCtrl.AppendItem(self.os1, "run1")
-            self.os3 = self.m_treeCtrl.AppendItem(self.os2, "lab")
-            self.os4 = self.m_treeCtrl.AppendItem(self.os2, "client")
-            self.m_treeCtrl.Expand(self.root)
+
+            db = pymysql.connect(host='localhost', user='root', password='Bluering123.', database='bluering')
+
+            cursor = db.cursor()
+
+            job_number = self.m_textCtrl_job.GetValue()
+            chamber = self.m_textCtrl_chamber.GetValue()
+            clientname = self.m_textCtrl_name.GetValue()
+
+            # sql = "SELECT chamber_ID from header WHERE job_number = %s" % job_number
+            # sql = "SELECT chamber_ID from header WHERE chamber = %s" % chamber
+            # sql = "SELECT chamber_ID from header WHERE job_number = %s AND chamber = '%s'" % (job_number,chamber)
+            sql = "SELECT b.chamber_ID, b.chamber, a.job_number, a.clientname FROM client a RIGHT JOIN header b ON a.job_number = b.job_number WHERE LOWER(a.clientname) = '%s'" \
+                  % (clientname.lower())
+
+            cursor.execute(sql)
+            db_output = cursor.fetchall()
+
+            db.close()
+
+            job_set = []
+            name_set = []
+            chamber_set = []
+            all_chamber = []
+            id_set = []
+
+            for row in db_output:
+                if row[2] not in job_set:
+                    job_set.append(row[2])
+                if row[3] not in name_set:
+                    name_set.append(row[3])
+
+            for jobid in job_set:
+                tmp_id = []
+                tmp_chamber = []
+                tmp_all_ch = []
+                for row in db_output:
+                    if row[2] == jobid:
+                        if row[0] not in id_set:
+                            tmp_id.append(row[0])
+                            tmp_all_ch.append(row[1])
+
+                        if " ".join(row[1].split()) not in tmp_chamber and 'MEFAC' not in row[1]:
+                            tmp_chamber.append(" ".join(row[1].split()))
+                id_set.append(tmp_id)
+                chamber_set.append(tmp_chamber)
+                all_chamber.append(tmp_all_ch)
+
+
+            self.root = self.m_treeCtrl.AddRoot("Searching result")
+
+            names = locals()
+            for i in range(len(job_set)): # job id
+                tmp_job = 'CAL'+('00000'+str(job_set[i]))[-5:]
+                tree_job = self.m_treeCtrl.AppendItem(self.root, tmp_job + '_' + name_set[0])
+                for ch in chamber_set[i]: # chamber
+                    tree_chamber = self.m_treeCtrl.AppendItem(tree_job, ch)
+
+                    for run_num in range(len(all_chamber[i])//2):
+                        var_name1 = str(job_set[i]) + '_run_' + str(run_num + 1)
+                        child_name1 = 'Run' + str(run_num + 1)
+                        names[var_name1] = self.m_treeCtrl.AppendItem(tree_chamber,child_name1)
+                        for j in ['Client','Lab']:
+                            var_name2 = str(job_set[i]) + '_run_' + str(run_num + 1) + '_'+ j.lower()
+                            child_name2 = 'Run' + str(run_num + 1)+ '_'+ j
+                            names[var_name2] = self.m_treeCtrl.AppendItem(names[var_name1], child_name2)
+
+            # self.root = self.m_treeCtrl.AddRoot("jobid+name")
+            # # self.m_treeCtrl.SetItemData(self.root, ("key", "value"))
+            # self.os1 = self.m_treeCtrl.AppendItem(self.root, "chamber")
+            self.m_treeCtrl.ExpandAll()
         return
 
     def download_db(self, event):
