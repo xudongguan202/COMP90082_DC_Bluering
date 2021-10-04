@@ -3201,6 +3201,11 @@ class DatabaseFrame(wx.Frame):
                 chamber_set.append(tmp_chamber)
                 all_chamber.append(tmp_all_ch)
 
+            print(job_set)
+            print(name_set)
+            print(chamber_set)
+            print(all_chamber)
+            print(id_set)
 
             self.root = self.m_treeCtrl.AddRoot("Searching result")
 
@@ -3211,6 +3216,7 @@ class DatabaseFrame(wx.Frame):
                 for ch in chamber_set[i]: # chamber
                     tree_chamber = self.m_treeCtrl.AppendItem(tree_job, ch)
 
+                    num = 0
                     for run_num in range(len(all_chamber[i])//2):
                         var_name1 = str(job_set[i]) + '_run_' + str(run_num + 1)
                         child_name1 = 'Run' + str(run_num + 1)
@@ -3219,6 +3225,8 @@ class DatabaseFrame(wx.Frame):
                             var_name2 = str(job_set[i]) + '_run_' + str(run_num + 1) + '_'+ j.lower()
                             child_name2 = 'Run' + str(run_num + 1)+ '_'+ j
                             names[var_name2] = self.m_treeCtrl.AppendItem(names[var_name1], child_name2)
+                            self.m_treeCtrl.SetItemData(names[var_name2], id_set[i][num])
+                            num += 1
 
             # self.root = self.m_treeCtrl.AddRoot("jobid+name")
             # # self.m_treeCtrl.SetItemData(self.root, ("key", "value"))
@@ -3239,8 +3247,13 @@ class DatabaseFrame(wx.Frame):
         else:
             selections = self.m_treeCtrl.GetSelections()
             print(selections)
-            if self.os1 in selections:
-                print('yes')
+
+            chamebr_id_download = []
+            for selected in selections:
+                data = self.m_treeCtrl.GetItemData(selected)
+                chamebr_id_download.append(data)
+            print(chamebr_id_download)
+
         return
 
 class PdfViewerFrame(sc.SizedFrame):
