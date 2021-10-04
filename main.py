@@ -3139,6 +3139,8 @@ class DatabaseFrame(wx.Frame):
 
     def search(self, event):
 
+        self.m_treeCtrl.DeleteAllItems()
+
         if (
             self.m_textCtrl_job.GetValue() == ""
             and self.m_textCtrl_name.GetValue() == ""
@@ -3162,11 +3164,27 @@ class DatabaseFrame(wx.Frame):
             chamber = self.m_textCtrl_chamber.GetValue()
             clientname = self.m_textCtrl_name.GetValue()
 
-            # sql = "SELECT chamber_ID from header WHERE job_number = %s" % job_number
-            # sql = "SELECT chamber_ID from header WHERE chamber = %s" % chamber
-            # sql = "SELECT chamber_ID from header WHERE job_number = %s AND chamber = '%s'" % (job_number,chamber)
-            sql = "SELECT b.chamber_ID, b.chamber, a.job_number, a.clientname FROM client a RIGHT JOIN header b ON a.job_number = b.job_number WHERE LOWER(a.clientname) = '%s'" \
-                  % (clientname.lower())
+            if job_number == '' and chamber != '' and clientname != '':
+                sql = "SELECT b.chamber_ID, b.chamber, a.job_number, a.clientname FROM client a RIGHT JOIN header b ON a.job_number = b.job_number WHERE LOWER(a.clientname) = '%s' AND LOWER(b.chamber) = '%s'" \
+                      % (clientname.lower(),chamber.lower())
+            elif chamber == '' and job_number != '' and clientname != '':
+                sql = "SELECT b.chamber_ID, b.chamber, a.job_number, a.clientname FROM client a RIGHT JOIN header b ON a.job_number = b.job_number WHERE LOWER(a.clientname) = '%s' AND a.job_number = %s" \
+                      % (clientname.lower(),job_number)
+            elif clientname == '' and job_number != '' and chamber != '':
+                sql = "SELECT b.chamber_ID, b.chamber, a.job_number, a.clientname FROM client a RIGHT JOIN header b ON a.job_number = b.job_number WHERE  a.job_number = %s AND LOWER(b.chamber) = '%s'" \
+                      % (job_number, chamber.lower())
+            elif job_number == '' and chamber == '' and clientname != '':
+                sql = "SELECT b.chamber_ID, b.chamber, a.job_number, a.clientname FROM client a RIGHT JOIN header b ON a.job_number = b.job_number WHERE LOWER(a.clientname) = '%s'" \
+                      % (clientname.lower())
+            elif chamber == '' and clientname == ''and job_number != '':
+                sql = "SELECT b.chamber_ID, b.chamber, a.job_number, a.clientname FROM client a RIGHT JOIN header b ON a.job_number = b.job_number WHERE a.job_number = %s" % job_number
+
+            elif job_number == '' and clientname == ''and chamber != '':
+                sql = "SELECT b.chamber_ID, b.chamber, a.job_number, a.clientname FROM client a RIGHT JOIN header b ON a.job_number = b.job_number WHERE LOWER(b.chamber) = '%s'" \
+                      % (chamber.lower())
+            else:
+                sql = "SELECT b.chamber_ID, b.chamber, a.job_number, a.clientname FROM client a RIGHT JOIN header b ON a.job_number = b.job_number WHERE LOWER(a.clientname) = '%s' AND LOWER(b.chamber) = '%s' AND a.job_number = %s" \
+                      % (clientname.lower(), chamber.lower(),job_number)
 
             cursor.execute(sql)
             db_output = cursor.fetchall()
@@ -3228,9 +3246,6 @@ class DatabaseFrame(wx.Frame):
                             self.m_treeCtrl.SetItemData(names[var_name2], id_set[i][num])
                             num += 1
 
-            # self.root = self.m_treeCtrl.AddRoot("jobid+name")
-            # # self.m_treeCtrl.SetItemData(self.root, ("key", "value"))
-            # self.os1 = self.m_treeCtrl.AppendItem(self.root, "chamber")
             self.m_treeCtrl.ExpandAll()
         return
 
@@ -3246,13 +3261,12 @@ class DatabaseFrame(wx.Frame):
                 dlg.Destroy()
         else:
             selections = self.m_treeCtrl.GetSelections()
-            print(selections)
 
-            chamebr_id_download = []
+            chamber_id_download = []
             for selected in selections:
                 data = self.m_treeCtrl.GetItemData(selected)
-                chamebr_id_download.append(data)
-            print(chamebr_id_download)
+                chamber_id_download.append(data)
+            print(chamber_id_download)
 
         return
 
