@@ -2984,7 +2984,7 @@ class DatabaseFrame(wx.Frame):
             wx.EmptyString,
             wx.DefaultPosition,
             wx.Size(-1, -1),
-            0,
+            wx.TE_PROCESS_ENTER,
         )
         bSizer3.Add(self.m_textCtrl_job, 0, wx.ALIGN_CENTER | wx.ALL, 5)
 
@@ -3020,7 +3020,7 @@ class DatabaseFrame(wx.Frame):
             wx.EmptyString,
             wx.DefaultPosition,
             wx.Size(-1, -1),
-            0,
+            wx.TE_PROCESS_ENTER,
         )
         bSizer31.Add(self.m_textCtrl_name, 0, wx.ALIGN_CENTER | wx.ALL, 5)
 
@@ -3056,7 +3056,7 @@ class DatabaseFrame(wx.Frame):
             wx.EmptyString,
             wx.DefaultPosition,
             wx.Size(-1, -1),
-            0,
+            wx.TE_PROCESS_ENTER,
         )
         bSizer32.Add(self.m_textCtrl_chamber, 0, wx.ALIGN_CENTER | wx.ALL, 5)
 
@@ -3136,6 +3136,11 @@ class DatabaseFrame(wx.Frame):
         # bind button and function
         self.Bind(wx.EVT_BUTTON, self.download_db, self.m_button_db_download)
         self.Bind(wx.EVT_BUTTON, self.search, self.m_button_search)
+        self.Bind(wx.EVT_TEXT_ENTER, self.search, self.m_textCtrl_job)
+        self.Bind(wx.EVT_TEXT_ENTER, self.search, self.m_textCtrl_name)
+        self.Bind(wx.EVT_TEXT_ENTER, self.search, self.m_textCtrl_chamber)
+
+
 
     def search(self, event):
 
@@ -3219,11 +3224,11 @@ class DatabaseFrame(wx.Frame):
                 chamber_set.append(tmp_chamber)
                 all_chamber.append(tmp_all_ch)
 
-            print(job_set)
-            print(name_set)
-            print(chamber_set)
-            print(all_chamber)
-            print(id_set)
+            # print(job_set)
+            # print(name_set)
+            # print(chamber_set)
+            # print(all_chamber)
+            # print(id_set)
 
             self.root = self.m_treeCtrl.AddRoot("Searching result")
 
