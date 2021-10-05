@@ -2211,7 +2211,7 @@ class MainFrame(wx.Frame):
 
         # key in your DataBase password
         db = pymysql.connect(
-            host="localhost", user="root", password="961011Bmw-", database="bluering"
+            host="localhost", user="root", password="Bluering123.", database="bluering"
         )
 
         cursor = db.cursor()
