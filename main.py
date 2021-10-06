@@ -2090,7 +2090,7 @@ class MainFrame(wx.Frame):
             if path_11 != "" and path_12 != "" and self.confirmed:
 
                 # set hint
-                self.m_textCtrl_job_no.SetHint("Please generate job number")
+                # self.m_textCtrl_job_no.SetHint("Please generate job number")
                 self.m_textCtrl_client_name.SetHint("Enter client name")
                 self.m_textCtrl_operator.SetHint("Enter operator name")
                 self.m_textCtrl_client_address1.SetHint("Enter address line 1")
@@ -2139,7 +2139,7 @@ class MainFrame(wx.Frame):
                     )  # row 17-21
                     # read job number
                     job_no = client_info_df[2][4]  # col3 row5
-                    job_no = re.sub("[^0-9]", "", str(job_no))
+                    # job_no = re.sub("[^0-9]", "", str(job_no))
                     self.m_textCtrl_job_no.SetValue(job_no)
 
                     # read client info
@@ -2188,7 +2188,7 @@ class MainFrame(wx.Frame):
             address1 = ["Address 1", "", updated_address1]
             address2 = ["Address 2", "", updated_address2]
             oper = ["Operator", "", updated_operator_name]
-            # CAL = ["CAL Number", "", ""]
+            CAL = ["CAL Number", "", '-']
 
             for i in range(len(path_client_lst)):
                 path_client = path_client_lst[i]
@@ -3089,12 +3089,30 @@ class MainFrame(wx.Frame):
             # rewrite cal number
             job_str = ('00000'+str(job_number))[-5:]  # 00001,00002
             old_job = self.m_textCtrl_job_no.GetValue()
-            self.m_textCtrl_job_no.SetValue('New: '+job_str+'  Old: '+old_job)
+            self.m_textCtrl_job_no.SetValue('New: '+job_str+'  Old: '+old_job[-5:])
 
-            # rick help: cal number = job_str
+            # rick
             CAL = ["CAL Number", "", 'CAL' + job_str]
 
-            # end help
+            for file in pathClient+pathLab:
+                bottle_list = []
+
+                # Read all data from the csv file.
+                with open(file, 'r') as b:
+                    bottles = csv.reader(b)
+                    bottle_list.extend(bottles)
+                    b.close()
+
+                # data to override in the format {line_num_to_override:data_to_write}.
+                line_to_override = {20: CAL}
+
+                # Write data to the csv file and replace the lines in the line_to_override dict.
+                with open(file, 'w', newline='') as b:
+                    writer = csv.writer(b)
+                    for line, row in enumerate(bottle_list):
+                        data = line_to_override.get(line, row)
+                        writer.writerow(data)
+                    b.close()
 
             dlg = wx.MessageDialog(
                 None,
