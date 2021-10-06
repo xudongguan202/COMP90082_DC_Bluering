@@ -1008,6 +1008,7 @@ class MainFrame(wx.Frame):
             wx.EmptyString,
             wx.DefaultPosition,
             wx.Size(200, -1),
+            wx.TE_READONLY,
         )
         self.m_textCtrl_job_no.SetMinSize(wx.Size(200, -1))
         self.m_textCtrl_job_no.SetMaxSize(wx.Size(200, -1))
@@ -2064,7 +2065,7 @@ class MainFrame(wx.Frame):
             address1 = ["Address 1", "", updated_address1]
             address2 = ["Address 2", "", updated_address2]
             oper = ["Operator", "", updated_operator_name]
-            CAL = ["CAL Number", "", ""]
+            # CAL = ["CAL Number", "", ""]
 
             for i in range(len(path_client_lst)):
                 path_client = path_client_lst[i]
@@ -2216,8 +2217,6 @@ class MainFrame(wx.Frame):
 
         cursor = db.cursor()
         if self.confirmed and self.readed and self.m_textCtrl_client_name.GetValue() != '':
-            # path_11 = self.m_filePicker_run11.GetPath()  # run1 client
-            # path_12 = self.m_filePicker_run12.GetPath()  # run1 lab
 
             if self.m_checkBox_run1.GetValue():
                 pathClient.append(self.m_filePicker_run11.GetPath())
@@ -2962,6 +2961,27 @@ class MainFrame(wx.Frame):
             MainFrame.m_progress_bar.SetValue(100)
             # close connection
             db.close()
+
+            # rewrite cal number
+            job_str = ('00000'+str(job_number))[-5:]  # 00001,00002
+            old_job = self.m_textCtrl_job_no.GetValue()
+            self.m_textCtrl_job_no.SetValue('New: '+job_str+'  Old: '+old_job)
+
+            # rick help: cal number = job_str
+            CAL = ["CAL Number", "", 'CAL' + job_str]
+
+            # end help
+
+            dlg = wx.MessageDialog(
+                None,
+                u"The CAL number has been updated to %s" % (job_str),
+                u"Local file changed",
+                wx.YES_DEFAULT | wx.ICON_WARNING,
+            )
+            if dlg.ShowModal() == wx.ID_YES:
+                dlg.Destroy()
+
+
             # print("Success!")
             dlg = wx.MessageDialog(
                 None,
