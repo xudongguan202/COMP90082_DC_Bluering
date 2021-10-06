@@ -2235,6 +2235,7 @@ class MainFrame(wx.Frame):
                 pathClient.append(self.m_filePicker_run51.GetPath())
                 pathLab.append(self.m_filePicker_run52.GetPath())
 
+            #find whether this file have already exist in Database or not and find the Job_number
             df = pd.read_csv(pathClient[0], encoding="raw_unicode_escape")
             filename = df.iloc[0][2]
             date = df.iloc[1][2]
