@@ -1796,7 +1796,6 @@ class MainFrame(wx.Frame):
                     "T(Air)",
                     "T(SC)",
                     "H(%)",
-                    "Comment",
                 ]
 
                 # validate column
@@ -1822,7 +1821,7 @@ class MainFrame(wx.Frame):
                     label_column.append(i[0])
 
                 if (
-                    standard_row != label_row1 and standard_row != label_row2
+                    standard_row != label_row1[:-1] and standard_row != label_row2[:-1]
                 ) or standard_column != label_column:
                     dlg = wx.MessageDialog(
                         None,
