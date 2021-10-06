@@ -3869,7 +3869,7 @@ class DatabaseFrame(wx.Frame):
 
                     path = self.m_dirPicker_download.GetPath()
 
-                    cal_num = ('00000'+str(rows[0][1]))[-5:]
+                    cal_num = 'CAL'+('00000'+str(rows[0][1]))[-5:]
                     file = path + '/%s Raw %s-%s.csv'%(cal_num,clientname,file_name)
 
                     with open(file, "w", newline="") as f:
