@@ -171,6 +171,121 @@ def Testr(path_Client, path_Lab):
     # print(df_merge_col)
     return KeV, Beam, NK
 
+def MEXdata_PTB_Beams(path_Client, path_Lab):
+    df_Client = pd.read_csv(path_Client,
+                            skiprows=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21])
+    df_Lab = pd.read_csv(path_Lab, skiprows=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21])
+
+    current1_Client = df_Client["Current1(pA)"]
+    current2_Client = df_Client["Current2(pA)"]
+
+    current1_Lab = df_Lab["Current1(pA)"]
+    current2_Lab = df_Lab["Current2(pA)"]
+
+    BgdIC1_Before_Client = current1_Client.iloc[0:89].mean(axis=0)
+    BgdMC1_Before_Client = current2_Client.iloc[0:89].mean(axis=0)
+
+    BgdIC2_Before_Lab = current1_Lab.iloc[0:89].mean(axis=0)
+    BgdMC2_Before_Lab = current2_Lab.iloc[0:89].mean(axis=0)
+
+    df_Client["R1"] = (
+        ((df_Client["Current2(pA)"] - BgdIC2_Before_Lab) / (df_Client["Current1(pA)"] - BgdMC2_Before_Lab)).groupby(
+            [df_Client['Filter'], df_Client['XraysOn']]).transform('mean').round(5))
+    df_Lab["R2"] = (
+        ((df_Lab["Current2(pA)"] - BgdIC2_Before_Lab) / (df_Lab["Current1(pA)"] - BgdMC2_Before_Lab)).groupby(
+            [df_Lab['Filter'], df_Lab['XraysOn']]).transform('mean').round(5))
+
+    # currentLab_Mean["H2"]=currentLab_Mean.apply(H2,axis=1)
+    pd.set_option('display.max_rows', None)
+
+    group_Client = df_Client.groupby(["Filter", "XraysOn"], as_index=False)
+    df_Client_MEX = group_Client.agg(
+        {"kV": "mean", "Current1(pA)": "mean", "Current2(pA)": "mean", "T(MC)": "mean", "T(Air)": "mean", "R1": "mean"})
+
+    group_Lab = df_Lab.groupby(["Filter", "XraysOn"], as_index=False)
+    df_Lab_MEX = group_Lab.agg(
+        {"kV": "mean", "Current1(pA)": "mean", "Current2(pA)": "mean", "T(MC)": "mean", "T(SC)": "mean", "H(%)": "mean",
+         "R2": "mean"})
+    df_Client_MEX["R2"] = df_Lab_MEX["R2"]
+    df_Lab_MEX["MC2"] = df_Lab_MEX[["Current1(pA)"]].apply(lambda x: x["Current1(pA)"] - BgdMC2_Before_Lab, axis=1)
+    df_Lab_MEX["IC2"] = df_Lab_MEX[["Current2(pA)"]].apply(lambda x: x["Current2(pA)"] - BgdIC2_Before_Lab, axis=1)
+
+    df_Client_MEX["MC1"] = df_Lab_MEX[["Current1(pA)"]].apply(lambda x: x["Current1(pA)"] - BgdMC1_Before_Client,
+                                                              axis=1)
+    df_Client_MEX["IC1"] = df_Lab_MEX[["Current2(pA)"]].apply(lambda x: x["Current2(pA)"] - BgdIC1_Before_Client,
+                                                              axis=1)
+    df_Client_MEX["MC2"] = df_Lab_MEX["MC2"]
+    df_Client_MEX["IC2"] = df_Lab_MEX["IC2"]
+    df_Client_MEX["TM2"] = df_Lab_MEX["T(MC)"]
+    df_Client_MEX["TS2"] = df_Lab_MEX["T(SC)"]
+    df_Client_MEX["H2"] = df_Lab_MEX["H(%)"]
+
+    Ma = 6.18E-06
+    WE = 33.97
+
+    # df_Client_MEX["NK"]=df_Lab_MEX[["Current2(pA)"]].apply(lambda x:x["Current2(pA)"]-BgdIC1_Before_Client,axis=1)
+
+    product = pd.read_csv("KKMaWE.csv", skiprows=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+
+    product = product[['Filter', 'Product']]
+
+    # MEX report
+    MEXs = pd.read_csv("KKMaWE.csv", skiprows=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+    MEX = MEXs[['Filter', '(kV)', 'mm Al', 'mm Cu', '(mm Al)', '(mm Cu)', '(eff, Cu)', 'Air kerma rate']]
+
+    df_merge_col = pd.merge(df_Client_MEX, product, on='Filter')
+    df_merge_col["NK"] = df_merge_col[["Product", "R1", "R2", "T(Air)", "H2", "T(MC)", "TS2", "TM2"]].apply(
+        lambda x: x["R2"] * WE * x["Product"] * ((273.15 + x["TS2"]) / (273.15 + x["TM2"])) * (
+                    0.995766667 + 0.000045 * x["H2"]) / (
+                              Ma * x["R1"] * (273.15 + x["T(Air)"]) / (273.15 + x["T(MC)"])) / 1000000, axis=1)
+
+    df_merge_col = df_merge_col.drop(df_merge_col[df_merge_col.XraysOn == False].index)
+
+    df_merge_col = pd.merge(df_merge_col, MEX, on='Filter')
+    MEXreport = df_merge_col[
+        ['Filter', '(kV)', 'mm Al', 'mm Cu', '(mm Al)', '(mm Cu)', '(eff, Cu)', 'NK', 'Air kerma rate']]
+    MEXreport['U'] = 1.4
+    MEXreport_sortByKev = MEXreport.sort_values(by=['(kV)'])
+
+    MEXreport_PTB = MEXreport.loc[(MEXreport['Filter'].isin(
+        ['NXA50', 'NXA70', 'NXB100', 'NXC120', 'NXD140', 'NXE150', 'NXF200', 'NXG250', 'NXH280', 'NXH300', 'NXH300*']))]
+
+    #print(MEXreport_PTB)
+    KeV = MEXreport_PTB["(kV)"].values.tolist()
+    Beam = MEXreport_PTB["Filter"].values.tolist()
+    NK = MEXreport_PTB["NK"].values.tolist()
+    AddedfiltermmAl = MEXreport_PTB["mm Al"].values.tolist()
+    AddedfiltermmCu = MEXreport_PTB["mm Cu"].values.tolist()
+    HVLmmAl = MEXreport_PTB["(mm Al)"].values.tolist()
+    HVLmmCu = MEXreport_PTB["(mm Cu)"].values.tolist()
+    NominalEffectiveEnergy = MEXreport_PTB["(eff, Cu)"].values.tolist()
+    NominalAirKermaRate = MEXreport_PTB["Air kerma rate"].values.tolist()
+    U = MEXreport_PTB["U"].values.tolist()
+
+    KeV = pd.Series(KeV, dtype=object).fillna(0).tolist()
+    Beam = pd.Series(Beam, dtype=object).fillna(0).tolist()
+
+    NK = pd.Series(NK, dtype=object).fillna(0).tolist()
+    NK_round = []
+    for i in NK:
+        NK_round.append(round(i,2))
+
+    AddedfiltermmAl = pd.Series(AddedfiltermmAl, dtype=object).fillna(0).tolist()
+    AddedfiltermmCu =pd.Series(AddedfiltermmCu, dtype=object).fillna(0).tolist()
+    HVLmmAl = pd.Series(HVLmmAl, dtype=object).fillna(0).tolist()
+    HVLmmCu =pd.Series(HVLmmCu, dtype=object).fillna(0).tolist()
+    NominalEffectiveEnergy =pd.Series(NominalEffectiveEnergy, dtype=object).fillna(0).tolist()
+
+    NominalAirKermaRate =pd.Series(NominalAirKermaRate, dtype=object).fillna(0).tolist()
+    NominalAirKermaRate_round = []
+    for i in NominalAirKermaRate:
+        NominalAirKermaRate_round.append(round(i,1))
+
+    U =pd.Series(U, dtype=object).fillna(0).tolist()
+
+    #print(MEXreport_PTB)
+    return KeV, Beam, NK_round, AddedfiltermmAl, AddedfiltermmCu, HVLmmAl, HVLmmCu, NominalEffectiveEnergy, NominalAirKermaRate_round, U
+
 
 class MyApp(wx.App):
     def __init__(self):
@@ -3056,7 +3171,31 @@ class MainFrame(wx.Frame):
                 dlg.Destroy()
         return
 
+
     def generate_pdf(self,event):
+        global pathClient
+        global pathLab
+
+        pathClient = []
+        pathLab = []
+
+        if self.confirmed and self.readed and self.m_textCtrl_client_name.GetValue() != '':
+            if self.m_checkBox_run1.GetValue():
+                pathClient.append(self.m_filePicker_run11.GetPath())
+                pathLab.append(self.m_filePicker_run12.GetPath())
+            if self.m_checkBox_run2.GetValue():
+                pathClient.append(self.m_filePicker_run21.GetPath())
+                pathLab.append(self.m_filePicker_run22.GetPath())
+            if self.m_checkBox_run3.GetValue():
+                pathClient.append(self.m_filePicker_run31.GetPath())
+                pathLab.append(self.m_filePicker_run32.GetPath())
+            if self.m_checkBox_run4.GetValue():
+                pathClient.append(self.m_filePicker_run41.GetPath())
+                pathLab.append(self.m_filePicker_run42.GetPath())
+            if self.m_checkBox_run5.GetValue():
+                pathClient.append(self.m_filePicker_run51.GetPath())
+                pathLab.append(self.m_filePicker_run52.GetPath())
+
         pdf = FPDF(orientation='P', unit='mm', format='A4')
 
         create_pdf = True
@@ -3495,15 +3634,72 @@ class MainFrame(wx.Frame):
             unit_list = ['kV','mm Al','mm Cu','mm Al','mm Cu','keV','mGy/s','mGy/nC','%']
             pdf.set_xy(10, 145)
             pdf.set_font('Arial', size=10)
-            pdf.cell(18.5,10,'',1,0,'C')
+            pdf.cell(18.5,5,'',1,0,'C')
             for i in range(len(unit_list)):
-                pdf.set_xy(28.5 + i * 18.5, 145)
+                pdf.set_xy(28.5+i*18.5, 145)
+                pdf.set_font('Arial', size=9)
+                pdf.cell(18.5, 5, unit_list[i], 1, 0, 'C')
+
+
+            KeV, Beam, NK, AddedfiltermmAl, AddedfiltermmCu,HVLmmAl, HVLmmCu, NominalEffectiveEnergy, NominalAirKermaRate, U = MEXdata_PTB_Beams(pathClient[0], pathLab[0])
+            table1_data = [KeV, AddedfiltermmAl, AddedfiltermmCu, HVLmmAl, HVLmmCu, NominalEffectiveEnergy, NominalAirKermaRate,NK,U]
+            print(table1_data)
+            for i in range(len(Beam)):
+                pdf.set_xy(10, 150+i*10)
                 pdf.set_font('Arial', size=10)
-                pdf.cell(18.5, 10, unit_list[i], 1, 0, 'C')
+                pdf.cell(18.5, 10, Beam[i], 1, 0, 'C')
+                for j in range(9):
+                    pdf.set_xy(28.5+j*18.5, 150+i*10)
+                    pdf.set_font('Arial', size=10)
+                    pdf.cell(18.5, 10, str(table1_data[j][i]), 1, 0, 'C')
+
+            #pdf.set_xy(10, 250)
+            #pdf.set_font('Arial', size=10)
+            #pdf.cell(18.5, 10, 'NXH300*', 1, 0, 'C')
+
+            pdf.set_xy(10.0, 250.0)
+            pdf.set_font('Arial', size=9)
+            pdf.cell(200, 10, txt="[1] The energy of a monoenergetic beam with the same HVL in mm of Cu", ln=1, border=0)
+
+            pdf.set_xy(10.0, 255.0)
+            pdf.set_font('Arial', size=9)
+            pdf.cell(200, 10, txt="[2] The air kerma calibration coefficient", ln=1,border=0)
+
+            pdf.set_xy(10.0, 260.0)
+            pdf.set_font('Arial', size=9)
+            pdf.cell(200, 10, txt="* With buildup cap on", ln=1, border=0)
+
+            pdf.set_xy(100.0, 260.0)
+            pdf.set_font('Arial', size=9)
+            pdf.cell(10, 10, txt="_____________________________________", ln=1, border=0)
+
+            pdf.set_xy(100.0, 265.0)
+            pdf.set_font('Arial', size=9)
+            pdf.cell(10, 10, txt="Calibrated by Duncan Butler", ln=1, border=0)
+
+            pdf.set_xy(180.0, 275.0)
+            pdf.set_font('Arial', 'I', 8)
+            pdf.cell(210, 0, txt="page 3 of 6", ln=1, border=0)
+
+            ############################################### Page 4 ###########################################
+            pdf.add_page()
+            pdf.line(5.0, 5.0, 205.0, 5.0)  # top one
+            pdf.line(5.0, 292.0, 205.0, 292.0)  # bottom one
+            pdf.line(5.0, 5.0, 5.0, 292.0)  # left one
+            pdf.line(205.0, 5.0, 205.0, 292.0)  # right one
+
+            pdf.set_xy(15.0, 10.0)
+            pdf.image('./imgReference/Heading.png', w=160.0, h=20.0)
+
+            pdf.set_xy(30.0, 30.0)
+            pdf.set_font('Arial', 'B', size=12)
+            pdf.cell(200, 5, txt="	Table 2:", ln=1, border=0)
+            pdf.set_xy(50.0, 30.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 5, txt="	Complete set of air kerma calibration coefficients for all MEX beams", ln=1, border=0)
 
 
 
-            #$pdf.cell)
             # save the pdf with name .pdf
             pdf.output("Calibration Report.pdf")
 
