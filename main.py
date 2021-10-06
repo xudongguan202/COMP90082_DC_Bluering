@@ -3235,6 +3235,137 @@ class MainFrame(wx.Frame):
             pdf.set_font('Arial', 'B' + 'U', 12)
             pdf.cell(200, 10, txt="GENERAL COMMENTS", ln=1, align='C', border=0)
 
+
+            # information section
+            # Chamber description
+            pdf.set_xy(10.0, 20.0)
+            pdf.set_font('Arial', 'B', 12)
+            pdf.cell(200, 10, txt="Chamber description - " + self.m_textCtrl_model1.GetValue(), ln=1, border=0)
+
+            # Accessories Supplied
+            pdf.set_xy(10.0, 55.0)
+            pdf.set_font('Arial', 'B', size=12)
+            pdf.cell(200, 10, txt="Accessories Supplied", ln=1, border=0)
+            pdf.set_xy(10.0, 60.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="-   Buildup cap", ln=1, border=0)
+
+            # Preliminary Inspection
+            pdf.set_xy(10.0, 70.0)
+            pdf.set_font('Arial', 'B', size=12)
+            pdf.cell(200, 10, txt="Preliminary Inspection", ln=1, border=0)
+            pdf.set_xy(10.0, 75.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="-   The ionisation chamber had no obvious damage or faults on receipt.", ln=1,
+                     border=0)
+
+            # Calibration Coefficient
+            pdf.set_xy(10.0, 85.0)
+            pdf.set_font('Arial', 'B', size=12)
+            pdf.cell(200, 10, txt="Calibration Coefficient", ln=1, border=0)
+            pdf.set_xy(10.0, 90.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="-   The calibration coefficient is the number by which the charge from the " +
+                                  "chamber, in nC, must be ", ln=1, border=0)
+            pdf.set_xy(10.0, 95.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="     multiplied to obtain the air kerma [1]. The calibration " +
+                                  "factor for the electrometer must also be ", ln=1, border=0)
+            pdf.set_xy(10.0, 100.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="     taken into account when measuring the charge from the chamber.", ln=1, border=0)
+
+            # Calibration Coefficients for Medium-Energy X-ray (MEX) Qualities in Air
+            pdf.set_xy(10.0, 110.0)
+            pdf.set_font('Arial', 'B', size=12)
+            pdf.cell(200, 10, txt="Calibration Coefficients for Medium-Energy X-ray (MEX) Qualities in Air", ln=1,
+                     border=0)
+            pdf.set_xy(10.0, 115.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="-   The calibration coefficients for the chamber for each X-ray beam quality" +
+                                  " from the Gulmay ", ln=1, border=0)
+            pdf.set_xy(10.0, 120.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="     Comet X-ray generator were determined by comparison with the" +
+                                  " ARPANSA Medium Energy ", ln=1, border=0)
+            pdf.set_xy(10.0, 125.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="     Free-Air Chamber, which is the Australian primary standard" +
+                                  " of air kerma for medium energy X-", ln=1, border=0)
+            pdf.set_xy(10.0, 130.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="     rays.", ln=1, border=0)
+            pdf.set_xy(10.0, 135.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="-   The Gulmay Comet X-ray generator is constant potential and the X-ray tube " +
+                                  "has a tungsten ", ln=1, border=0)
+            pdf.set_xy(10.0, 140.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="     target.", ln=1, border=0)
+
+            # Recombination Correction Measurement
+            pdf.set_xy(10.0, 150.0)
+            pdf.set_font('Arial', 'B', size=12)
+            pdf.cell(200, 10, txt="Recombination Correction Measurement ", ln=1, border=0)
+            pdf.set_xy(10.0, 155.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="-   Not measured.", ln=1, border=0)
+
+            # Polarity Correction Measurement
+            pdf.set_xy(10.0, 165.0)
+            pdf.set_font('Arial', 'B', size=12)
+            pdf.cell(200, 10, txt="Polarity Correction Measurement", ln=1, border=0)
+            pdf.set_xy(10.0, 170.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="-   Not measured.", ln=1, border=0)
+
+            # Notes
+            pdf.set_xy(10.0, 185.0)
+            pdf.set_font('Arial', 'B', size=12)
+            pdf.cell(200, 10, txt="Notes", ln=1, border=0)
+            pdf.set_xy(10.0, 190.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="-   The ionisation chamber was tested in accordance with ARPANSA Standard " +
+                                  "Operational ", ln=1, border=0)
+            pdf.set_xy(10.0, 195.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="     Procedure ARPANSA-SOP-0816 Version 7.", ln=1, border=0)
+            pdf.set_xy(10.0, 200.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="", ln=1, border=0)
+
+            # References
+            pdf.set_xy(10.0, 210.0)
+            pdf.set_font('Arial', 'B', size=12)
+            pdf.cell(200, 10, txt="References", ln=1, border=0)
+            pdf.set_xy(10.0, 215.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="[1] AAPM protocol for 40-300 kV x-ray beam dosimetry in radiotherapy and " +
+                                  "radiobiology, C.-M. ", ln=1, border=0)
+            pdf.set_xy(10.0, 220.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="     Ma, Chair, C. W. Coffey, L. A. DeWerd, C. Liu, R. Nath, " +
+                                  "S. M. Seltzer, J. P. Seuntjens, Med. ", ln=1, border=0)
+            pdf.set_xy(10.0, 225.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="     Phys. ", ln=1, border=0)
+            pdf.set_xy(28.0, 225.0)
+            pdf.set_font('Arial', 'B', size=12)
+            pdf.cell(200, 10, txt="28", ln=1, border=0)
+            pdf.set_xy(33.0, 225.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt=" (6) 868-893, 2001", ln=1, border=0)
+            pdf.set_xy(10.0, 230.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="", ln=1, border=0)
+
+            # Footer info
+            pdf.set_xy(180.0, 255.0)
+            pdf.set_font('Arial', 'I', 8)
+            pdf.cell(210, 0, txt="page 2 of 6", ln=1, border=0)
+
+
+
             # save the pdf with name .pdf
             pdf.output("Calibration Report.pdf")
 
