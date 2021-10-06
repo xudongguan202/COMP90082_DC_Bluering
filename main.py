@@ -1816,12 +1816,13 @@ class MainFrame(wx.Frame):
                     "Monitor HV",
                     "MEFAC-IC electrometer range",
                     "IC HV",
+                    "Comment",
                 ]
                 for i in header:
                     label_column.append(i[0])
 
                 if (
-                    standard_row != label_row1[:-1] and standard_row != label_row2[:-1]
+                    standard_row != label_row1 and standard_row != label_row2
                 ) or standard_column != label_column:
                     dlg = wx.MessageDialog(
                         None,
@@ -3897,14 +3898,14 @@ class DatabaseFrame(wx.Frame):
                         writer.writerow(['[DATA]'])
                         writer.writerow(
                             ['kV', 'mA', 'BarCode', 'XraysOn', 'HVLFilter(mm)', 'Filter', 'FilterReady', 'HVLReady', 'N',
-                             'Current1(pA)', 'Current2(pA)', 'P(kPa)', 'T(MC)', 'T(Air)', 'T(SC)', 'H(%)'])
+                             'Current1(pA)', 'Current2(pA)', 'P(kPa)', 'T(MC)', 'T(Air)', 'T(SC)', 'H(%)', 'Comment',])
 
                     # sql = "SELECT * from body WHERE chamber_ID = %s" % chamber_ID
                     sql = "SELECT kv,ma,barcode,xrayson,HVLFilter,filter,filterready,hvlready,n,Current1,Current2,P,T_MC,T_Air,T_SC,H from body WHERE chamber_ID = %s" % chamber_ID
 
                     cursor.execute(sql)
                     rows = cursor.fetchall()
-                    fp = open(file, 'a')
+                    fp = open(file, 'a', newline='')
                     myFile = csv.writer(fp)
                     myFile.writerows(rows)
                     fp.close()
