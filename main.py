@@ -144,6 +144,7 @@ def Testr(path_Client, path_Lab):
     # print(df_Client_MEX)
 
     product = pd.read_csv("KKMaWE.csv", skiprows=10)
+
     product = product[["Filter", "Product"]]
 
     df_merge_col = pd.merge(df_Client_MEX, product, on="Filter")
