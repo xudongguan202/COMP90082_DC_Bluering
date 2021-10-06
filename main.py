@@ -3784,7 +3784,7 @@ class DatabaseFrame(wx.Frame):
             names = locals()
             for i in range(len(job_set)): # job id
                 tmp_job = 'CAL'+('00000'+str(job_set[i]))[-5:]
-                tree_job = self.m_treeCtrl.AppendItem(self.root, tmp_job + '_' + name_set[0])
+                tree_job = self.m_treeCtrl.AppendItem(self.root, tmp_job + '-' + name_set[0])
                 for ch in chamber_set[i]: # chamber
                     tree_chamber = self.m_treeCtrl.AppendItem(tree_job, ch)
 
@@ -3795,9 +3795,9 @@ class DatabaseFrame(wx.Frame):
                         names[var_name1] = self.m_treeCtrl.AppendItem(tree_chamber,child_name1)
                         for j in ['Client','Lab']:
                             var_name2 = str(job_set[i]) + '_run_' + str(run_num + 1) + '_'+ j.lower()
-                            child_name2 = 'Run' + str(run_num + 1)+ '_'+ j
+                            child_name2 = 'Run' + str(run_num + 1)+ '-'+ j
                             names[var_name2] = self.m_treeCtrl.AppendItem(names[var_name1], child_name2)
-                            self.m_treeCtrl.SetItemData(names[var_name2], id_set[i][num])
+                            self.m_treeCtrl.SetItemData(names[var_name2], [id_set[i][num],child_name2])
                             num += 1
 
             self.m_treeCtrl.ExpandAll()
@@ -3816,11 +3816,108 @@ class DatabaseFrame(wx.Frame):
         else:
             selections = self.m_treeCtrl.GetSelections()
 
-            chamber_id_download = []
-            for selected in selections:
-                data = self.m_treeCtrl.GetItemData(selected)
-                chamber_id_download.append(data)
-            print(chamber_id_download)
+            if len(selections) == 0:
+                dlg = wx.MessageDialog(
+                    None,
+                    u"Please select the file to download!",
+                    u"Nothing selected",
+                    wx.YES_DEFAULT | wx.ICON_WARNING,
+                )
+                if dlg.ShowModal() == wx.ID_YES:
+                    dlg.Destroy()
+            else:
+                chamber_id_download = []
+                for selected in selections:
+                    data = self.m_treeCtrl.GetItemData(selected)
+                    chamber_id_download.append(data)
+                print(chamber_id_download)
+
+                # download part
+                db = pymysql.connect(host='localhost', user='root', password='Bluering123.', database='bluering')
+
+                cursor = db.cursor()
+                for i in range(len(chamber_id_download)):
+
+                    chamber_ID = chamber_id_download[i][0]
+                    file_name = chamber_id_download[i][1]
+
+                    sql = "SELECT * from header WHERE chamber_ID = %s" % chamber_ID
+
+                    cursor.execute(sql)
+                    rows = cursor.fetchall()
+
+                    filename = rows[0][2]
+                    date = rows[0][3]
+                    chamber = rows[0][4]
+                    description = rows[0][7]
+                    software = rows[0][8]
+                    backgrounds = rows[0][9]
+                    measurements = rows[0][10]
+                    trolley = rows[0][11]
+                    sDC = rows[0][12]
+                    aperturewheel = rows[0][13]
+                    comment = rows[0][14]
+                    monitorelectrometerrange = rows[0][15]
+                    monitorhv = rows[0][16]
+                    mEFAC_ICElectrometerRange = rows[0][17]
+                    ic_hv = rows[0][18]
+                    clientname = rows[0][19]
+                    address1 = rows[0][20]
+                    address2 = rows[0][21]
+                    operator = rows[0][22]
+                    calnumber = rows[0][23]
+
+                    path = self.m_dirPicker_download.GetPath()
+
+                    cal_num = ('00000'+str(rows[0][1]))[-5:]
+                    file = path + '/%s Raw %s-%s.csv'%(cal_num,clientname,file_name)
+
+                    with open(file, "w", newline="") as f:
+                        writer = csv.writer(f)
+                        writer.writerow(['[COMET X-RAY MEASUREMENT]'])
+                        writer.writerow(['Filename', '', filename])
+                        writer.writerow(['Date', '', date])
+                        writer.writerow(['Chamber', '', chamber])
+                        writer.writerow(['Description', '', description])
+                        writer.writerow(['Software', '', software])
+                        writer.writerow(['Backgrounds', '', backgrounds])
+                        writer.writerow(['Measurements', '', measurements])
+                        writer.writerow(['Trolley (mm)', '', trolley])
+                        writer.writerow(['SCD (mm)', '', sDC])
+                        writer.writerow(['Aperture wheel', '', aperturewheel])
+                        writer.writerow(['Comment', '', comment])
+                        writer.writerow(['Monitor electrometer range', '', monitorelectrometerrange])
+                        writer.writerow(['Monitor HV', '', monitorhv])
+                        writer.writerow(['MEFAC-IC electrometer range', '', mEFAC_ICElectrometerRange])
+                        writer.writerow(['IC HV', '', ic_hv])
+                        writer.writerow(['Client name', '', clientname])
+                        writer.writerow(['Address 1', '', address1])
+                        writer.writerow(['Address 2', '', address2])
+                        writer.writerow(['Operator', '', operator])
+                        writer.writerow(['CAL Number', '', calnumber])
+                        writer.writerow(['[DATA]'])
+                        writer.writerow(
+                            ['kV', 'mA', 'BarCode', 'XraysOn', 'HVLFilter(mm)', 'Filter', 'FilterReady', 'HVLReady', 'N',
+                             'Current1(pA)', 'Current2(pA)', 'P(kPa)', 'T(MC)', 'T(Air)', 'T(SC)', 'H(%)'])
+
+                    # sql = "SELECT * from body WHERE chamber_ID = %s" % chamber_ID
+                    sql = "SELECT kv,ma,barcode,xrayson,HVLFilter,filter,filterready,hvlready,n,Current1,Current2,P,T_MC,T_Air,T_SC,H from body WHERE chamber_ID = %s" % chamber_ID
+
+                    cursor.execute(sql)
+                    rows = cursor.fetchall()
+                    fp = open(file, 'a')
+                    myFile = csv.writer(fp)
+                    myFile.writerows(rows)
+                    fp.close()
+                db.close()
+                dlg = wx.MessageDialog(
+                    None,
+                    u"%d files downloaded!"%(i+1),
+                    u"Successfully downloaded",
+                    wx.YES_DEFAULT | wx.ICON_WARNING,
+                )
+                if dlg.ShowModal() == wx.ID_YES:
+                    dlg.Destroy()
 
         return
 
