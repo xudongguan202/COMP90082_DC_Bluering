@@ -1796,6 +1796,7 @@ class MainFrame(wx.Frame):
                     "T(Air)",
                     "T(SC)",
                     "H(%)",
+                    "Comment",
                 ]
 
                 # validate column
@@ -1816,7 +1817,6 @@ class MainFrame(wx.Frame):
                     "Monitor HV",
                     "MEFAC-IC electrometer range",
                     "IC HV",
-                    "Comment",
                 ]
                 for i in header:
                     label_column.append(i[0])
