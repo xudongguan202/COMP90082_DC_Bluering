@@ -144,6 +144,7 @@ def Testr(path_Client, path_Lab):
     # print(df_Client_MEX)
 
     product = pd.read_csv("KKMaWE.csv", skiprows=10)
+
     product = product[["Filter", "Product"]]
 
     df_merge_col = pd.merge(df_Client_MEX, product, on="Filter")
@@ -2234,6 +2235,7 @@ class MainFrame(wx.Frame):
                 pathClient.append(self.m_filePicker_run51.GetPath())
                 pathLab.append(self.m_filePicker_run52.GetPath())
 
+            #find whether this file have already exist in Database or not and find the Job_number
             df = pd.read_csv(pathClient[0], encoding="raw_unicode_escape")
             filename = df.iloc[0][2]
             date = df.iloc[1][2]
