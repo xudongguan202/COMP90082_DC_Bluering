@@ -2236,12 +2236,409 @@ class MainFrame(wx.Frame):
                 pathClient.append(self.m_filePicker_run51.GetPath())
                 pathLab.append(self.m_filePicker_run52.GetPath())
 
+            #find whether this file have already exist in Database or not and find the Job_number
             df = pd.read_csv(pathClient[0], encoding="raw_unicode_escape")
+            filename = df.iloc[0][2]
+            date = df.iloc[1][2]
+            chamber = df.iloc[2][2]
+            chamber2 = chamber.split()
+            model = " "
+            model = model.join(chamber2[:-1])
+            serial = chamber2[-1]
+            description = df.iloc[3][2]
+            software = df.iloc[4][2]
+            backgrounds = df.iloc[5][2]
+            measurements = df.iloc[6][2]
+            trolley = int(df.iloc[7][2])
+            sCD = int(df.iloc[8][2])
+            aperture_wheel = df.iloc[9][2]
+            comment = df.iloc[10][2]
+            monitorelectrometerrange = df.iloc[11][2]
+            monitor_hv = df.iloc[12][2]
+            mEFAC_ICElectrometerRange = df.iloc[13][2]
+            ic_hv = df.iloc[14][2]
+            sql = "SELECT job_number FROM header WHERE filename = '%s' AND Date = '%s' AND chamber = '%s' AND model = '%s' AND serial = '%s' AND description = '%s' AND software = '%s' AND backgrounds = '%s' AND measurements = '%s' AND Trolley = '%s' AND SCD = '%s' AND aperturewheel = '%s' AND Comment = '%s' AND monitorelectrometerrange = '%s' AND monitorhv = '%s' AND MEFAC_ICElectrometerRange = '%s' AND ic_hv= '%s'" \
+                  % (
+                      filename,
+                      date,
+                      chamber,
+                      model,
+                      serial,
+                      description,
+                      software,
+                      backgrounds,
+                      measurements,
+                      trolley,
+                      sCD,
+                      aperture_wheel,
+                      comment,
+                      monitorelectrometerrange,
+                      monitor_hv,
+                      mEFAC_ICElectrometerRange,
+                      ic_hv
+                  )
+            result_number = cursor.execute(sql)
+            result = cursor.fetchall()
             if df.iloc[15][0] == "[DATA]":
                 dlg = wx.MessageDialog(
                     None,
                     u"please update the client information",
                     u"wrong format",
+                    wx.YES_DEFAULT | wx.ICON_WARNING,
+                )
+                if dlg.ShowModal() == wx.ID_YES:
+                    dlg.Destroy()
+                return
+            #If the sql find some result, but the file number is less than the files in database
+            elif result_number != 0 and result_number >= len(pathClient) + len(pathLab):
+                dlg = wx.MessageDialog(
+                    None,
+                    u"all the information have already stored in database",
+                    u"wrong format",
+                    wx.YES_DEFAULT | wx.ICON_WARNING,
+                )
+                if dlg.ShowModal() == wx.ID_YES:
+                    dlg.Destroy()
+                return
+            #If the sql did find some result but some new files added
+            elif result_number != 0 and result_number < len(pathClient) + len(pathLab):
+                job_number = result[0][0]
+                for pathClient1, pathLab1 in zip(pathClient, pathLab):
+                    # store run11(Client) file
+                    csv_file_name = pathClient1
+                    df = pd.read_csv(csv_file_name, encoding="raw_unicode_escape")
+                    filename = df.iloc[0][2]
+                    date = df.iloc[1][2]
+                    chamber = df.iloc[2][2]
+                    chamber2 = chamber.split()
+                    model = " "
+                    model = model.join(chamber2[:-1])
+                    serial = chamber2[-1]
+                    description = df.iloc[3][2]
+                    software = df.iloc[4][2]
+                    backgrounds = df.iloc[5][2]
+                    measurements = df.iloc[6][2]
+                    trolley = int(df.iloc[7][2])
+                    sCD = int(df.iloc[8][2])
+                    aperture_wheel = df.iloc[9][2]
+                    comment = df.iloc[10][2]
+                    monitorelectrometerrange = df.iloc[11][2]
+                    monitor_hv = df.iloc[12][2]
+                    mEFAC_ICElectrometerRange = df.iloc[13][2]
+                    ic_hv = df.iloc[14][2]
+                    sql = "SELECT job_number FROM header WHERE filename = '%s' AND Date = '%s' AND chamber = '%s' AND model = '%s' AND serial = '%s' AND description = '%s' AND software = '%s' AND backgrounds = '%s' AND measurements = '%s' AND Trolley = '%s' AND SCD = '%s' AND aperturewheel = '%s' AND Comment = '%s' AND monitorelectrometerrange = '%s' AND monitorhv = '%s' AND MEFAC_ICElectrometerRange = '%s' AND ic_hv= '%s'" \
+                          % (
+                              filename,
+                              date,
+                              chamber,
+                              model,
+                              serial,
+                              description,
+                              software,
+                              backgrounds,
+                              measurements,
+                              trolley,
+                              sCD,
+                              aperture_wheel,
+                              comment,
+                              monitorelectrometerrange,
+                              monitor_hv,
+                              mEFAC_ICElectrometerRange,
+                              ic_hv
+                          )
+                    result_number = cursor.execute(sql)
+                    if result_number != 0:
+                        continue
+                    #When the file not in database
+                    elif df.iloc[20][0] == "[DATA]":
+                        filename = df.iloc[0][2]
+                        date = df.iloc[1][2]
+                        chamber = df.iloc[2][2]
+                        chamber2 = chamber.split()
+                        model = " "
+                        model = model.join(chamber2[:-1])
+                        serial = chamber2[-1]
+                        description = df.iloc[3][2]
+                        software = df.iloc[4][2]
+                        backgrounds = df.iloc[5][2]
+                        measurements = df.iloc[6][2]
+                        trolley = int(df.iloc[7][2])
+                        sCD = int(df.iloc[8][2])
+                        aperture_wheel = df.iloc[9][2]
+                        comment = df.iloc[10][2]
+                        monitorelectrometerrange = df.iloc[11][2]
+                        monitor_hv = df.iloc[12][2]
+                        mEFAC_ICElectrometerRange = df.iloc[13][2]
+                        ic_hv = df.iloc[14][2]
+                        client_name = df.iloc[15][2]
+                        address1 = df.iloc[16][2]
+                        address2 = df.iloc[17][2]
+                        operator = df.iloc[18][2]
+                        calnumber = df.iloc[19][2]
+                        sql = (
+                                "INSERT INTO header(job_number,filename,Date,chamber,model,serial,description,software,backgrounds,measurements,Trolley,SCD,aperturewheel,Comment,monitorelectrometerrange,monitorhv,MEFAC_ICElectrometerRange,ic_hv,clientname,address1,address2,operator,calnumber) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')"
+                                % (
+                                    job_number,
+                                    filename,
+                                    date,
+                                    chamber,
+                                    model,
+                                    serial,
+                                    description,
+                                    software,
+                                    backgrounds,
+                                    measurements,
+                                    trolley,
+                                    sCD,
+                                    aperture_wheel,
+                                    comment,
+                                    monitorelectrometerrange,
+                                    monitor_hv,
+                                    mEFAC_ICElectrometerRange,
+                                    ic_hv,
+                                    client_name,
+                                    address1,
+                                    address2,
+                                    operator,
+                                    calnumber
+                                )
+                        )
+                        try:
+                            # excute sql
+                            cursor.execute(sql)
+                            # commit to database
+                            db.commit()
+                            print("success csv 1")
+                        except:
+                            # if fail rollback
+                            db.rollback()
+                            print("fail")
+
+                        df2 = pd.read_csv(
+                            csv_file_name, encoding="raw_unicode_escape", skiprows=22
+                        )
+
+                        sql = "SELECT * from header ORDER BY chamber_ID DESC"
+                        cursor.execute(sql)
+                        results = cursor.fetchall()
+                        chamber_ID = results[0][0]
+
+                        for i in range(len(df2)):
+                            kV = int(df2.iloc[i]["kV"])
+                            mA = int(df2.iloc[i]["mA"])
+                            barCode = df2.iloc[i]["BarCode"]
+                            xraysOn = df2.iloc[i]["XraysOn"]
+                            hVLFilter = df2.iloc[i]["HVLFilter(mm)"]
+                            filter = df2.iloc[i]["Filter"]
+                            filterReady = df2.iloc[i]["FilterReady"]
+                            hVLReady = df2.iloc[i]["HVLReady"]
+                            n = df2.iloc[i]["N"]
+                            current1 = float(df2.iloc[i]["Current1(pA)"])
+                            current2 = float(df2.iloc[i]["Current2(pA)"])
+                            p = float(df2.iloc[i]["P(kPa)"])
+                            t_MC = float(df2.iloc[i]["T(MC)"])
+                            t_Air = float(df2.iloc[i]["T(Air)"])
+                            t_SC = float(df2.iloc[i]["T(SC)"])
+                            h = float(df2.iloc[i]["H(%)"])
+                            sql = (
+                                    "INSERT INTO body(chamber_ID,chamber,kv,ma,barcode,xrayson,HVLFilter,filter,filterready,hvlready,n,Current1,Current2,P,T_MC,T_Air,T_SC,H) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')"
+                                    % (
+                                        chamber_ID,
+                                        chamber,
+                                        kV,
+                                        mA,
+                                        barCode,
+                                        xraysOn,
+                                        hVLFilter,
+                                        filter,
+                                        filterReady,
+                                        hVLReady,
+                                        n,
+                                        current1,
+                                        current2,
+                                        p,
+                                        t_MC,
+                                        t_Air,
+                                        t_SC,
+                                        h
+                                    )
+                            )
+                            try:
+                                # excute sql
+                                cursor.execute(sql)
+                                # commit to database
+                                db.commit()
+                                print("processing...")
+                                if progress <= 50:
+                                    progress = progress + 1
+                                    MainFrame.m_progress_bar.SetValue(progress)
+                            except:
+                                # if fail rollback
+                                db.rollback()
+                                print("fail")
+                    else:
+                        dlg = wx.MessageDialog(
+                            None,
+                            u"please check the file",
+                            u"wrong format",
+                            wx.YES_DEFAULT | wx.ICON_WARNING,
+                        )
+                        if dlg.ShowModal() == wx.ID_YES:
+                            dlg.Destroy()
+
+                    # store run12(Lab) file
+                    csv_file_name = pathLab1
+                    df = pd.read_csv(csv_file_name, encoding="raw_unicode_escape")
+
+                    if df.iloc[20][0] == "[DATA]":
+                        print(
+                            ".............................................................................................................................")
+                        filename = df.iloc[0][2]
+                        date = df.iloc[1][2]
+                        chamber = df.iloc[2][2]
+                        chamber2 = chamber.split()
+                        model = " "
+                        model = model.join(chamber2[:-1])
+                        serial = chamber2[-1]
+                        description = df.iloc[3][2]
+                        software = df.iloc[4][2]
+                        backgrounds = df.iloc[5][2]
+                        measurements = df.iloc[6][2]
+                        trolley = int(df.iloc[7][2])
+                        sCD = int(df.iloc[8][2])
+                        aperture_wheel = df.iloc[9][2]
+                        comment = df.iloc[10][2]
+                        monitorelectrometerrange = df.iloc[11][2]
+                        monitor_hv = df.iloc[12][2]
+                        mEFAC_ICElectrometerRange = df.iloc[13][2]
+                        ic_hv = df.iloc[14][2]
+                        client_name = df.iloc[15][2]
+                        address1 = df.iloc[16][2]
+                        address2 = df.iloc[17][2]
+                        operator = df.iloc[18][2]
+                        calnumber = df.iloc[19][2]
+                        sql = (
+                                "INSERT INTO header(job_number,filename,Date,chamber,model,serial,description,software,backgrounds,measurements,Trolley,SCD,aperturewheel,Comment,monitorelectrometerrange,monitorhv,MEFAC_ICElectrometerRange,ic_hv,clientname,address1,address2,operator,calnumber) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')"
+                                % (
+                                    job_number,
+                                    filename,
+                                    date,
+                                    chamber,
+                                    model,
+                                    serial,
+                                    description,
+                                    software,
+                                    backgrounds,
+                                    measurements,
+                                    trolley,
+                                    sCD,
+                                    aperture_wheel,
+                                    comment,
+                                    monitorelectrometerrange,
+                                    monitor_hv,
+                                    mEFAC_ICElectrometerRange,
+                                    ic_hv,
+                                    client_name,
+                                    address1,
+                                    address2,
+                                    operator,
+                                    calnumber
+                                )
+                        )
+                        try:
+                            # excute sql
+                            cursor.execute(sql)
+                            # commit to database
+                            db.commit()
+                            print("success csv 2")
+                        except:
+                            # if fail rollback
+                            db.rollback()
+                            print("fail")
+
+                        # insert data to table body
+                        df2 = pd.read_csv(
+                            csv_file_name, encoding="raw_unicode_escape", skiprows=22
+                        )
+
+                        sql = "SELECT * from header ORDER BY chamber_ID DESC"
+                        cursor.execute(sql)
+                        results = cursor.fetchall()
+                        chamber_ID = results[0][0]
+
+                        for i in range(len(df2)):
+                            kV = int(df2.iloc[i]["kV"])
+                            mA = int(df2.iloc[i]["mA"])
+                            barCode = df2.iloc[i]["BarCode"]
+                            xraysOn = df2.iloc[i]["XraysOn"]
+                            hLFilter = df2.iloc[i]["HVLFilter(mm)"]
+                            filter = df2.iloc[i]["Filter"]
+                            filterReady = df2.iloc[i]["FilterReady"]
+                            hVLReady = df2.iloc[i]["HVLReady"]
+                            n = df2.iloc[i]["N"]
+                            current1 = float(df2.iloc[i]["Current1(pA)"])
+                            current2 = float(df2.iloc[i]["Current2(pA)"])
+                            p = float(df2.iloc[i]["P(kPa)"])
+                            t_MC = float(df2.iloc[i]["T(MC)"])
+                            t_Air = float(df2.iloc[i]["T(Air)"])
+                            t_SC = float(df2.iloc[i]["T(SC)"])
+                            h = float(df2.iloc[i]["H(%)"])
+                            sql = (
+                                    "INSERT INTO body(chamber_ID,chamber,kv,ma,barcode,xrayson,HVLFilter,filter,filterready,hvlready,n,Current1,Current2,P,T_MC,T_Air,T_SC,H) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')"
+                                    % (
+                                        chamber_ID,
+                                        chamber,
+                                        kV,
+                                        mA,
+                                        barCode,
+                                        xraysOn,
+                                        hVLFilter,
+                                        filter,
+                                        filterReady,
+                                        hVLReady,
+                                        n,
+                                        current1,
+                                        current2,
+                                        p,
+                                        t_MC,
+                                        t_Air,
+                                        t_SC,
+                                        h
+                                    )
+                            )
+                            try:
+                                # excute sql
+                                cursor.execute(sql)
+                                # commit to database
+                                db.commit()
+                                print("processing...")
+                                if progress < 100:
+                                    progress = progress + 1
+                                    MainFrame.m_progress_bar.SetValue(progress)
+                            except:
+                                # if fail rollback
+                                db.rollback()
+                                print("fail")
+                        # progress = progress + 10
+                        # MainFrame.m_progress_bar.SetValue(progress)
+                    else:
+                        dlg = wx.MessageDialog(
+                            None,
+                            u"please check the file",
+                            u"wrong format",
+                            wx.YES_DEFAULT | wx.ICON_WARNING,
+                        )
+                        if dlg.ShowModal() == wx.ID_YES:
+                            dlg.Destroy()
+
+                MainFrame.m_progress_bar.SetValue(100)
+                # close connection
+                db.close()
+                # print("Success!")
+                dlg = wx.MessageDialog(
+                    None,
+                    u"You have already store all the data to database",
+                    u"successful stored",
                     wx.YES_DEFAULT | wx.ICON_WARNING,
                 )
                 if dlg.ShowModal() == wx.ID_YES:
