@@ -29,6 +29,7 @@ from PyPDF2.pdf import ContentStream, PageObject
 from PyPDF2.filters import ASCII85Decode, FlateDecode
 
 
+
 def Testr(path_Client, path_Lab):
 
     df_Client = pd.read_csv(path_Client, skiprows=22)
@@ -1980,11 +1981,17 @@ class MainFrame(wx.Frame):
                 self.m_textCtrl_client_address1.SetHint("Enter address line 1")
                 self.m_textCtrl_client_address2.SetHint("Enter address line 2")
 
-                data_df =  pd.read_csv(
+                data_df = pd.read_csv(
                     path_11, skiprows=2, nrows=1, header=None
                 )
                 global test_date
                 test_date=data_df[2][0]
+
+                IC_HV_df = pd.read_csv(
+                    path_11, skiprows=15, nrows=1, header=None
+                )
+                global IC_HV
+                IC_HV = data_df[2][0]
                 # read client chamber information
                 client_chamber_info_df = pd.read_csv(
                     path_11, skiprows=3, nrows=1, header=None
@@ -3364,8 +3371,139 @@ class MainFrame(wx.Frame):
             pdf.set_font('Arial', 'I', 8)
             pdf.cell(210, 0, txt="page 2 of 6", ln=1, border=0)
 
+            ############################################### Page 3 ###########################################
+            pdf.add_page()
+            pdf.line(5.0, 5.0, 205.0, 5.0)  # top one
+            pdf.line(5.0, 292.0, 205.0, 292.0)  # bottom one
+            pdf.line(5.0, 5.0, 5.0, 292.0)  # left one
+            pdf.line(205.0, 5.0, 205.0, 292.0)  # right one
+
+            pdf.set_xy(15.0, 10.0)
+            pdf.image('./imgReference/Heading.png', w=160.0, h=20.0)
+            pdf.set_xy(10.0, 30.0)
+            pdf.set_font('Arial', 'B' + 'U', 12)
+            pdf.cell(200, 10, txt="Air Kerma Calibration Certificate - Medium-Energy X-rays", ln=1, align='C', border=0)
+
+            pdf.set_xy(10.0, 40.0)
+            pdf.set_font('Arial', 'B', 12)
+            pdf.cell(200, 10, txt="Client", ln=1, border=0)
+            pdf.set_xy(80.0, 40.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt=self.m_textCtrl_client_name.GetValue(), ln=1, border=0)
+
+            pdf.set_xy(10.0, 40.0)
+            pdf.set_font('Arial', 'B', 12)
+            pdf.cell(200, 10, txt="Client", ln=1, border=0)
+            pdf.set_xy(80.0, 40.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt=self.m_textCtrl_client_name.GetValue(), ln=1, border=0)
+
+            pdf.set_xy(10.0, 45.0)
+            pdf.set_font('Arial','B', size=12)
+            pdf.cell(200, 10, txt="Ionisation chamber", ln=1, border=0)
+            pdf.set_xy(80.0, 45.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10,
+                     txt=self.m_textCtrl_model1.GetValue() + ', serial number ' + self.m_textCtrl_serial1.GetValue(),
+                     ln=1, border=0)
+
+            pdf.set_xy(10.0, 50.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="Polarising voltage", ln=1, border=0)
+            pdf.set_xy(80.0, 50.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt = IC_HV +" V on the guard electrode", ln=1, border=0)
+
+            pdf.set_xy(10.0, 55.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="Collected charge polarity", ln=1, border=0)
+            pdf.set_xy(80.0, 55.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="Positive (Central Electrode Negative)", ln=1, border=0)
+
+            pdf.set_xy(10.0, 60.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="Reference point", ln=1, border=0)
+            pdf.set_xy(80.0, 60.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="The geometrical centre of the cavity", ln=1, border=0)
+
+            pdf.set_xy(10.0, 65.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="Geometry", ln=1, border=0)
+            pdf.set_xy(80.0, 65.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="Mark on chamber stem facing the radiation source", ln=1, border=0)
+            pdf.set_xy(80.0, 70.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="Chamber stem vertically upwards, cable down", ln=1, border=0)
+            pdf.set_xy(80.0, 75.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="Horizontal radiation beam", ln=1, border=0)
+            pdf.set_xy(80.0, 80.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="Source-detector distance 100 cm ", ln=1, border=0)
+            pdf.set_xy(80.0, 85.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="Circular beam of diameter 10 cm ", ln=1, border=0)
+
+            pdf.set_xy(10.0, 90.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="Build-up", ln=1, border=0)
+            pdf.set_xy(80.0, 90.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="Build-up cap removed except where stated. Calibrated free in air. ", ln=1, border=0)
+
+            pdf.set_xy(10.0, 95.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="Polarity and recombination", ln=1, border=0)
+            pdf.set_xy(80.0, 95.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="Corrections not applied", ln=1, border=0)
+
+            pdf.set_xy(10.0, 100.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="Reference conditions", ln=1, border=0)
+            pdf.set_xy(80.0, 100.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="20oC, 101.325 kPa and 50% humidity", ln=1, border=0)
+
+            pdf.set_xy(10.0, 105.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="Measurement date(s)", ln=1, border=0)
+            pdf.set_xy(80.0, 105.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt=test_date, ln=1, border=0)
+
+            pdf.set_xy(10.0, 110.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="Uncertainties (U) are given at a confidence level of approximately 95% (k=2)", ln=1, border=0)
+
+            pdf.set_xy(50.0, 120.0)
+            pdf.set_font('Arial', 'B',size=12)
+            pdf.cell(200, 10, txt="	Table 1:", ln=1,border=0)
+            pdf.set_xy(70.0, 120.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="	Subset of air kerma calibration coefficients", ln=1, border=0)
+
+            header_name_list = ['Beam code','Tube voltage','Added filter','Added filter','HVL','HVL','Nominal effective energy [1]','Nominal air kerma rate','NK [2]','U']
+            for i in range(len(header_name_list)):
+                pdf.set_xy(10+i*18.5,130)
+                pdf.set_font('Arial', size=10)
+                pdf.cell(18.5,15,header_name_list[i],1,0,'C')
+
+            unit_list = ['kV','mm Al','mm Cu','mm Al','mm Cu','keV','mGy/s','mGy/nC','%']
+            pdf.set_xy(10, 145)
+            pdf.set_font('Arial', size=10)
+            pdf.cell(18.5,10,'',1,0,'C')
+            for i in range(len(unit_list)):
+                pdf.set_xy(28.5 + i * 18.5, 145)
+                pdf.set_font('Arial', size=10)
+                pdf.cell(18.5, 10, unit_list[i], 1, 0, 'C')
 
 
+
+            #$pdf.cell)
             # save the pdf with name .pdf
             pdf.output("Calibration Report.pdf")
 
