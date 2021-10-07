@@ -2106,7 +2106,7 @@ class MainFrame(wx.Frame):
                     path_11, skiprows=15, nrows=1, header=None
                 )
                 global IC_HV
-                IC_HV = data_df[2][0]
+                IC_HV = IC_HV_df[2][0]
                 # read client chamber information
                 client_chamber_info_df = pd.read_csv(
                     path_11, skiprows=3, nrows=1, header=None
@@ -3571,7 +3571,7 @@ class MainFrame(wx.Frame):
             pdf.cell(200, 10, txt="Polarising voltage", ln=1, border=0)
             pdf.set_xy(80.0, 50.0)
             pdf.set_font('Arial', size=12)
-            pdf.cell(200, 10, txt = IC_HV +" V on the guard electrode", ln=1, border=0)
+            pdf.cell(200, 10, txt = str(IC_HV) +" V on the guard electrode", ln=1, border=0)
 
             pdf.set_xy(10.0, 55.0)
             pdf.set_font('Arial', size=12)
@@ -3625,7 +3625,7 @@ class MainFrame(wx.Frame):
             pdf.cell(200, 10, txt="Reference conditions", ln=1, border=0)
             pdf.set_xy(80.0, 100.0)
             pdf.set_font('Arial', size=12)
-            pdf.cell(200, 10, txt="20oC, 101.325 kPa and 50% humidity", ln=1, border=0)
+            pdf.cell(200, 10, txt="20°C, 101.325 kPa and 50% humidity", ln=1, border=0)
 
             pdf.set_xy(10.0, 105.0)
             pdf.set_font('Arial', size=12)
@@ -3689,11 +3689,11 @@ class MainFrame(wx.Frame):
             pdf.set_font('Arial', size=9)
             pdf.cell(200, 10, txt="* With buildup cap on", ln=1, border=0)
 
-            pdf.set_xy(100.0, 260.0)
+            pdf.set_xy(120.0, 260.0)
             pdf.set_font('Arial', size=9)
             pdf.cell(10, 10, txt="_____________________________________", ln=1, border=0)
 
-            pdf.set_xy(100.0, 265.0)
+            pdf.set_xy(120.0, 265.0)
             pdf.set_font('Arial', size=9)
             pdf.cell(10, 10, txt="Calibrated by Duncan Butler", ln=1, border=0)
 
@@ -3713,10 +3713,10 @@ class MainFrame(wx.Frame):
 
             pdf.set_xy(30.0, 30.0)
             pdf.set_font('Arial', 'B', size=12)
-            pdf.cell(200, 5, txt="	Table 2:", ln=1, border=0)
+            pdf.cell(200, 10, txt="	Table 2:", ln=1, border=0)
             pdf.set_xy(50.0, 30.0)
             pdf.set_font('Arial', size=12)
-            pdf.cell(200, 5, txt="	Complete set of air kerma calibration coefficients for all MEX beams", ln=1, border=0)
+            pdf.cell(200, 10, txt="	Complete set of air kerma calibration coefficients for all MEX beams", ln=1, border=0)
 
 
 
