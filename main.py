@@ -1124,23 +1124,13 @@ class MainFrame(wx.Frame):
             wx.ID_ANY,
             wx.EmptyString,
             wx.DefaultPosition,
-            wx.Size(200, -1),
+            wx.Size(250, -1),
             wx.TE_READONLY,
         )
-        self.m_textCtrl_job_no.SetMinSize(wx.Size(200, -1))
-        self.m_textCtrl_job_no.SetMaxSize(wx.Size(200, -1))
+        self.m_textCtrl_job_no.SetMinSize(wx.Size(250, -1))
+        self.m_textCtrl_job_no.SetMaxSize(wx.Size(250, -1))
 
         bSizer57.Add(self.m_textCtrl_job_no, 0, wx.ALIGN_CENTER | wx.ALL, 3)
-
-        self.m_button_job = wx.Button(
-            self.m_panel_job_no,
-            wx.ID_ANY,
-            u"Generate",
-            wx.DefaultPosition,
-            wx.DefaultSize,
-            0,
-        )
-        bSizer57.Add(self.m_button_job, 0, wx.ALL, 5)
 
         self.m_panel_job_no.SetSizer(bSizer57)
         self.m_panel_job_no.Layout()
@@ -1612,7 +1602,6 @@ class MainFrame(wx.Frame):
         self.Bind(wx.EVT_BUTTON, self.upload_csv, self.m_button_upload)
         self.Bind(wx.EVT_BUTTON, self.download_csv, self.m_button_download)
         self.Bind(wx.EVT_BUTTON, self.download_csv, self.m_button_download)
-        self.Bind(wx.EVT_BUTTON, self.generate_jobid, self.m_button_job)
         self.Bind(wx.EVT_BUTTON, self.generate_pdf, self.m_button_pdf)
 
         # reset confirm bind
@@ -3167,30 +3156,6 @@ class MainFrame(wx.Frame):
     def download_csv(self, event):
         frame = DatabaseFrame()
         frame.Show()
-
-    def generate_jobid(self, event):
-        if self.confirmed and self.readed:
-            return
-        elif not self.confirmed:
-            dlg = wx.MessageDialog(
-                None,
-                u"Please confirm your data files!",
-                u"Not confirmed",
-                wx.YES_DEFAULT | wx.ICON_WARNING,
-            )
-            if dlg.ShowModal() == wx.ID_YES:
-                dlg.Destroy()
-        elif not self.readed:
-            dlg = wx.MessageDialog(
-                None,
-                u"Please read your data files!",
-                u"Not readed",
-                wx.YES_DEFAULT | wx.ICON_WARNING,
-            )
-            if dlg.ShowModal() == wx.ID_YES:
-                dlg.Destroy()
-        return
-
 
     def generate_pdf(self,event):
         global pathClient
