@@ -3271,7 +3271,7 @@ class MainFrame(wx.Frame):
 
             # Ionisation chamber
             pdf.set_xy(10.0, 110.0)
-            pdf.set_font('Arial', size=12)
+            pdf.set_font('Arial','B', size=12)
             pdf.cell(200, 10, txt="Ionisation chamber", ln=1, border=0)
             pdf.set_xy(100.0, 110.0)
             pdf.set_font('Arial', size=12)
@@ -3649,7 +3649,6 @@ class MainFrame(wx.Frame):
 
             KeV, Beam, NK, AddedfiltermmAl, AddedfiltermmCu,HVLmmAl, HVLmmCu, NominalEffectiveEnergy, NominalAirKermaRate, U = MEXdata_PTB_Beams(pathClient[0], pathLab[0])
             table1_data = [KeV, AddedfiltermmAl, AddedfiltermmCu, HVLmmAl, HVLmmCu, NominalEffectiveEnergy, NominalAirKermaRate,NK,U]
-            print(table1_data)
             for i in range(len(Beam)):
                 pdf.set_xy(10, 150+i*10)
                 pdf.set_font('Arial', size=10)
@@ -3704,7 +3703,41 @@ class MainFrame(wx.Frame):
             pdf.set_font('Arial', size=12)
             pdf.cell(200, 10, txt="	Complete set of air kerma calibration coefficients for all MEX beams", ln=1, border=0)
 
+            header_name_list = ['Beam code', 'Tube voltage', 'Added filter', 'Added filter', 'HVL', 'HVL',
+                                'Nominal effective energy [1]', 'Nominal air kerma rate', 'NK [2]', 'U']
+            pos = 0
+            max_len = 0
+            for i in range(len(header_name_list)):
+                if len(header_name_list[i]) > max_len:
+                    pos = i
+                    max_len = len(header_name_list[i])
 
+            header_name_list_new = []
+            for h in header_name_list:
+                if len(h) < max_len:
+                    h = h + ' ' * (max_len - len(h))
+                    header_name_list_new.append(h)
+                else:
+                    header_name_list_new.append(h)
+
+            for i in range(len(header_name_list_new)):
+                if i == 6 or i == 7:
+                    pdf.set_xy(10 + i * 18.5, 40)
+                    pdf.set_font('Arial', size=9)
+                    pdf.multi_cell(18.5, 5, header_name_list_new[i], 1, 0, 'C')
+                else:
+                    pdf.set_xy(10 + i * 18.5, 40)
+                    pdf.set_font('Arial', size=9)
+                    pdf.cell(18.5, 15, header_name_list[i], 1, 0, 'C')
+
+            unit_list = ['kV', 'mm Al', 'mm Cu', 'mm Al', 'mm Cu', 'keV', 'mGy/s', 'mGy/nC', '%']
+            pdf.set_xy(10, 55)
+            pdf.set_font('Arial', size=10)
+            pdf.cell(18.5, 5, '', 1, 0, 'C')
+            for i in range(len(unit_list)):
+                pdf.set_xy(28.5 + i * 18.5, 55)
+                pdf.set_font('Arial', size=9)
+                pdf.cell(18.5, 5, unit_list[i], 1, 0, 'C')
 
             # save the pdf with name .pdf
             pdf.output("Calibration Report.pdf")
