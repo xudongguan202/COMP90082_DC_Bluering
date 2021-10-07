@@ -3425,7 +3425,7 @@ class MainFrame(wx.Frame):
             # inquiries detail line1
             pdf.set_xy(10.0, 160.0)
             pdf.set_font('Arial', size=12)
-            pdf.cell(200, 10, txt="Direct inquiries to                                                Chris Oliver",
+            pdf.cell(200, 10, txt="Direct inquiries to                                                   Chris Oliver",
                      ln=1, border=0)
 
             # inquiries detail line2
@@ -3483,81 +3483,164 @@ class MainFrame(wx.Frame):
             pdf.set_xy(10.0, 20.0)
             pdf.set_font('Arial', 'B', 12)
             pdf.cell(200, 10, txt="Chamber description - " + self.m_textCtrl_model1.GetValue(), ln=1, border=0)
+            chambers = ['NE 2571','2571','IBA FC65-G','PTW 30013','NE 2561','NE 2611A','PTW 30012','Exradin A12',
+                        'IBA CC13','PTW 23342','PTW 23344','PTW 34001 Roos','Advanced Markus','Exradin A19',
+                        'Exradin A1SL','IBA PPC40']
+            line1 = ['Farmer chamber with graphite walls of nominal thickness 0.065 g/cm.',
+                     'Farmer chamber with graphite walls of nominal thickness 0.065 g/cm.',
+                     'Farmer-type with graphite walls of nominal thickness 0.073 g/cm.',
+                     'Farmer-type chamber with plastic-coated graphite walls of nominal thickness 0.057 g/cm.',
+                     'The chamber is cylindrical type with graphite walls of nominal thickness 0.09 g/cm.',
+                     'The chamber is cylindrical type with graphite walls of nominal thickness 0.09 g/cm.',
+                     'Farmer-type chamber with graphite walls of nominal thickness 0.079 g/cm.',
+                     'Farmer-type with C552 (air-equivalent) plastic walls of nominal thickness 0.088 g/cm.',
+                     'The chamber is cylindrical type with C552 (air-equivalent) walls of nominal thickness 0.07 g/cm.',
+                     'The chamber is plane-parallel with a thin window for low-energy X-ray dosimetry.',
+                     'The chamber is plane-parallel with a thin window for low-energy X-ray dosimetry.',
+                     'The chamber is plane-parallel and was designed for electron dosimetry.',
+                     'The chamber is plane-parallel and was designed for electron dosimetry.',
+                     'Farmer-type with C552 (air-equivalent) plastic walls of nominal thickness 0.5 mm.',
+                     'The chamber is thimble type with Shonka Air-equivalent plastic C552 walls of nominal',
+                     'The chamber is plane-parallel and was designed for electron dosimetry.']
+            line2 = ['The nominal cavity volume is 0.6 cc (length 24 mm and radius 3.2 mm).',
+                     'The nominal cavity volume is 0.6 cc (length 24 mm and radius 3.2 mm).',
+                     'The nominal cavity volume is 0.65 cc (length 23.1 mm and radius 3.1 mm).',
+                     'The nominal cavity volume is 0.6 cc (length 23 mm and radius 3.1 mm).',
+                     'The nominal cavity volume is 0.33 cc (length 9.2 mm and radius 3.7 mm).',
+                     'The nominal cavity volume is 0.33 cc (length 9.2 mm and radius 3.7 mm).',
+                     'The nominal cavity volume is 0.6 cc (length 23 mm and radius 3.05 mm).',
+                     'The nominal cavity volume is 0.64 cc (length 24.2 mm and radius 3.05 mm).',
+                     'The nominal cavity volume is 0.13 cc (length 5.8 mm and radius 3.0 mm).',
+                     'The front window is polyethylene of thickness 2.76 mg/cm^2 (0.03 mm approx).',
+                     'The front window is polyethylene of thickness 2.76 mg/cm^2 (0.03 mm approx).',
+                     'The front window is graphite coated acrylic of thickness 118 mg/cm^2 (~1 mm).',
+                     'The front window is graphited polyethylene foil, thickness 102 mg/cm^2 (cap is 0.9 mm).',
+                     'The nominal cavity volume is 0.62 cc.',
+                     'thickness 1.1 mm',
+                     'The front window is graphite coated PMMA of 1 mm thickness.']
+            line3 = ['The central electrode is aluminium.','The central electrode is aluminium.',
+                     'The central electrode is aluminium.','The central electrode is aluminium.',
+                     'The central electrode is hollow aluminium.','The central electrode is hollow aluminium.',
+                     'The central electrode is aluminium.','The central electrode is C552 (air-equivalent) plastic.',
+                     'The central electrode is C552 (air-equivalent) plastic.',
+                     'The nominal cavity volume is 0.02 cm^3.','The nominal cavity volume is 0.2 cm^3.',
+                     'The nominal cavity volume is 0.35 cc. Plate separation 2 mm.',
+                     'The nominal cavity volume is 0.02 cc. Plate separation 1 mm.','The central electrode is C552 (air-equivalent) plastic.',
+                     'The nominal cavity volume is 0.053 cm^3.','The nominal cavity volume is 0.4 cc. Plate separation 2 mm.']
+            line4 = ['The buildup cap is Delrin.','The buildup cap is Delrin.','The buildup cap is Delrin.',
+                     'The buildup cap is PMMA.','The buildup cap is Delrin.','The buildup cap is Delrin.',
+                     'The buildup cap is PMMA.','The buildup cap is C552 (air-equivalent) plastic.',
+                     'The chamber does not have a build-up cap.','Sensitivity volume: diameter 3 mm, depth 1 mm.',
+                     'Sensitivity volume: diameter 13 mm, depth 1.5 mm.','The collecting electrode is graphite coated acrylic of diameter 15 mm.',
+                     'The collecting electrode is 5 mm in diameter.','The build-up cap is C552 (air-equivalent) plastic.',
+                     'The shell, guard and central electrodes are made of Shonka Air-equivalent plastic C552.','The collecting electrode is graphite coated acrylic of diameter 16 mm.']
+            line5 = ['The chamber is not waterproof.','The chamber is not waterproof.','The chamber is waterproof.',
+                     'The chamber is waterproof.','The chamber is not waterproof.','The chamber is not waterproof.',
+                     'The chamber is not waterproof.','The chamber is waterproof.','The chamber is waterproof.',
+                     'The chamber is not waterproof.','The chamber is not waterproof.','The chamber is waterproof.',
+                     'The chamber is waterproof with the 0.87 mm thick cap on.','The chamber is waterproof.',
+                     'The chamber is waterproof.','The chamber is waterproof.']
+            line6 = ['The geometrical centre of the cavity','The geometrical centre of the cavity','The geometrical centre of the cavity',
+                     'The geometrical centre of the cavity','The geometrical centre of the cavity','The geometrical centre of the cavity',
+                     'The geometrical centre of the cavity','The geometrical centre of the cavity','The geometrical centre of the cavity',
+                     'The centre of the front window, level with the front face.','The centre of the front window, level with the front face.',
+                     'The centre of the front window, on the inside surface','The centre of the front window, on the inside surface',
+                     'The geometrical centre of the cavity','The geometrical centre of the cavity, approximately 4 mm from the tip','The centre of the front window, on the inside surface']
+            for i in range(len(chambers)):
+                if self.m_textCtrl_model1.GetValue() == chambers[i] or self.m_textCtrl_model1.GetValue() == chambers[i] + ' ':
+                    pdf.set_xy(10.0, 25.0)
+                    pdf.set_font('Arial', size=12)
+                    pdf.cell(200, 10, txt="-   " + line1[i],ln=1, border=0)
+                    pdf.set_xy(10.0, 30.0)
+                    pdf.set_font('Arial', size=12)
+                    pdf.cell(200, 10, txt="-   " + line2[i],ln=1, border=0)
+                    pdf.set_xy(10.0, 35.0)
+                    pdf.set_font('Arial', size=12)
+                    pdf.cell(200, 10, txt="-   " + line3[i], ln=1, border=0)
+                    pdf.set_xy(10.0, 40.0)
+                    pdf.set_font('Arial', size=12)
+                    pdf.cell(200, 10, txt="-   " + line4[i], ln=1, border=0)
+                    pdf.set_xy(10.0, 45.0)
+                    pdf.set_font('Arial', size=12)
+                    pdf.cell(200, 10, txt="-   " + line5[i], ln=1, border=0)
+                    pdf.set_xy(10.0, 50.0)
+                    pdf.set_font('Arial', size=12)
+                    pdf.cell(200, 10, txt="-   " + line6[i], ln=1, border=0)
 
-            # Accessories Supplied
-            pdf.set_xy(10.0, 55.0)
+       # Accessories Supplied
+            pdf.set_xy(10.0, 60.0)
             pdf.set_font('Arial', 'B', size=12)
             pdf.cell(200, 10, txt="Accessories Supplied", ln=1, border=0)
-            pdf.set_xy(10.0, 60.0)
+            pdf.set_xy(10.0, 65.0)
             pdf.set_font('Arial', size=12)
             pdf.cell(200, 10, txt="-   Buildup cap", ln=1, border=0)
 
             # Preliminary Inspection
-            pdf.set_xy(10.0, 70.0)
+            pdf.set_xy(10.0, 75.0)
             pdf.set_font('Arial', 'B', size=12)
             pdf.cell(200, 10, txt="Preliminary Inspection", ln=1, border=0)
-            pdf.set_xy(10.0, 75.0)
+            pdf.set_xy(10.0, 80.0)
             pdf.set_font('Arial', size=12)
             pdf.cell(200, 10, txt="-   The ionisation chamber had no obvious damage or faults on receipt.", ln=1,
                      border=0)
 
             # Calibration Coefficient
-            pdf.set_xy(10.0, 85.0)
+            pdf.set_xy(10.0, 90.0)
             pdf.set_font('Arial', 'B', size=12)
             pdf.cell(200, 10, txt="Calibration Coefficient", ln=1, border=0)
-            pdf.set_xy(10.0, 90.0)
+            pdf.set_xy(10.0, 95.0)
             pdf.set_font('Arial', size=12)
             pdf.cell(200, 10, txt="-   The calibration coefficient is the number by which the charge from the " +
                                   "chamber, in nC, must be ", ln=1, border=0)
-            pdf.set_xy(10.0, 95.0)
+            pdf.set_xy(10.0, 100.0)
             pdf.set_font('Arial', size=12)
             pdf.cell(200, 10, txt="     multiplied to obtain the air kerma [1]. The calibration " +
                                   "factor for the electrometer must also be ", ln=1, border=0)
-            pdf.set_xy(10.0, 100.0)
+            pdf.set_xy(10.0, 105.0)
             pdf.set_font('Arial', size=12)
             pdf.cell(200, 10, txt="     taken into account when measuring the charge from the chamber.", ln=1, border=0)
 
             # Calibration Coefficients for Medium-Energy X-ray (MEX) Qualities in Air
-            pdf.set_xy(10.0, 110.0)
+            pdf.set_xy(10.0, 115.0)
             pdf.set_font('Arial', 'B', size=12)
             pdf.cell(200, 10, txt="Calibration Coefficients for Medium-Energy X-ray (MEX) Qualities in Air", ln=1,
                      border=0)
-            pdf.set_xy(10.0, 115.0)
+            pdf.set_xy(10.0, 120.0)
             pdf.set_font('Arial', size=12)
             pdf.cell(200, 10, txt="-   The calibration coefficients for the chamber for each X-ray beam quality" +
                                   " from the Gulmay ", ln=1, border=0)
-            pdf.set_xy(10.0, 120.0)
+            pdf.set_xy(10.0, 125.0)
             pdf.set_font('Arial', size=12)
             pdf.cell(200, 10, txt="     Comet X-ray generator were determined by comparison with the" +
                                   " ARPANSA Medium Energy ", ln=1, border=0)
-            pdf.set_xy(10.0, 125.0)
+            pdf.set_xy(10.0, 130.0)
             pdf.set_font('Arial', size=12)
             pdf.cell(200, 10, txt="     Free-Air Chamber, which is the Australian primary standard" +
                                   " of air kerma for medium energy X-", ln=1, border=0)
-            pdf.set_xy(10.0, 130.0)
+            pdf.set_xy(10.0, 135.0)
             pdf.set_font('Arial', size=12)
             pdf.cell(200, 10, txt="     rays.", ln=1, border=0)
-            pdf.set_xy(10.0, 135.0)
+            pdf.set_xy(10.0, 140.0)
             pdf.set_font('Arial', size=12)
             pdf.cell(200, 10, txt="-   The Gulmay Comet X-ray generator is constant potential and the X-ray tube " +
                                   "has a tungsten ", ln=1, border=0)
-            pdf.set_xy(10.0, 140.0)
+            pdf.set_xy(10.0, 145.0)
             pdf.set_font('Arial', size=12)
             pdf.cell(200, 10, txt="     target.", ln=1, border=0)
 
             # Recombination Correction Measurement
-            pdf.set_xy(10.0, 150.0)
+            pdf.set_xy(10.0, 155.0)
             pdf.set_font('Arial', 'B', size=12)
             pdf.cell(200, 10, txt="Recombination Correction Measurement ", ln=1, border=0)
-            pdf.set_xy(10.0, 155.0)
+            pdf.set_xy(10.0, 160.0)
             pdf.set_font('Arial', size=12)
             pdf.cell(200, 10, txt="-   Not measured.", ln=1, border=0)
 
             # Polarity Correction Measurement
-            pdf.set_xy(10.0, 165.0)
+            pdf.set_xy(10.0, 170.0)
             pdf.set_font('Arial', 'B', size=12)
             pdf.cell(200, 10, txt="Polarity Correction Measurement", ln=1, border=0)
-            pdf.set_xy(10.0, 170.0)
+            pdf.set_xy(10.0, 175.0)
             pdf.set_font('Arial', size=12)
             pdf.cell(200, 10, txt="-   Not measured.", ln=1, border=0)
 
