@@ -29,6 +29,7 @@ from PyPDF2.pdf import ContentStream, PageObject
 from PyPDF2.filters import ASCII85Decode, FlateDecode
 
 
+
 def Testr(path_Client, path_Lab):
 
     df_Client = pd.read_csv(path_Client, skiprows=22)
@@ -169,6 +170,121 @@ def Testr(path_Client, path_Lab):
 
     # print(df_merge_col)
     return KeV, Beam, NK
+
+def MEXdata_PTB_Beams(path_Client, path_Lab):
+    df_Client = pd.read_csv(path_Client,
+                            skiprows=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21])
+    df_Lab = pd.read_csv(path_Lab, skiprows=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21])
+
+    current1_Client = df_Client["Current1(pA)"]
+    current2_Client = df_Client["Current2(pA)"]
+
+    current1_Lab = df_Lab["Current1(pA)"]
+    current2_Lab = df_Lab["Current2(pA)"]
+
+    BgdIC1_Before_Client = current1_Client.iloc[0:89].mean(axis=0)
+    BgdMC1_Before_Client = current2_Client.iloc[0:89].mean(axis=0)
+
+    BgdIC2_Before_Lab = current1_Lab.iloc[0:89].mean(axis=0)
+    BgdMC2_Before_Lab = current2_Lab.iloc[0:89].mean(axis=0)
+
+    df_Client["R1"] = (
+        ((df_Client["Current2(pA)"] - BgdIC2_Before_Lab) / (df_Client["Current1(pA)"] - BgdMC2_Before_Lab)).groupby(
+            [df_Client['Filter'], df_Client['XraysOn']]).transform('mean').round(5))
+    df_Lab["R2"] = (
+        ((df_Lab["Current2(pA)"] - BgdIC2_Before_Lab) / (df_Lab["Current1(pA)"] - BgdMC2_Before_Lab)).groupby(
+            [df_Lab['Filter'], df_Lab['XraysOn']]).transform('mean').round(5))
+
+    # currentLab_Mean["H2"]=currentLab_Mean.apply(H2,axis=1)
+    pd.set_option('display.max_rows', None)
+
+    group_Client = df_Client.groupby(["Filter", "XraysOn"], as_index=False)
+    df_Client_MEX = group_Client.agg(
+        {"kV": "mean", "Current1(pA)": "mean", "Current2(pA)": "mean", "T(MC)": "mean", "T(Air)": "mean", "R1": "mean"})
+
+    group_Lab = df_Lab.groupby(["Filter", "XraysOn"], as_index=False)
+    df_Lab_MEX = group_Lab.agg(
+        {"kV": "mean", "Current1(pA)": "mean", "Current2(pA)": "mean", "T(MC)": "mean", "T(SC)": "mean", "H(%)": "mean",
+         "R2": "mean"})
+    df_Client_MEX["R2"] = df_Lab_MEX["R2"]
+    df_Lab_MEX["MC2"] = df_Lab_MEX[["Current1(pA)"]].apply(lambda x: x["Current1(pA)"] - BgdMC2_Before_Lab, axis=1)
+    df_Lab_MEX["IC2"] = df_Lab_MEX[["Current2(pA)"]].apply(lambda x: x["Current2(pA)"] - BgdIC2_Before_Lab, axis=1)
+
+    df_Client_MEX["MC1"] = df_Lab_MEX[["Current1(pA)"]].apply(lambda x: x["Current1(pA)"] - BgdMC1_Before_Client,
+                                                              axis=1)
+    df_Client_MEX["IC1"] = df_Lab_MEX[["Current2(pA)"]].apply(lambda x: x["Current2(pA)"] - BgdIC1_Before_Client,
+                                                              axis=1)
+    df_Client_MEX["MC2"] = df_Lab_MEX["MC2"]
+    df_Client_MEX["IC2"] = df_Lab_MEX["IC2"]
+    df_Client_MEX["TM2"] = df_Lab_MEX["T(MC)"]
+    df_Client_MEX["TS2"] = df_Lab_MEX["T(SC)"]
+    df_Client_MEX["H2"] = df_Lab_MEX["H(%)"]
+
+    Ma = 6.18E-06
+    WE = 33.97
+
+    # df_Client_MEX["NK"]=df_Lab_MEX[["Current2(pA)"]].apply(lambda x:x["Current2(pA)"]-BgdIC1_Before_Client,axis=1)
+
+    product = pd.read_csv("KKMaWE.csv", skiprows=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+
+    product = product[['Filter', 'Product']]
+
+    # MEX report
+    MEXs = pd.read_csv("KKMaWE.csv", skiprows=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+    MEX = MEXs[['Filter', '(kV)', 'mm Al', 'mm Cu', '(mm Al)', '(mm Cu)', '(eff, Cu)', 'Air kerma rate']]
+
+    df_merge_col = pd.merge(df_Client_MEX, product, on='Filter')
+    df_merge_col["NK"] = df_merge_col[["Product", "R1", "R2", "T(Air)", "H2", "T(MC)", "TS2", "TM2"]].apply(
+        lambda x: x["R2"] * WE * x["Product"] * ((273.15 + x["TS2"]) / (273.15 + x["TM2"])) * (
+                    0.995766667 + 0.000045 * x["H2"]) / (
+                              Ma * x["R1"] * (273.15 + x["T(Air)"]) / (273.15 + x["T(MC)"])) / 1000000, axis=1)
+
+    df_merge_col = df_merge_col.drop(df_merge_col[df_merge_col.XraysOn == False].index)
+
+    df_merge_col = pd.merge(df_merge_col, MEX, on='Filter')
+    MEXreport = df_merge_col[
+        ['Filter', '(kV)', 'mm Al', 'mm Cu', '(mm Al)', '(mm Cu)', '(eff, Cu)', 'NK', 'Air kerma rate']]
+    MEXreport['U'] = 1.4
+    MEXreport_sortByKev = MEXreport.sort_values(by=['(kV)'])
+
+    MEXreport_PTB = MEXreport.loc[(MEXreport['Filter'].isin(
+        ['NXA50', 'NXA70', 'NXB100', 'NXC120', 'NXD140', 'NXE150', 'NXF200', 'NXG250', 'NXH280', 'NXH300', 'NXH300*']))]
+
+    #print(MEXreport_PTB)
+    KeV = MEXreport_PTB["(kV)"].values.tolist()
+    Beam = MEXreport_PTB["Filter"].values.tolist()
+    NK = MEXreport_PTB["NK"].values.tolist()
+    AddedfiltermmAl = MEXreport_PTB["mm Al"].values.tolist()
+    AddedfiltermmCu = MEXreport_PTB["mm Cu"].values.tolist()
+    HVLmmAl = MEXreport_PTB["(mm Al)"].values.tolist()
+    HVLmmCu = MEXreport_PTB["(mm Cu)"].values.tolist()
+    NominalEffectiveEnergy = MEXreport_PTB["(eff, Cu)"].values.tolist()
+    NominalAirKermaRate = MEXreport_PTB["Air kerma rate"].values.tolist()
+    U = MEXreport_PTB["U"].values.tolist()
+
+    KeV = pd.Series(KeV, dtype=object).fillna(0).tolist()
+    Beam = pd.Series(Beam, dtype=object).fillna(0).tolist()
+
+    NK = pd.Series(NK, dtype=object).fillna(0).tolist()
+    NK_round = []
+    for i in NK:
+        NK_round.append(round(i,2))
+
+    AddedfiltermmAl = pd.Series(AddedfiltermmAl, dtype=object).fillna(0).tolist()
+    AddedfiltermmCu =pd.Series(AddedfiltermmCu, dtype=object).fillna(0).tolist()
+    HVLmmAl = pd.Series(HVLmmAl, dtype=object).fillna(0).tolist()
+    HVLmmCu =pd.Series(HVLmmCu, dtype=object).fillna(0).tolist()
+    NominalEffectiveEnergy =pd.Series(NominalEffectiveEnergy, dtype=object).fillna(0).tolist()
+
+    NominalAirKermaRate =pd.Series(NominalAirKermaRate, dtype=object).fillna(0).tolist()
+    NominalAirKermaRate_round = []
+    for i in NominalAirKermaRate:
+        NominalAirKermaRate_round.append(round(i,1))
+
+    U =pd.Series(U, dtype=object).fillna(0).tolist()
+
+    #print(MEXreport_PTB)
+    return KeV, Beam, NK_round, AddedfiltermmAl, AddedfiltermmCu, HVLmmAl, HVLmmCu, NominalEffectiveEnergy, NominalAirKermaRate_round, U
 
 
 class MyApp(wx.App):
@@ -1008,22 +1124,13 @@ class MainFrame(wx.Frame):
             wx.ID_ANY,
             wx.EmptyString,
             wx.DefaultPosition,
-            wx.Size(200, -1),
+            wx.Size(250, -1),
+            wx.TE_READONLY,
         )
-        self.m_textCtrl_job_no.SetMinSize(wx.Size(200, -1))
-        self.m_textCtrl_job_no.SetMaxSize(wx.Size(200, -1))
+        self.m_textCtrl_job_no.SetMinSize(wx.Size(250, -1))
+        self.m_textCtrl_job_no.SetMaxSize(wx.Size(250, -1))
 
         bSizer57.Add(self.m_textCtrl_job_no, 0, wx.ALIGN_CENTER | wx.ALL, 3)
-
-        self.m_button_job = wx.Button(
-            self.m_panel_job_no,
-            wx.ID_ANY,
-            u"Generate",
-            wx.DefaultPosition,
-            wx.DefaultSize,
-            0,
-        )
-        bSizer57.Add(self.m_button_job, 0, wx.ALL, 5)
 
         self.m_panel_job_no.SetSizer(bSizer57)
         self.m_panel_job_no.Layout()
@@ -1495,7 +1602,6 @@ class MainFrame(wx.Frame):
         self.Bind(wx.EVT_BUTTON, self.upload_csv, self.m_button_upload)
         self.Bind(wx.EVT_BUTTON, self.download_csv, self.m_button_download)
         self.Bind(wx.EVT_BUTTON, self.download_csv, self.m_button_download)
-        self.Bind(wx.EVT_BUTTON, self.generate_jobid, self.m_button_job)
         self.Bind(wx.EVT_BUTTON, self.generate_pdf, self.m_button_pdf)
 
         # reset confirm bind
@@ -1973,17 +2079,23 @@ class MainFrame(wx.Frame):
             if path_11 != "" and path_12 != "" and self.confirmed:
 
                 # set hint
-                self.m_textCtrl_job_no.SetHint("Please generate job number")
+                # self.m_textCtrl_job_no.SetHint("Please generate job number")
                 self.m_textCtrl_client_name.SetHint("Enter client name")
                 self.m_textCtrl_operator.SetHint("Enter operator name")
                 self.m_textCtrl_client_address1.SetHint("Enter address line 1")
                 self.m_textCtrl_client_address2.SetHint("Enter address line 2")
 
-                data_df =  pd.read_csv(
+                data_df = pd.read_csv(
                     path_11, skiprows=2, nrows=1, header=None
                 )
                 global test_date
                 test_date=data_df[2][0]
+
+                IC_HV_df = pd.read_csv(
+                    path_11, skiprows=15, nrows=1, header=None
+                )
+                global IC_HV
+                IC_HV = IC_HV_df[2][0]
                 # read client chamber information
                 client_chamber_info_df = pd.read_csv(
                     path_11, skiprows=3, nrows=1, header=None
@@ -2016,7 +2128,7 @@ class MainFrame(wx.Frame):
                     )  # row 17-21
                     # read job number
                     job_no = client_info_df[2][4]  # col3 row5
-                    job_no = re.sub("[^0-9]", "", str(job_no))
+                    # job_no = re.sub("[^0-9]", "", str(job_no))
                     self.m_textCtrl_job_no.SetValue(job_no)
 
                     # read client info
@@ -2065,7 +2177,7 @@ class MainFrame(wx.Frame):
             address1 = ["Address 1", "", updated_address1]
             address2 = ["Address 2", "", updated_address2]
             oper = ["Operator", "", updated_operator_name]
-            CAL = ["CAL Number", "", ""]
+            CAL = ["CAL Number", "", '-']
 
             for i in range(len(path_client_lst)):
                 path_client = path_client_lst[i]
@@ -2217,8 +2329,6 @@ class MainFrame(wx.Frame):
 
         cursor = db.cursor()
         if self.confirmed and self.readed and self.m_textCtrl_client_name.GetValue() != '':
-            # path_11 = self.m_filePicker_run11.GetPath()  # run1 client
-            # path_12 = self.m_filePicker_run12.GetPath()  # run1 lab
 
             if self.m_checkBox_run1.GetValue():
                 pathClient.append(self.m_filePicker_run11.GetPath())
@@ -2237,7 +2347,8 @@ class MainFrame(wx.Frame):
                 pathLab.append(self.m_filePicker_run52.GetPath())
 
             #find whether this file have already exist in Database or not and find the Job_number
-            df = pd.read_csv(pathClient[0], encoding="raw_unicode_escape")
+            df = pd.read_csv(pathClient[0], encoding="raw_unicode_escape", names = range(17), skiprows = 1)
+            print(df.to_string())
             filename = df.iloc[0][2]
             date = df.iloc[1][2]
             chamber = df.iloc[2][2]
@@ -2306,7 +2417,7 @@ class MainFrame(wx.Frame):
                 for pathClient1, pathLab1 in zip(pathClient, pathLab):
                     # store run11(Client) file
                     csv_file_name = pathClient1
-                    df = pd.read_csv(csv_file_name, encoding="raw_unicode_escape")
+                    df = pd.read_csv(csv_file_name, encoding="raw_unicode_escape", names = range(17), skiprows = 1)
                     filename = df.iloc[0][2]
                     date = df.iloc[1][2]
                     chamber = df.iloc[2][2]
@@ -2679,7 +2790,7 @@ class MainFrame(wx.Frame):
             for pathClient1, pathLab1 in zip(pathClient, pathLab):
                 # store run11(Client) file
                 csv_file_name = pathClient1
-                df = pd.read_csv(csv_file_name, encoding="raw_unicode_escape")
+                df = pd.read_csv(csv_file_name, encoding="raw_unicode_escape", names = range(17), skiprows = 1)
 
                 if df.iloc[20][0] == "[DATA]":
                     filename = df.iloc[0][2]
@@ -2819,7 +2930,8 @@ class MainFrame(wx.Frame):
 
                 # store run12(Lab) file
                 csv_file_name = pathLab1
-                df = pd.read_csv(csv_file_name, encoding="raw_unicode_escape")
+                df = pd.read_csv(csv_file_name, encoding="raw_unicode_escape", names = range(17), skiprows = 1)
+                print(df)
 
                 if df.iloc[20][0] == "[DATA]":
                     print(".............................................................................................................................")
@@ -2964,6 +3076,45 @@ class MainFrame(wx.Frame):
             MainFrame.m_progress_bar.SetValue(100)
             # close connection
             db.close()
+
+            # rewrite cal number
+            job_str = ('00000'+str(job_number))[-5:]  # 00001,00002
+            old_job = self.m_textCtrl_job_no.GetValue()
+            self.m_textCtrl_job_no.SetValue('New: '+job_str+'  Old: '+old_job[-5:])
+
+            # rick
+            CAL = ["CAL Number", "", 'CAL' + job_str]
+
+            for file in pathClient+pathLab:
+                bottle_list = []
+
+                # Read all data from the csv file.
+                with open(file, 'r') as b:
+                    bottles = csv.reader(b)
+                    bottle_list.extend(bottles)
+                    b.close()
+
+                # data to override in the format {line_num_to_override:data_to_write}.
+                line_to_override = {20: CAL}
+
+                # Write data to the csv file and replace the lines in the line_to_override dict.
+                with open(file, 'w', newline='') as b:
+                    writer = csv.writer(b)
+                    for line, row in enumerate(bottle_list):
+                        data = line_to_override.get(line, row)
+                        writer.writerow(data)
+                    b.close()
+
+            dlg = wx.MessageDialog(
+                None,
+                u"The CAL number has been updated to %s" % (job_str),
+                u"Local file changed",
+                wx.YES_DEFAULT | wx.ICON_WARNING,
+            )
+            if dlg.ShowModal() == wx.ID_YES:
+                dlg.Destroy()
+
+
             # print("Success!")
             dlg = wx.MessageDialog(
                 None,
@@ -3006,30 +3157,30 @@ class MainFrame(wx.Frame):
         frame = DatabaseFrame()
         frame.Show()
 
-    def generate_jobid(self, event):
-        if self.confirmed and self.readed:
-            return
-        elif not self.confirmed:
-            dlg = wx.MessageDialog(
-                None,
-                u"Please confirm your data files!",
-                u"Not confirmed",
-                wx.YES_DEFAULT | wx.ICON_WARNING,
-            )
-            if dlg.ShowModal() == wx.ID_YES:
-                dlg.Destroy()
-        elif not self.readed:
-            dlg = wx.MessageDialog(
-                None,
-                u"Please read your data files!",
-                u"Not readed",
-                wx.YES_DEFAULT | wx.ICON_WARNING,
-            )
-            if dlg.ShowModal() == wx.ID_YES:
-                dlg.Destroy()
-        return
-
     def generate_pdf(self,event):
+        global pathClient
+        global pathLab
+
+        pathClient = []
+        pathLab = []
+
+        if self.confirmed and self.readed and self.m_textCtrl_client_name.GetValue() != '':
+            if self.m_checkBox_run1.GetValue():
+                pathClient.append(self.m_filePicker_run11.GetPath())
+                pathLab.append(self.m_filePicker_run12.GetPath())
+            if self.m_checkBox_run2.GetValue():
+                pathClient.append(self.m_filePicker_run21.GetPath())
+                pathLab.append(self.m_filePicker_run22.GetPath())
+            if self.m_checkBox_run3.GetValue():
+                pathClient.append(self.m_filePicker_run31.GetPath())
+                pathLab.append(self.m_filePicker_run32.GetPath())
+            if self.m_checkBox_run4.GetValue():
+                pathClient.append(self.m_filePicker_run41.GetPath())
+                pathLab.append(self.m_filePicker_run42.GetPath())
+            if self.m_checkBox_run5.GetValue():
+                pathClient.append(self.m_filePicker_run51.GetPath())
+                pathLab.append(self.m_filePicker_run52.GetPath())
+
         pdf = FPDF(orientation='P', unit='mm', format='A4')
 
         create_pdf = True
@@ -3120,7 +3271,7 @@ class MainFrame(wx.Frame):
 
             # Ionisation chamber
             pdf.set_xy(10.0, 110.0)
-            pdf.set_font('Arial', size=12)
+            pdf.set_font('Arial','B', size=12)
             pdf.cell(200, 10, txt="Ionisation chamber", ln=1, border=0)
             pdf.set_xy(100.0, 110.0)
             pdf.set_font('Arial', size=12)
@@ -3214,6 +3365,379 @@ class MainFrame(wx.Frame):
             pdf.set_xy(10.0, 10.0)
             pdf.set_font('Arial', 'B' + 'U', 12)
             pdf.cell(200, 10, txt="GENERAL COMMENTS", ln=1, align='C', border=0)
+
+
+            # information section
+            # Chamber description
+            pdf.set_xy(10.0, 20.0)
+            pdf.set_font('Arial', 'B', 12)
+            pdf.cell(200, 10, txt="Chamber description - " + self.m_textCtrl_model1.GetValue(), ln=1, border=0)
+
+            # Accessories Supplied
+            pdf.set_xy(10.0, 55.0)
+            pdf.set_font('Arial', 'B', size=12)
+            pdf.cell(200, 10, txt="Accessories Supplied", ln=1, border=0)
+            pdf.set_xy(10.0, 60.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="-   Buildup cap", ln=1, border=0)
+
+            # Preliminary Inspection
+            pdf.set_xy(10.0, 70.0)
+            pdf.set_font('Arial', 'B', size=12)
+            pdf.cell(200, 10, txt="Preliminary Inspection", ln=1, border=0)
+            pdf.set_xy(10.0, 75.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="-   The ionisation chamber had no obvious damage or faults on receipt.", ln=1,
+                     border=0)
+
+            # Calibration Coefficient
+            pdf.set_xy(10.0, 85.0)
+            pdf.set_font('Arial', 'B', size=12)
+            pdf.cell(200, 10, txt="Calibration Coefficient", ln=1, border=0)
+            pdf.set_xy(10.0, 90.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="-   The calibration coefficient is the number by which the charge from the " +
+                                  "chamber, in nC, must be ", ln=1, border=0)
+            pdf.set_xy(10.0, 95.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="     multiplied to obtain the air kerma [1]. The calibration " +
+                                  "factor for the electrometer must also be ", ln=1, border=0)
+            pdf.set_xy(10.0, 100.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="     taken into account when measuring the charge from the chamber.", ln=1, border=0)
+
+            # Calibration Coefficients for Medium-Energy X-ray (MEX) Qualities in Air
+            pdf.set_xy(10.0, 110.0)
+            pdf.set_font('Arial', 'B', size=12)
+            pdf.cell(200, 10, txt="Calibration Coefficients for Medium-Energy X-ray (MEX) Qualities in Air", ln=1,
+                     border=0)
+            pdf.set_xy(10.0, 115.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="-   The calibration coefficients for the chamber for each X-ray beam quality" +
+                                  " from the Gulmay ", ln=1, border=0)
+            pdf.set_xy(10.0, 120.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="     Comet X-ray generator were determined by comparison with the" +
+                                  " ARPANSA Medium Energy ", ln=1, border=0)
+            pdf.set_xy(10.0, 125.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="     Free-Air Chamber, which is the Australian primary standard" +
+                                  " of air kerma for medium energy X-", ln=1, border=0)
+            pdf.set_xy(10.0, 130.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="     rays.", ln=1, border=0)
+            pdf.set_xy(10.0, 135.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="-   The Gulmay Comet X-ray generator is constant potential and the X-ray tube " +
+                                  "has a tungsten ", ln=1, border=0)
+            pdf.set_xy(10.0, 140.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="     target.", ln=1, border=0)
+
+            # Recombination Correction Measurement
+            pdf.set_xy(10.0, 150.0)
+            pdf.set_font('Arial', 'B', size=12)
+            pdf.cell(200, 10, txt="Recombination Correction Measurement ", ln=1, border=0)
+            pdf.set_xy(10.0, 155.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="-   Not measured.", ln=1, border=0)
+
+            # Polarity Correction Measurement
+            pdf.set_xy(10.0, 165.0)
+            pdf.set_font('Arial', 'B', size=12)
+            pdf.cell(200, 10, txt="Polarity Correction Measurement", ln=1, border=0)
+            pdf.set_xy(10.0, 170.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="-   Not measured.", ln=1, border=0)
+
+            # Notes
+            pdf.set_xy(10.0, 185.0)
+            pdf.set_font('Arial', 'B', size=12)
+            pdf.cell(200, 10, txt="Notes", ln=1, border=0)
+            pdf.set_xy(10.0, 190.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="-   The ionisation chamber was tested in accordance with ARPANSA Standard " +
+                                  "Operational ", ln=1, border=0)
+            pdf.set_xy(10.0, 195.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="     Procedure ARPANSA-SOP-0816 Version 7.", ln=1, border=0)
+            pdf.set_xy(10.0, 200.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="", ln=1, border=0)
+
+            # References
+            pdf.set_xy(10.0, 210.0)
+            pdf.set_font('Arial', 'B', size=12)
+            pdf.cell(200, 10, txt="References", ln=1, border=0)
+            pdf.set_xy(10.0, 215.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="[1] AAPM protocol for 40-300 kV x-ray beam dosimetry in radiotherapy and " +
+                                  "radiobiology, C.-M. ", ln=1, border=0)
+            pdf.set_xy(10.0, 220.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="     Ma, Chair, C. W. Coffey, L. A. DeWerd, C. Liu, R. Nath, " +
+                                  "S. M. Seltzer, J. P. Seuntjens, Med. ", ln=1, border=0)
+            pdf.set_xy(10.0, 225.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="     Phys. ", ln=1, border=0)
+            pdf.set_xy(28.0, 225.0)
+            pdf.set_font('Arial', 'B', size=12)
+            pdf.cell(200, 10, txt="28", ln=1, border=0)
+            pdf.set_xy(33.0, 225.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt=" (6) 868-893, 2001", ln=1, border=0)
+            pdf.set_xy(10.0, 230.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="", ln=1, border=0)
+
+            # Footer info
+            pdf.set_xy(180.0, 255.0)
+            pdf.set_font('Arial', 'I', 8)
+            pdf.cell(210, 0, txt="page 2 of 6", ln=1, border=0)
+
+            ############################################### Page 3 ###########################################
+            pdf.add_page()
+            pdf.line(5.0, 5.0, 205.0, 5.0)  # top one
+            pdf.line(5.0, 292.0, 205.0, 292.0)  # bottom one
+            pdf.line(5.0, 5.0, 5.0, 292.0)  # left one
+            pdf.line(205.0, 5.0, 205.0, 292.0)  # right one
+
+            pdf.set_xy(15.0, 10.0)
+            pdf.image('./imgReference/Heading.png', w=160.0, h=20.0)
+            pdf.set_xy(10.0, 30.0)
+            pdf.set_font('Arial', 'B' + 'U', 12)
+            pdf.cell(200, 10, txt="Air Kerma Calibration Certificate - Medium-Energy X-rays", ln=1, align='C', border=0)
+
+            pdf.set_xy(10.0, 40.0)
+            pdf.set_font('Arial', 'B', 12)
+            pdf.cell(200, 10, txt="Client", ln=1, border=0)
+            pdf.set_xy(80.0, 40.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt=self.m_textCtrl_client_name.GetValue(), ln=1, border=0)
+
+            pdf.set_xy(10.0, 40.0)
+            pdf.set_font('Arial', 'B', 12)
+            pdf.cell(200, 10, txt="Client", ln=1, border=0)
+            pdf.set_xy(80.0, 40.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt=self.m_textCtrl_client_name.GetValue(), ln=1, border=0)
+
+            pdf.set_xy(10.0, 45.0)
+            pdf.set_font('Arial','B', size=12)
+            pdf.cell(200, 10, txt="Ionisation chamber", ln=1, border=0)
+            pdf.set_xy(80.0, 45.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10,
+                     txt=self.m_textCtrl_model1.GetValue() + ', serial number ' + self.m_textCtrl_serial1.GetValue(),
+                     ln=1, border=0)
+
+            pdf.set_xy(10.0, 50.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="Polarising voltage", ln=1, border=0)
+            pdf.set_xy(80.0, 50.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt = str(IC_HV) +" V on the guard electrode", ln=1, border=0)
+
+            pdf.set_xy(10.0, 55.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="Collected charge polarity", ln=1, border=0)
+            pdf.set_xy(80.0, 55.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="Positive (Central Electrode Negative)", ln=1, border=0)
+
+            pdf.set_xy(10.0, 60.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="Reference point", ln=1, border=0)
+            pdf.set_xy(80.0, 60.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="The geometrical centre of the cavity", ln=1, border=0)
+
+            pdf.set_xy(10.0, 65.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="Geometry", ln=1, border=0)
+            pdf.set_xy(80.0, 65.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="Mark on chamber stem facing the radiation source", ln=1, border=0)
+            pdf.set_xy(80.0, 70.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="Chamber stem vertically upwards, cable down", ln=1, border=0)
+            pdf.set_xy(80.0, 75.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="Horizontal radiation beam", ln=1, border=0)
+            pdf.set_xy(80.0, 80.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="Source-detector distance 100 cm ", ln=1, border=0)
+            pdf.set_xy(80.0, 85.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="Circular beam of diameter 10 cm ", ln=1, border=0)
+
+            pdf.set_xy(10.0, 90.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="Build-up", ln=1, border=0)
+            pdf.set_xy(80.0, 90.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="Build-up cap removed except where stated. Calibrated free in air. ", ln=1, border=0)
+
+            pdf.set_xy(10.0, 95.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="Polarity and recombination", ln=1, border=0)
+            pdf.set_xy(80.0, 95.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="Corrections not applied", ln=1, border=0)
+
+            pdf.set_xy(10.0, 100.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="Reference conditions", ln=1, border=0)
+            pdf.set_xy(80.0, 100.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="20°C, 101.325 kPa and 50% humidity", ln=1, border=0)
+
+            pdf.set_xy(10.0, 105.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="Measurement date(s)", ln=1, border=0)
+            pdf.set_xy(80.0, 105.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt=test_date, ln=1, border=0)
+
+            pdf.set_xy(10.0, 110.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="Uncertainties (U) are given at a confidence level of approximately 95% (k=2)", ln=1, border=0)
+
+            pdf.set_xy(50.0, 120.0)
+            pdf.set_font('Arial', 'B',size=12)
+            pdf.cell(200, 10, txt="	Table 1:", ln=1,border=0)
+            pdf.set_xy(70.0, 120.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="	Subset of air kerma calibration coefficients", ln=1, border=0)
+
+            header_name_list = ['Beam code','Tube voltage','Added filter','Added filter','HVL','HVL','Nominal effective energy [1]','Nominal air kerma rate','NK [2]','U']
+            pos = 0
+            max_len = 0
+            for i in range(len(header_name_list)):
+                if len(header_name_list[i])>max_len:
+                    pos = i
+                    max_len = len(header_name_list[i])
+
+            header_name_list_new = []
+            for h in header_name_list:
+                if len(h) < max_len:
+                    h = h + ' '*(max_len-len(h))
+                    header_name_list_new.append(h)
+                else:
+                    header_name_list_new.append(h)
+
+
+            for i in range(len(header_name_list_new)):
+                if i == 6 or i == 7:
+                    pdf.set_xy(10 + i * 18.5, 130)
+                    pdf.set_font('Arial', size=9)
+                    pdf.multi_cell(18.5, 5, header_name_list_new[i], 1, 0, 'C')
+                else:
+                    pdf.set_xy(10 + i * 18.5, 130)
+                    pdf.set_font('Arial', size=9)
+                    pdf.cell(18.5, 15, header_name_list[i], 1, 0, 'C')
+
+            unit_list = ['kV','mm Al','mm Cu','mm Al','mm Cu','keV','mGy/s','mGy/nC','%']
+            pdf.set_xy(10, 145)
+            pdf.set_font('Arial', size=10)
+            pdf.cell(18.5,5,'',1,0,'C')
+            for i in range(len(unit_list)):
+                pdf.set_xy(28.5+i*18.5, 145)
+                pdf.set_font('Arial', size=9)
+                pdf.cell(18.5, 5, unit_list[i], 1, 0, 'C')
+
+
+            KeV, Beam, NK, AddedfiltermmAl, AddedfiltermmCu,HVLmmAl, HVLmmCu, NominalEffectiveEnergy, NominalAirKermaRate, U = MEXdata_PTB_Beams(pathClient[0], pathLab[0])
+            table1_data = [KeV, AddedfiltermmAl, AddedfiltermmCu, HVLmmAl, HVLmmCu, NominalEffectiveEnergy, NominalAirKermaRate,NK,U]
+            for i in range(len(Beam)):
+                pdf.set_xy(10, 150+i*10)
+                pdf.set_font('Arial', size=10)
+                pdf.cell(18.5, 10, Beam[i], 1, 0, 'C')
+                for j in range(9):
+                    pdf.set_xy(28.5+j*18.5, 150+i*10)
+                    pdf.set_font('Arial', size=10)
+                    pdf.cell(18.5, 10, str(table1_data[j][i]), 1, 0, 'C')
+
+            #pdf.set_xy(10, 250)
+            #pdf.set_font('Arial', size=10)
+            #pdf.cell(18.5, 10, 'NXH300*', 1, 0, 'C')
+
+            pdf.set_xy(10.0, 250.0)
+            pdf.set_font('Arial', size=9)
+            pdf.cell(200, 10, txt="[1] The energy of a monoenergetic beam with the same HVL in mm of Cu", ln=1, border=0)
+
+            pdf.set_xy(10.0, 255.0)
+            pdf.set_font('Arial', size=9)
+            pdf.cell(200, 10, txt="[2] The air kerma calibration coefficient", ln=1,border=0)
+
+            pdf.set_xy(10.0, 260.0)
+            pdf.set_font('Arial', size=9)
+            pdf.cell(200, 10, txt="* With buildup cap on", ln=1, border=0)
+
+            pdf.set_xy(120.0, 260.0)
+            pdf.set_font('Arial', size=9)
+            pdf.cell(10, 10, txt="_____________________________________", ln=1, border=0)
+
+            pdf.set_xy(120.0, 265.0)
+            pdf.set_font('Arial', size=9)
+            pdf.cell(10, 10, txt="Calibrated by Duncan Butler", ln=1, border=0)
+
+            pdf.set_xy(180.0, 275.0)
+            pdf.set_font('Arial', 'I', 8)
+            pdf.cell(210, 0, txt="page 3 of 6", ln=1, border=0)
+
+            ############################################### Page 4 ###########################################
+            pdf.add_page()
+            pdf.line(5.0, 5.0, 205.0, 5.0)  # top one
+            pdf.line(5.0, 292.0, 205.0, 292.0)  # bottom one
+            pdf.line(5.0, 5.0, 5.0, 292.0)  # left one
+            pdf.line(205.0, 5.0, 205.0, 292.0)  # right one
+
+            pdf.set_xy(15.0, 10.0)
+            pdf.image('./imgReference/Heading.png', w=160.0, h=20.0)
+
+            pdf.set_xy(30.0, 30.0)
+            pdf.set_font('Arial', 'B', size=12)
+            pdf.cell(200, 10, txt="	Table 2:", ln=1, border=0)
+            pdf.set_xy(50.0, 30.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="	Complete set of air kerma calibration coefficients for all MEX beams", ln=1, border=0)
+
+            header_name_list = ['Beam code', 'Tube voltage', 'Added filter', 'Added filter', 'HVL', 'HVL',
+                                'Nominal effective energy [1]', 'Nominal air kerma rate', 'NK [2]', 'U']
+            pos = 0
+            max_len = 0
+            for i in range(len(header_name_list)):
+                if len(header_name_list[i]) > max_len:
+                    pos = i
+                    max_len = len(header_name_list[i])
+
+            header_name_list_new = []
+            for h in header_name_list:
+                if len(h) < max_len:
+                    h = h + ' ' * (max_len - len(h))
+                    header_name_list_new.append(h)
+                else:
+                    header_name_list_new.append(h)
+
+            for i in range(len(header_name_list_new)):
+                if i == 6 or i == 7:
+                    pdf.set_xy(10 + i * 18.5, 40)
+                    pdf.set_font('Arial', size=9)
+                    pdf.multi_cell(18.5, 5, header_name_list_new[i], 1, 0, 'C')
+                else:
+                    pdf.set_xy(10 + i * 18.5, 40)
+                    pdf.set_font('Arial', size=9)
+                    pdf.cell(18.5, 15, header_name_list[i], 1, 0, 'C')
+
+            unit_list = ['kV', 'mm Al', 'mm Cu', 'mm Al', 'mm Cu', 'keV', 'mGy/s', 'mGy/nC', '%']
+            pdf.set_xy(10, 55)
+            pdf.set_font('Arial', size=10)
+            pdf.cell(18.5, 5, '', 1, 0, 'C')
+            for i in range(len(unit_list)):
+                pdf.set_xy(28.5 + i * 18.5, 55)
+                pdf.set_font('Arial', size=9)
+                pdf.cell(18.5, 5, unit_list[i], 1, 0, 'C')
 
             # save the pdf with name .pdf
             pdf.output("Calibration Report.pdf")
@@ -3633,7 +4157,7 @@ class DatabaseFrame(wx.Frame):
             names = locals()
             for i in range(len(job_set)): # job id
                 tmp_job = 'CAL'+('00000'+str(job_set[i]))[-5:]
-                tree_job = self.m_treeCtrl.AppendItem(self.root, tmp_job + '_' + name_set[0])
+                tree_job = self.m_treeCtrl.AppendItem(self.root, tmp_job + '-' + name_set[0])
                 for ch in chamber_set[i]: # chamber
                     tree_chamber = self.m_treeCtrl.AppendItem(tree_job, ch)
 
@@ -3644,9 +4168,9 @@ class DatabaseFrame(wx.Frame):
                         names[var_name1] = self.m_treeCtrl.AppendItem(tree_chamber,child_name1)
                         for j in ['Client','Lab']:
                             var_name2 = str(job_set[i]) + '_run_' + str(run_num + 1) + '_'+ j.lower()
-                            child_name2 = 'Run' + str(run_num + 1)+ '_'+ j
+                            child_name2 = 'Run' + str(run_num + 1)+ '-'+ j
                             names[var_name2] = self.m_treeCtrl.AppendItem(names[var_name1], child_name2)
-                            self.m_treeCtrl.SetItemData(names[var_name2], id_set[i][num])
+                            self.m_treeCtrl.SetItemData(names[var_name2], [id_set[i][num],child_name2])
                             num += 1
 
             self.m_treeCtrl.ExpandAll()
@@ -3665,11 +4189,108 @@ class DatabaseFrame(wx.Frame):
         else:
             selections = self.m_treeCtrl.GetSelections()
 
-            chamber_id_download = []
-            for selected in selections:
-                data = self.m_treeCtrl.GetItemData(selected)
-                chamber_id_download.append(data)
-            print(chamber_id_download)
+            if len(selections) == 0:
+                dlg = wx.MessageDialog(
+                    None,
+                    u"Please select the file to download!",
+                    u"Nothing selected",
+                    wx.YES_DEFAULT | wx.ICON_WARNING,
+                )
+                if dlg.ShowModal() == wx.ID_YES:
+                    dlg.Destroy()
+            else:
+                chamber_id_download = []
+                for selected in selections:
+                    data = self.m_treeCtrl.GetItemData(selected)
+                    chamber_id_download.append(data)
+                print(chamber_id_download)
+
+                # download part
+                db = pymysql.connect(host='localhost', user='root', password='Bluering123.', database='bluering')
+
+                cursor = db.cursor()
+                for i in range(len(chamber_id_download)):
+
+                    chamber_ID = chamber_id_download[i][0]
+                    file_name = chamber_id_download[i][1]
+
+                    sql = "SELECT * from header WHERE chamber_ID = %s" % chamber_ID
+
+                    cursor.execute(sql)
+                    rows = cursor.fetchall()
+
+                    filename = rows[0][2]
+                    date = rows[0][3]
+                    chamber = rows[0][4]
+                    description = rows[0][7]
+                    software = rows[0][8]
+                    backgrounds = rows[0][9]
+                    measurements = rows[0][10]
+                    trolley = rows[0][11]
+                    sDC = rows[0][12]
+                    aperturewheel = rows[0][13]
+                    comment = rows[0][14]
+                    monitorelectrometerrange = rows[0][15]
+                    monitorhv = rows[0][16]
+                    mEFAC_ICElectrometerRange = rows[0][17]
+                    ic_hv = rows[0][18]
+                    clientname = rows[0][19]
+                    address1 = rows[0][20]
+                    address2 = rows[0][21]
+                    operator = rows[0][22]
+                    calnumber = rows[0][23]
+
+                    path = self.m_dirPicker_download.GetPath()
+
+                    cal_num = 'CAL'+('00000'+str(rows[0][1]))[-5:]
+                    file = path + '/%s Raw %s-%s.csv'%(cal_num,clientname,file_name)
+
+                    with open(file, "w", newline="") as f:
+                        writer = csv.writer(f)
+                        writer.writerow(['[COMET X-RAY MEASUREMENT]'])
+                        writer.writerow(['Filename', '', filename])
+                        writer.writerow(['Date', '', date])
+                        writer.writerow(['Chamber', '', chamber])
+                        writer.writerow(['Description', '', description])
+                        writer.writerow(['Software', '', software])
+                        writer.writerow(['Backgrounds', '', backgrounds])
+                        writer.writerow(['Measurements', '', measurements])
+                        writer.writerow(['Trolley (mm)', '', trolley])
+                        writer.writerow(['SCD (mm)', '', sDC])
+                        writer.writerow(['Aperture wheel', '', aperturewheel])
+                        writer.writerow(['Comment', '', comment])
+                        writer.writerow(['Monitor electrometer range', '', monitorelectrometerrange])
+                        writer.writerow(['Monitor HV', '', monitorhv])
+                        writer.writerow(['MEFAC-IC electrometer range', '', mEFAC_ICElectrometerRange])
+                        writer.writerow(['IC HV', '', ic_hv])
+                        writer.writerow(['Client name', '', clientname])
+                        writer.writerow(['Address 1', '', address1])
+                        writer.writerow(['Address 2', '', address2])
+                        writer.writerow(['Operator', '', operator])
+                        writer.writerow(['CAL Number', '', calnumber])
+                        writer.writerow(['[DATA]'])
+                        writer.writerow(
+                            ['kV', 'mA', 'BarCode', 'XraysOn', 'HVLFilter(mm)', 'Filter', 'FilterReady', 'HVLReady', 'N',
+                             'Current1(pA)', 'Current2(pA)', 'P(kPa)', 'T(MC)', 'T(Air)', 'T(SC)', 'H(%)', 'Comment',])
+
+                    # sql = "SELECT * from body WHERE chamber_ID = %s" % chamber_ID
+                    sql = "SELECT kv,ma,barcode,xrayson,HVLFilter,filter,filterready,hvlready,n,Current1,Current2,P,T_MC,T_Air,T_SC,H from body WHERE chamber_ID = %s" % chamber_ID
+
+                    cursor.execute(sql)
+                    rows = cursor.fetchall()
+                    fp = open(file, 'a', newline='')
+                    myFile = csv.writer(fp)
+                    myFile.writerows(rows)
+                    fp.close()
+                db.close()
+                dlg = wx.MessageDialog(
+                    None,
+                    u"%d files downloaded!"%(i+1),
+                    u"Successfully downloaded",
+                    wx.YES_DEFAULT | wx.ICON_WARNING,
+                )
+                if dlg.ShowModal() == wx.ID_YES:
+                    dlg.Destroy()
 
         return
 
