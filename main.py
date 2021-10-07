@@ -3425,8 +3425,10 @@ class MainFrame(wx.Frame):
             # inquiries detail line1
             pdf.set_xy(10.0, 160.0)
             pdf.set_font('Arial', size=12)
-            pdf.cell(200, 10, txt="Direct inquiries to                                                   Chris Oliver",
-                     ln=1, border=0)
+            pdf.cell(200, 10, txt="Direct inquiries to",ln=1, border=0)
+            pdf.set_xy(100.0, 160.0)
+            pdf.set_font('Arial', size=12)
+            pdf.cell(200, 10, txt="Chris Oliver", ln=1, border=0)
 
             # inquiries detail line2
             pdf.set_xy(10.0, 170.0)  # 1
