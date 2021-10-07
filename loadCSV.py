@@ -119,8 +119,10 @@ MEXreport_sortByKev=MEXreport.sort_values(by=['(kV)'])
 
 MEXreport_PTB=MEXreport.loc[(MEXreport['Filter'].isin(['NXA50','NXA70','NXB100','NXC120','NXD140','NXE150','NXF200','NXG250','NXH280','NXH300','NXH300*']))]
 
+MEXreport_sortByKev_NX = MEXreport.loc[MEXreport['Filter'].str.contains('NX')]
+MEXreport_sortByKev_NX = MEXreport_sortByKev_NX.sort_values(by=['(kV)'])
 
-print(MEXreport_PTB)
+print(MEXreport_sortByKev_NX)
 
 
 

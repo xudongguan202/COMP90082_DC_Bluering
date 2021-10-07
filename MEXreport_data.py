@@ -75,20 +75,21 @@ def MEX_data(path_Client, path_Lab):
     MEXreport_sortByKev=MEXreport.sort_values(by=['(kV)'])
 
     MEXreport_PTB=MEXreport.loc[(MEXreport['Filter'].isin(['NXA50','NXA70','NXB100','NXC120','NXD140','NXE150','NXF200','NXG250','NXH280','NXH300','NXH300*']))]
+    MEXreport_sortByKev_NX=MEXreport.loc[MEXreport['Filter'].str.contains('NX')]
+    MEXreport_sortByKev_NX=MEXreport_sortByKev_NX.sort_values(by=['(kV)'])
 
-    KeV = MEXreport_sortByKev["kV"].values.tolist()
-    Beam = MEXreport_sortByKev["Filter"].values.tolist()
-    NK = MEXreport_sortByKev["NK"].values.tolist()
-    AddedfiltermmAl=  MEXreport_sortByKev["mm Al"].values.tolist()
-    AddedfiltermmCu = MEXreport_sortByKev["mm Cu"].values.tolist()
-    HVLmmAl = MEXreport_sortByKev["(mm Al)"].values.tolist()
-    HVLmmCu = MEXreport_sortByKev["(mm Cu)"].values.tolist()
-    NominalEffectiveEnergy = MEXreport_sortByKev["(eff, Cu)"].values.tolist()
-    NominalAirKermaRate = MEXreport_sortByKev["Air kerma rate"].values.tolist()
-    U = MEXreport_sortByKev["U"].values.tolist()
+    KeV = MEXreport_sortByKev_NX["kV"].values.tolist()
+    Beam = MEXreport_sortByKev_NX["Filter"].values.tolist()
+    NK = MEXreport_sortByKev_NX["NK"].values.tolist()
+    AddedfiltermmAl=  MEXreport_sortByKev_NX["mm Al"].values.tolist()
+    AddedfiltermmCu = MEXreport_sortByKev_NX["mm Cu"].values.tolist()
+    HVLmmAl = MEXreport_sortByKev_NX["(mm Al)"].values.tolist()
+    HVLmmCu = MEXreport_sortByKev_NX["(mm Cu)"].values.tolist()
+    NominalEffectiveEnergy = MEXreport_sortByKev_NX["(eff, Cu)"].values.tolist()
+    NominalAirKermaRate = MEXreport_sortByKev_NX["Air kerma rate"].values.tolist()
+    U = MEXreport_sortByKev_NX["U"].values.tolist()
 
 
-    print(MEXreport_PTB)
     return KeV, Beam, NK, AddedfiltermmAl, AddedfiltermmCu, HVLmmAl, HVLmmCu, NominalEffectiveEnergy, NominalAirKermaRate, U
 
 
