@@ -286,6 +286,117 @@ def MEXdata_PTB_Beams(path_Client, path_Lab):
     #print(MEXreport_PTB)
     return KeV, Beam, NK_round, AddedfiltermmAl, AddedfiltermmCu, HVLmmAl, HVLmmCu, NominalEffectiveEnergy, NominalAirKermaRate_round, U
 
+def MEX_data(path_Client, path_Lab):
+
+
+    df_Client = pd.read_csv(path_Client, skiprows=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,17,18,19,20,21])
+    df_Lab = pd.read_csv(path_Lab, skiprows=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,17,18,19,20,21])
+
+
+    current1_Client=df_Client["Current1(pA)"]
+    current2_Client=df_Client["Current2(pA)"]
+
+    current1_Lab=df_Lab["Current1(pA)"]
+    current2_Lab=df_Lab["Current2(pA)"]
+
+    BgdIC1_Before_Client=current1_Client.iloc[0:89].mean(axis=0)
+    BgdMC1_Before_Client=current2_Client.iloc[0:89].mean(axis=0)
+
+    BgdIC2_Before_Lab=current1_Lab.iloc[0:89].mean(axis=0)
+    BgdMC2_Before_Lab=current2_Lab.iloc[0:89].mean(axis=0)
+
+
+    df_Client["R1"]=(((df_Client["Current2(pA)"]-BgdIC2_Before_Lab)/(df_Client["Current1(pA)"]-BgdMC2_Before_Lab)).groupby([df_Client['Filter'], df_Client['XraysOn']]).transform('mean').round(5))
+    df_Lab["R2"]=(((df_Lab["Current2(pA)"]-BgdIC2_Before_Lab)/(df_Lab["Current1(pA)"]-BgdMC2_Before_Lab)).groupby([df_Lab['Filter'], df_Lab['XraysOn']]).transform('mean').round(5))
+
+
+
+
+    #currentLab_Mean["H2"]=currentLab_Mean.apply(H2,axis=1)
+    pd.set_option('display.max_rows', None)
+
+    group_Client=df_Client.groupby(["Filter", "XraysOn"], as_index=False)
+    df_Client_MEX=group_Client.agg({"kV": "mean", "Current1(pA)": "mean", "Current2(pA)": "mean","T(MC)": "mean","T(Air)": "mean", "R1": "mean"})
+
+    group_Lab=df_Lab.groupby(["Filter", "XraysOn"], as_index=False )
+    df_Lab_MEX=group_Lab.agg({"kV": "mean", "Current1(pA)": "mean", "Current2(pA)": "mean", "T(MC)": "mean", "T(SC)": "mean", "H(%)": "mean",  "R2": "mean"})
+    df_Client_MEX["R2"]=df_Lab_MEX["R2"]
+    df_Lab_MEX["MC2"]=df_Lab_MEX[["Current1(pA)"]].apply(lambda x:x["Current1(pA)"]-BgdMC2_Before_Lab,axis=1)
+    df_Lab_MEX["IC2"]=df_Lab_MEX[["Current2(pA)"]].apply(lambda x:x["Current2(pA)"]-BgdIC2_Before_Lab,axis=1)
+
+    df_Client_MEX["MC1"]=df_Lab_MEX[["Current1(pA)"]].apply(lambda x:x["Current1(pA)"]-BgdMC1_Before_Client,axis=1)
+    df_Client_MEX["IC1"]=df_Lab_MEX[["Current2(pA)"]].apply(lambda x:x["Current2(pA)"]-BgdIC1_Before_Client,axis=1)
+    df_Client_MEX["MC2"]=df_Lab_MEX["MC2"]
+    df_Client_MEX["IC2"]=df_Lab_MEX["IC2"]
+    df_Client_MEX["TM2"]=df_Lab_MEX["T(MC)"]
+    df_Client_MEX["TS2"]=df_Lab_MEX["T(SC)"]
+    df_Client_MEX["H2"]=df_Lab_MEX["H(%)"]
+
+    Ma = 6.18E-06
+    WE = 33.97
+
+
+    #df_Client_MEX["NK"]=df_Lab_MEX[["Current2(pA)"]].apply(lambda x:x["Current2(pA)"]-BgdIC1_Before_Client,axis=1)
+
+    product = pd.read_csv("KKMaWE.csv", skiprows=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+
+    product = product[['Filter', 'Product']]
+
+    #MEX report
+    MEXs = pd.read_csv("KKMaWE.csv", skiprows=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+    MEX = MEXs[['Filter', '(kV)', 'mm Al', 'mm Cu', '(mm Al)', '(mm Cu)', '(eff, Cu)', 'Air kerma rate']]
+
+
+
+
+    df_merge_col = pd.merge(df_Client_MEX, product, on='Filter')
+    df_merge_col["NK"]=df_merge_col[["Product","R1","R2","T(Air)","H2","T(MC)","TS2","TM2"]].apply(lambda x:x["R2"]*WE*x["Product"]*((273.15+x["TS2"])/(273.15+x["TM2"]))*(0.995766667+0.000045*x["H2"])/(Ma*x["R1"]*(273.15+x["T(Air)"])/(273.15+x["T(MC)"]))/1000000,axis=1)
+
+    df_merge_col = df_merge_col.drop(df_merge_col[df_merge_col.XraysOn ==False].index)
+
+    df_merge_col=pd.merge(df_merge_col, MEX, on='Filter')
+    MEXreport=df_merge_col[['Filter', '(kV)', 'mm Al', 'mm Cu', '(mm Al)', '(mm Cu)', '(eff, Cu)','NK', 'Air kerma rate']]
+    MEXreport['U']= 1.4
+    MEXreport_sortByKev=MEXreport.sort_values(by=['(kV)'])
+
+    MEXreport_PTB=MEXreport.loc[(MEXreport['Filter'].isin(['NXA50','NXA70','NXB100','NXC120','NXD140','NXE150','NXF200','NXG250','NXH280','NXH300','NXH300*']))]
+    MEXreport_sortByKev_NX=MEXreport.loc[MEXreport['Filter'].str.contains('NX')]
+    MEXreport_sortByKev_NX=MEXreport_sortByKev_NX.sort_values(by=['(kV)'])
+
+    KeV = MEXreport_sortByKev_NX["(kV)"].values.tolist()
+    Beam = MEXreport_sortByKev_NX["Filter"].values.tolist()
+    NK = MEXreport_sortByKev_NX["NK"].values.tolist()
+    AddedfiltermmAl=  MEXreport_sortByKev_NX["mm Al"].values.tolist()
+    AddedfiltermmCu = MEXreport_sortByKev_NX["mm Cu"].values.tolist()
+    HVLmmAl = MEXreport_sortByKev_NX["(mm Al)"].values.tolist()
+    HVLmmCu = MEXreport_sortByKev_NX["(mm Cu)"].values.tolist()
+    NominalEffectiveEnergy = MEXreport_sortByKev_NX["(eff, Cu)"].values.tolist()
+    NominalAirKermaRate = MEXreport_sortByKev_NX["Air kerma rate"].values.tolist()
+    U = MEXreport_sortByKev_NX["U"].values.tolist()
+
+    KeV = pd.Series(KeV, dtype=object).fillna(0).tolist()
+    Beam = pd.Series(Beam, dtype=object).fillna(0).tolist()
+
+    NK = pd.Series(NK, dtype=object).fillna(0).tolist()
+    NK_round = []
+    for i in NK:
+        NK_round.append(round(i, 2))
+
+    AddedfiltermmAl = pd.Series(AddedfiltermmAl, dtype=object).fillna(0).tolist()
+    AddedfiltermmCu = pd.Series(AddedfiltermmCu, dtype=object).fillna(0).tolist()
+    HVLmmAl = pd.Series(HVLmmAl, dtype=object).fillna(0).tolist()
+    HVLmmCu = pd.Series(HVLmmCu, dtype=object).fillna(0).tolist()
+    NominalEffectiveEnergy = pd.Series(NominalEffectiveEnergy, dtype=object).fillna(0).tolist()
+
+    NominalAirKermaRate = pd.Series(NominalAirKermaRate, dtype=object).fillna(0).tolist()
+    NominalAirKermaRate_round = []
+    for i in NominalAirKermaRate:
+        NominalAirKermaRate_round.append(round(i, 1))
+
+    U = pd.Series(U, dtype=object).fillna(0).tolist()
+
+
+    return KeV, Beam, NK_round, AddedfiltermmAl, AddedfiltermmCu, HVLmmAl, HVLmmCu, NominalEffectiveEnergy, NominalAirKermaRate_round, U
 
 class MyApp(wx.App):
     def __init__(self):
@@ -3522,91 +3633,91 @@ class MainFrame(wx.Frame):
             pdf.set_font('Arial', size=12)
             pdf.cell(200, 10, txt=self.m_textCtrl_client_name.GetValue(), ln=1, border=0)
 
-            pdf.set_xy(10.0, 45.0)
+            pdf.set_xy(10.0, 50.0)
             pdf.set_font('Arial','B', size=12)
             pdf.cell(200, 10, txt="Ionisation chamber", ln=1, border=0)
-            pdf.set_xy(80.0, 45.0)
+            pdf.set_xy(80.0, 50.0)
             pdf.set_font('Arial', size=12)
             pdf.cell(200, 10,
                      txt=self.m_textCtrl_model1.GetValue() + ', serial number ' + self.m_textCtrl_serial1.GetValue(),
                      ln=1, border=0)
 
-            pdf.set_xy(10.0, 50.0)
+            pdf.set_xy(10.0, 60.0)
             pdf.set_font('Arial', size=12)
             pdf.cell(200, 10, txt="Polarising voltage", ln=1, border=0)
-            pdf.set_xy(80.0, 50.0)
+            pdf.set_xy(80.0, 60.0)
             pdf.set_font('Arial', size=12)
             pdf.cell(200, 10, txt = str(IC_HV) +" V on the guard electrode", ln=1, border=0)
 
-            pdf.set_xy(10.0, 55.0)
+            pdf.set_xy(10.0, 70.0)
             pdf.set_font('Arial', size=12)
             pdf.cell(200, 10, txt="Collected charge polarity", ln=1, border=0)
-            pdf.set_xy(80.0, 55.0)
+            pdf.set_xy(80.0, 70.0)
             pdf.set_font('Arial', size=12)
             pdf.cell(200, 10, txt="Positive (Central Electrode Negative)", ln=1, border=0)
 
-            pdf.set_xy(10.0, 60.0)
+            pdf.set_xy(10.0, 80.0)
             pdf.set_font('Arial', size=12)
             pdf.cell(200, 10, txt="Reference point", ln=1, border=0)
-            pdf.set_xy(80.0, 60.0)
+            pdf.set_xy(80.0, 80.0)
             pdf.set_font('Arial', size=12)
             pdf.cell(200, 10, txt="The geometrical centre of the cavity", ln=1, border=0)
 
-            pdf.set_xy(10.0, 65.0)
+            pdf.set_xy(10.0, 90.0)
             pdf.set_font('Arial', size=12)
             pdf.cell(200, 10, txt="Geometry", ln=1, border=0)
-            pdf.set_xy(80.0, 65.0)
+            pdf.set_xy(80.0, 90.0)
             pdf.set_font('Arial', size=12)
             pdf.cell(200, 10, txt="Mark on chamber stem facing the radiation source", ln=1, border=0)
-            pdf.set_xy(80.0, 70.0)
+            pdf.set_xy(80.0, 95.0)
             pdf.set_font('Arial', size=12)
             pdf.cell(200, 10, txt="Chamber stem vertically upwards, cable down", ln=1, border=0)
-            pdf.set_xy(80.0, 75.0)
+            pdf.set_xy(80.0, 100.0)
             pdf.set_font('Arial', size=12)
             pdf.cell(200, 10, txt="Horizontal radiation beam", ln=1, border=0)
-            pdf.set_xy(80.0, 80.0)
+            pdf.set_xy(80.0, 105.0)
             pdf.set_font('Arial', size=12)
             pdf.cell(200, 10, txt="Source-detector distance 100 cm ", ln=1, border=0)
-            pdf.set_xy(80.0, 85.0)
+            pdf.set_xy(80.0, 110.0)
             pdf.set_font('Arial', size=12)
             pdf.cell(200, 10, txt="Circular beam of diameter 10 cm ", ln=1, border=0)
 
-            pdf.set_xy(10.0, 90.0)
+            pdf.set_xy(10.0, 120.0)
             pdf.set_font('Arial', size=12)
             pdf.cell(200, 10, txt="Build-up", ln=1, border=0)
-            pdf.set_xy(80.0, 90.0)
+            pdf.set_xy(80.0, 120.0)
             pdf.set_font('Arial', size=12)
             pdf.cell(200, 10, txt="Build-up cap removed except where stated. Calibrated free in air. ", ln=1, border=0)
 
-            pdf.set_xy(10.0, 95.0)
+            pdf.set_xy(10.0, 130.0)
             pdf.set_font('Arial', size=12)
             pdf.cell(200, 10, txt="Polarity and recombination", ln=1, border=0)
-            pdf.set_xy(80.0, 95.0)
+            pdf.set_xy(80.0, 130.0)
             pdf.set_font('Arial', size=12)
             pdf.cell(200, 10, txt="Corrections not applied", ln=1, border=0)
 
-            pdf.set_xy(10.0, 100.0)
+            pdf.set_xy(10.0, 140.0)
             pdf.set_font('Arial', size=12)
             pdf.cell(200, 10, txt="Reference conditions", ln=1, border=0)
-            pdf.set_xy(80.0, 100.0)
+            pdf.set_xy(80.0, 140.0)
             pdf.set_font('Arial', size=12)
             pdf.cell(200, 10, txt="20°C, 101.325 kPa and 50% humidity", ln=1, border=0)
 
-            pdf.set_xy(10.0, 105.0)
+            pdf.set_xy(10.0, 150.0)
             pdf.set_font('Arial', size=12)
             pdf.cell(200, 10, txt="Measurement date(s)", ln=1, border=0)
-            pdf.set_xy(80.0, 105.0)
+            pdf.set_xy(80.0, 150.0)
             pdf.set_font('Arial', size=12)
             pdf.cell(200, 10, txt=test_date, ln=1, border=0)
 
-            pdf.set_xy(10.0, 110.0)
+            pdf.set_xy(10.0, 160.0)
             pdf.set_font('Arial', size=12)
             pdf.cell(200, 10, txt="Uncertainties (U) are given at a confidence level of approximately 95% (k=2)", ln=1, border=0)
 
-            pdf.set_xy(50.0, 120.0)
+            pdf.set_xy(50.0, 170.0)
             pdf.set_font('Arial', 'B',size=12)
             pdf.cell(200, 10, txt="	Table 1:", ln=1,border=0)
-            pdf.set_xy(70.0, 120.0)
+            pdf.set_xy(70.0, 170.0)
             pdf.set_font('Arial', size=12)
             pdf.cell(200, 10, txt="	Subset of air kerma calibration coefficients", ln=1, border=0)
 
@@ -3629,20 +3740,20 @@ class MainFrame(wx.Frame):
 
             for i in range(len(header_name_list_new)):
                 if i == 6 or i == 7:
-                    pdf.set_xy(10 + i * 18.5, 130)
+                    pdf.set_xy(10 + i * 18.5, 180)
                     pdf.set_font('Arial', size=9)
                     pdf.multi_cell(18.5, 5, header_name_list_new[i], 1, 0, 'C')
                 else:
-                    pdf.set_xy(10 + i * 18.5, 130)
+                    pdf.set_xy(10 + i * 18.5, 180)
                     pdf.set_font('Arial', size=9)
                     pdf.cell(18.5, 15, header_name_list[i], 1, 0, 'C')
 
             unit_list = ['kV','mm Al','mm Cu','mm Al','mm Cu','keV','mGy/s','mGy/nC','%']
-            pdf.set_xy(10, 145)
+            pdf.set_xy(10, 195)
             pdf.set_font('Arial', size=10)
             pdf.cell(18.5,5,'',1,0,'C')
             for i in range(len(unit_list)):
-                pdf.set_xy(28.5+i*18.5, 145)
+                pdf.set_xy(28.5+i*18.5, 195)
                 pdf.set_font('Arial', size=9)
                 pdf.cell(18.5, 5, unit_list[i], 1, 0, 'C')
 
@@ -3650,13 +3761,16 @@ class MainFrame(wx.Frame):
             KeV, Beam, NK, AddedfiltermmAl, AddedfiltermmCu,HVLmmAl, HVLmmCu, NominalEffectiveEnergy, NominalAirKermaRate, U = MEXdata_PTB_Beams(pathClient[0], pathLab[0])
             table1_data = [KeV, AddedfiltermmAl, AddedfiltermmCu, HVLmmAl, HVLmmCu, NominalEffectiveEnergy, NominalAirKermaRate,NK,U]
             for i in range(len(Beam)):
-                pdf.set_xy(10, 150+i*10)
+                pdf.set_xy(10, 200+i*5)
                 pdf.set_font('Arial', size=10)
-                pdf.cell(18.5, 10, Beam[i], 1, 0, 'C')
+                pdf.cell(18.5, 5, Beam[i], 1, 0, 'C')
                 for j in range(9):
-                    pdf.set_xy(28.5+j*18.5, 150+i*10)
+                    pdf.set_xy(28.5+j*18.5, 200+i*5)
                     pdf.set_font('Arial', size=10)
-                    pdf.cell(18.5, 10, str(table1_data[j][i]), 1, 0, 'C')
+                    if table1_data[j][i] == 0:
+                        pdf.cell(18.5, 5, ' ', 1, 0, 'C')
+                    else:
+                        pdf.cell(18.5, 5, str(table1_data[j][i]), 1, 0, 'C')
 
             #pdf.set_xy(10, 250)
             #pdf.set_font('Arial', size=10)
@@ -3664,15 +3778,15 @@ class MainFrame(wx.Frame):
 
             pdf.set_xy(10.0, 250.0)
             pdf.set_font('Arial', size=9)
-            pdf.cell(200, 10, txt="[1] The energy of a monoenergetic beam with the same HVL in mm of Cu", ln=1, border=0)
+            pdf.cell(200, 5, txt="[1] The energy of a monoenergetic beam with the same HVL in mm of Cu", ln=1, border=0)
 
             pdf.set_xy(10.0, 255.0)
             pdf.set_font('Arial', size=9)
-            pdf.cell(200, 10, txt="[2] The air kerma calibration coefficient", ln=1,border=0)
+            pdf.cell(200, 5, txt="[2] The air kerma calibration coefficient", ln=1,border=0)
 
             pdf.set_xy(10.0, 260.0)
             pdf.set_font('Arial', size=9)
-            pdf.cell(200, 10, txt="* With buildup cap on", ln=1, border=0)
+            pdf.cell(200, 5, txt="* With buildup cap on", ln=1, border=0)
 
             pdf.set_xy(120.0, 260.0)
             pdf.set_font('Arial', size=9)
@@ -3739,6 +3853,93 @@ class MainFrame(wx.Frame):
                 pdf.set_font('Arial', size=9)
                 pdf.cell(18.5, 5, unit_list[i], 1, 0, 'C')
 
+            KeV, Beam, NK, AddedfiltermmAl, AddedfiltermmCu, HVLmmAl, HVLmmCu, NominalEffectiveEnergy, NominalAirKermaRate, U = MEX_data(pathClient[0], pathLab[0])
+            table2_data = [KeV, AddedfiltermmAl, AddedfiltermmCu, HVLmmAl, HVLmmCu, NominalEffectiveEnergy,NominalAirKermaRate, NK, U]
+            for i in range(39):
+                pdf.set_xy(10, 60 + i * 5)
+                pdf.set_font('Arial', size=10)
+                pdf.cell(18.5, 5, Beam[i], 1, 0, 'C')
+                for j in range(9):
+                    pdf.set_xy(28.5 + j * 18.5, 60 + i * 5)
+                    pdf.set_font('Arial', size=10)
+                    if table2_data[j][i] == 0:
+                        pdf.cell(18.5, 5, ' ', 1, 0, 'C')
+                    else:
+                        pdf.cell(18.5, 5, str(table2_data[j][i]), 1, 0, 'C')
+
+            pdf.set_xy(170.0, 270.0)
+            pdf.set_font('Arial', 'I', 8)
+            pdf.cell(210, 0, txt="... continue page 5", ln=1, border=0)
+            pdf.set_xy(180.0, 275.0)
+            pdf.set_font('Arial', 'I', 8)
+            pdf.cell(210, 0, txt="page 4 of 6", ln=1, border=0)
+
+            ############################################### Page 5 ###########################################
+            pdf.add_page()
+            pdf.line(5.0, 5.0, 205.0, 5.0)  # top one
+            pdf.line(5.0, 292.0, 205.0, 292.0)  # bottom one
+            pdf.line(5.0, 5.0, 5.0, 292.0)  # left one
+            pdf.line(205.0, 5.0, 205.0, 292.0)  # right one
+
+            for i in range(len(header_name_list_new)):
+                if i == 6 or i == 7:
+                    pdf.set_xy(10 + i * 18.5, 10)
+                    pdf.set_font('Arial', size=9)
+                    pdf.multi_cell(18.5, 5, header_name_list_new[i], 1, 0, 'C')
+                else:
+                    pdf.set_xy(10 + i * 18.5, 10)
+                    pdf.set_font('Arial', size=9)
+                    pdf.cell(18.5, 15, header_name_list[i], 1, 0, 'C')
+
+            unit_list = ['kV', 'mm Al', 'mm Cu', 'mm Al', 'mm Cu', 'keV', 'mGy/s', 'mGy/nC', '%']
+            pdf.set_xy(10, 25)
+            pdf.set_font('Arial', size=10)
+            pdf.cell(18.5, 5, '', 1, 0, 'C')
+            for i in range(len(unit_list)):
+                pdf.set_xy(28.5 + i * 18.5, 25)
+                pdf.set_font('Arial', size=9)
+                pdf.cell(18.5, 5, unit_list[i], 1, 0, 'C')
+
+            for i in range(40,len(Beam)):
+                pdf.set_xy(10, 30 + (i-40) * 5)
+                pdf.set_font('Arial', size=10)
+                pdf.cell(18.5, 5, Beam[i], 1, 0, 'C')
+                for j in range(9):
+                    pdf.set_xy(28.5 + j * 18.5, 30 + (i-40) * 5)
+                    pdf.set_font('Arial', size=10)
+                    if table2_data[j][i] == 0:
+                        pdf.cell(18.5, 5, ' ', 1, 0, 'C')
+                    else:
+                        pdf.cell(18.5, 5, str(table2_data[j][i]), 1, 0, 'C')
+
+            pos = [48,51,56]
+            for i in range(len(pos)):
+                pdf.set_xy(10, 125+i*5)
+                pdf.set_font('Arial', size=10)
+                pdf.cell(18.5, 5, Beam[pos[i]]+'*', 1, 0, 'C')
+                for j in range(9):
+                    pdf.set_xy(28.5 + j * 18.5, 125+i*5)
+                    pdf.set_font('Arial', size=10)
+                    if table2_data[j][pos[i]] == 0:
+                        pdf.cell(18.5, 5, ' ', 1, 0, 'C')
+                    else:
+                        pdf.cell(18.5, 5, str(table2_data[j][pos[i]]), 1, 0, 'C')
+
+            pdf.set_xy(10.0, 140.0)
+            pdf.set_font('Arial', size=9)
+            pdf.cell(200, 5, txt="[1] The energy of a monoenergetic beam with the same HVL in mm of Cu", ln=1,
+                     border=0)
+
+            pdf.set_xy(10.0, 145.0)
+            pdf.set_font('Arial', size=9)
+            pdf.cell(200, 5, txt="[2] The air kerma calibration coefficient", ln=1, border=0)
+
+            pdf.set_xy(10.0, 150.0)
+            pdf.set_font('Arial', size=9)
+            pdf.cell(200, 5, txt="* With buildup cap on", ln=1, border=0)
+
+
+#48,51,56
             # save the pdf with name .pdf
             pdf.output("Calibration Report.pdf")
 
