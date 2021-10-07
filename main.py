@@ -2358,7 +2358,8 @@ class MainFrame(wx.Frame):
                 pathLab.append(self.m_filePicker_run52.GetPath())
 
             #find whether this file have already exist in Database or not and find the Job_number
-            df = pd.read_csv(pathClient[0], encoding="raw_unicode_escape")
+            df = pd.read_csv(pathClient[0], encoding="raw_unicode_escape", names = range(17), skiprows = 1)
+            print(df.to_string())
             filename = df.iloc[0][2]
             date = df.iloc[1][2]
             chamber = df.iloc[2][2]
@@ -2427,7 +2428,7 @@ class MainFrame(wx.Frame):
                 for pathClient1, pathLab1 in zip(pathClient, pathLab):
                     # store run11(Client) file
                     csv_file_name = pathClient1
-                    df = pd.read_csv(csv_file_name, encoding="raw_unicode_escape")
+                    df = pd.read_csv(csv_file_name, encoding="raw_unicode_escape", names = range(17), skiprows = 1)
                     filename = df.iloc[0][2]
                     date = df.iloc[1][2]
                     chamber = df.iloc[2][2]
@@ -2800,7 +2801,7 @@ class MainFrame(wx.Frame):
             for pathClient1, pathLab1 in zip(pathClient, pathLab):
                 # store run11(Client) file
                 csv_file_name = pathClient1
-                df = pd.read_csv(csv_file_name, encoding="raw_unicode_escape")
+                df = pd.read_csv(csv_file_name, encoding="raw_unicode_escape", names = range(17), skiprows = 1)
 
                 if df.iloc[20][0] == "[DATA]":
                     filename = df.iloc[0][2]
@@ -2940,7 +2941,8 @@ class MainFrame(wx.Frame):
 
                 # store run12(Lab) file
                 csv_file_name = pathLab1
-                df = pd.read_csv(csv_file_name, encoding="raw_unicode_escape")
+                df = pd.read_csv(csv_file_name, encoding="raw_unicode_escape", names = range(17), skiprows = 1)
+                print(df)
 
                 if df.iloc[20][0] == "[DATA]":
                     print(".............................................................................................................................")
