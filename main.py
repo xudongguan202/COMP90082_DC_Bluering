@@ -4030,7 +4030,8 @@ class MainFrame(wx.Frame):
             graph1_data = {'kVp':KeV,'kVp_values':KeV_string,'NK (mGy/nC)':NK}
 
             graph1_df =pd.DataFrame(graph1_data)
-            pltx1 = px.scatter(graph1_df, x='kVp', y='NK (mGy/nC)', color='kVp_values',trendline="ols")
+            pltx1 = px.scatter(graph1_df, x='kVp', y='NK (mGy/nC)', color='kVp_values')
+            #pltx1 = px.line(graph1_df, x='kVp', y='NK (mGy/nC)', color='kVp_values', line_shape="spline"),trendline="ols"
             plotly.io.write_image(pltx1, file='pltx1.png', format='png', width=700, height=450)
             pltx1 = (os.getcwd() + '/' + "pltx1.png")
             pdf.set_xy(40.0, 160.0)
@@ -4070,7 +4071,8 @@ class MainFrame(wx.Frame):
             graph2_data = {'kVp': KeV_graph2, 'kVp_values': KeV_graph2_string,'HVL (mm Al)': HVL_AL,'NK (mGy/nC)': NK_graph2}
 
             graph2_df = pd.DataFrame(graph2_data)
-            pltx2 = px.scatter(graph2_df, x='HVL (mm Al)', y='NK (mGy/nC)', color='kVp_values',trendline="ols")
+            pltx2 = px.scatter(graph2_df, x='HVL (mm Al)', y='NK (mGy/nC)', color='kVp_values')
+            #pltx2 = px.line(graph2_df, x='HVL (mm Al)', y='NK (mGy/nC)', color='kVp_values', line_shape="spline") ,trendline="ols"
             plotly.io.write_image(pltx2, file='pltx2.png', format='png', width=700, height=450)
             pltx2 = (os.getcwd() + '/' + "pltx2.png")
             pdf.set_xy(40.0, 10.0)
@@ -4100,7 +4102,8 @@ class MainFrame(wx.Frame):
             graph3_data = {'kVp': KeV_graph3, 'kVp_values': KeV_graph3_string, 'HVL (mm Cu)': HVL_Cu,'NK (mGy/nC)': NK_graph3}
 
             graph3_df = pd.DataFrame(graph3_data)
-            pltx3 = px.scatter(graph3_df, x='HVL (mm Cu)', y='NK (mGy/nC)', color='kVp_values',trendline="ols")
+            pltx3 = px.scatter(graph3_df, x='HVL (mm Cu)', y='NK (mGy/nC)', color='kVp_values')
+            #pltx3 = px.line(graph3_df, x='HVL (mm Cu)', y='NK (mGy/nC)', color='kVp_values', line_shape="spline"),trendline="ols"
             plotly.io.write_image(pltx3, file='pltx3.png', format='png', width=700, height=450)
             pltx3 = (os.getcwd() + '/' + "pltx3.png")
             pdf.set_xy(40.0, 140.0)
