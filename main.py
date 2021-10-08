@@ -4023,8 +4023,108 @@ class MainFrame(wx.Frame):
             pdf.set_font('Arial', size=9)
             pdf.cell(200, 5, txt="* With buildup cap on", ln=1, border=0)
 
+            ######graph1 plot
+            KeV_string = []
+            for i in KeV:
+                KeV_string.append(str(i) + 'kVp')
+            graph1_data = {'kVp':KeV,'kVp_values':KeV_string,'NK (mGy/nC)':NK}
 
-#48,51,56
+            graph1_df =pd.DataFrame(graph1_data)
+            pltx1 = px.scatter(graph1_df, x='kVp', y='NK (mGy/nC)', color='kVp_values',trendline="ols")
+            plotly.io.write_image(pltx1, file='pltx1.png', format='png', width=700, height=450)
+            pltx1 = (os.getcwd() + '/' + "pltx1.png")
+            pdf.set_xy(40.0, 160.0)
+            pdf.image('./pltx1.png', w=700 / 5, h=450 / 5)
+
+            pdf.set_xy(50.0, 250.0)
+            pdf.set_font('Arial', size=9)
+            pdf.cell(200, 5, txt="Figure 1: Calibration coefficients for IBA FC65-G serial number 457 grouped by kVp", ln=1, border=0)
+
+            pdf.set_xy(180.0, 275.0)
+            pdf.set_font('Arial', 'I', 8)
+            pdf.cell(210, 0, txt="page 5 of 6", ln=1, border=0)
+
+            ############################################### Page 6 ###########################################
+            pdf.add_page()
+            pdf.line(5.0, 5.0, 205.0, 5.0)  # top one
+            pdf.line(5.0, 292.0, 205.0, 292.0)  # bottom one
+            pdf.line(5.0, 5.0, 5.0, 292.0)  # left one
+            pdf.line(205.0, 5.0, 205.0, 292.0)  # right one
+            ########graph2 plot#############
+            KeV_graph2 = []
+            HVL_AL = []
+            NK_graph2 = []
+            #'NK (mGy/nC)': NK
+            for i in range(len(HVLmmAl)):
+                if HVLmmAl[i] == 0:
+                    pass
+                else:
+                    KeV_graph2.append(KeV[i])
+                    HVL_AL.append(HVLmmAl[i])
+                    NK_graph2.append(NK[i])
+
+            KeV_graph2_string = []
+            for i in KeV_graph2:
+                KeV_graph2_string.append(str(i) + 'kVp')
+
+            graph2_data = {'kVp': KeV_graph2, 'kVp_values': KeV_graph2_string,'HVL (mm Al)': HVL_AL,'NK (mGy/nC)': NK_graph2}
+
+            graph2_df = pd.DataFrame(graph2_data)
+            pltx2 = px.scatter(graph2_df, x='HVL (mm Al)', y='NK (mGy/nC)', color='kVp_values',trendline="ols")
+            plotly.io.write_image(pltx2, file='pltx2.png', format='png', width=700, height=450)
+            pltx2 = (os.getcwd() + '/' + "pltx2.png")
+            pdf.set_xy(40.0, 10.0)
+            pdf.image('./pltx2.png', w=700 / 5, h=450 / 5)
+
+            pdf.set_xy(50.0, 100.0)
+            pdf.set_font('Arial', size=9)
+            pdf.cell(200, 5, txt="Figure 2: Calibration coefficients for IBA FC65-G serial number 457 versus HVL (mm Al)",ln=1, border=0)
+
+            ########graph3 plot#############
+            KeV_graph3 = []
+            HVL_Cu = []
+            NK_graph3 = []
+            # 'NK (mGy/nC)': NK
+            for i in range(len(HVLmmCu)):
+                if HVLmmCu[i] == 0:
+                    pass
+                else:
+                    KeV_graph3.append(KeV[i])
+                    HVL_Cu.append(HVLmmCu[i])
+                    NK_graph3.append(NK[i])
+
+            KeV_graph3_string = []
+            for i in KeV_graph3:
+                KeV_graph3_string.append(str(i) + 'kVp')
+
+            graph3_data = {'kVp': KeV_graph3, 'kVp_values': KeV_graph3_string, 'HVL (mm Cu)': HVL_Cu,'NK (mGy/nC)': NK_graph3}
+
+            graph3_df = pd.DataFrame(graph3_data)
+            pltx3 = px.scatter(graph3_df, x='HVL (mm Cu)', y='NK (mGy/nC)', color='kVp_values',trendline="ols")
+            plotly.io.write_image(pltx3, file='pltx3.png', format='png', width=700, height=450)
+            pltx3 = (os.getcwd() + '/' + "pltx3.png")
+            pdf.set_xy(40.0, 140.0)
+            pdf.image('./pltx3.png', w=700 / 5, h=450 / 5)
+            #graph3_data = {'kVp': KeV_graph3, 'kVp_values': KeV_graph3_string, 'HVL (mm Cu)': HVL_Cu,'NK (mGy/nC)': NK_graph3}
+           # graph3_data = {'kVp': KeV_graph2, 'kVp_values': KeV_graph2_string, 'HVL (mm Al)': HVL_AL,'NK (mGy/nC)': NK_graph2}
+            #graph3_df = pd.DataFrame(graph3_data)
+           # pltx3 = px.scatter(graph3_df, x='HVL (mm Al)', y='NK (mGy/nC)', color='kVp_values')
+           # plotly.io.write_image(pltx3, file='pltx3.png', format='png', width=700, height=450)
+          #  pltx3 = (os.getcwd() + '/' + "pltx3.png")
+          #  pdf.set_xy(40.0, 140.0)
+           # pdf.image('./pltx3.png', w=700 / 5, h=450 / 5)
+
+            pdf.set_xy(50.0, 230.0)
+            pdf.set_font('Arial', size=9)
+            pdf.cell(200, 5, txt="Figure 3: Calibration coefficients for IBA FC65-G serial number 457 versus HVL (mm Cu)",ln=1, border=0)
+
+
+
+            pdf.set_xy(180.0, 275.0)
+            pdf.set_font('Arial', 'I', 8)
+            pdf.cell(210, 0, txt="page 6 of 6", ln=1, border=0)
+
+
             # save the pdf with name .pdf
             pdf.output("Calibration Report.pdf")
 
