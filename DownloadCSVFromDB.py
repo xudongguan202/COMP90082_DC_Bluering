@@ -5,7 +5,7 @@ import pymysql
 db = pymysql.connect(host='localhost',user='root',password='password',database='bluering')
 
 cursor = db.cursor()
-chamber_ID=10
+chamber_ID=19
 file = '/tmp/file.csv'
 
 sql = "SELECT * from header WHERE chamber_ID = %s" % chamber_ID
@@ -69,3 +69,5 @@ fp = open(file, 'a')
 myFile = csv.writer(fp)
 myFile.writerows(rows)
 fp.close()
+
+db.close()
