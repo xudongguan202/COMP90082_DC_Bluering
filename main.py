@@ -3689,7 +3689,7 @@ class MainFrame(wx.Frame):
             pdf.cell(200, 10, txt="", ln=1, border=0)
 
             # Footer info
-            pdf.set_xy(180.0, 255.0)
+            pdf.set_xy(180.0, 275.0)
             pdf.set_font('Arial', 'I', 8)
             pdf.cell(210, 0, txt="page 2 of 6", ln=1, border=0)
 
