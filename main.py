@@ -4166,7 +4166,15 @@ class RightPanelGrid(wx.Panel):
         wx.Panel.__init__(self, parent=parent)
 
         self.mygrid = grid.Grid(self)
-        tmpKeV, tmpBeam, tmpNK = Testr(pathClient[0], pathLab[0])
+        #tmpKeV, tmpBeam, tmpNK = Testr(pathClient[0], pathLab[0])
+        KeV, Beam, NK = [],[],[]
+        for i in range(len(pathClient)):
+            tmp1,tmp2,tmp3 = Testr(pathClient[i], pathLab[i])
+            KeV.append(tmp1)
+            Beam.append(tmp2)
+            NK.append(tmp3)
+        #KeV, Beam, NK = Testr(pathClient, pathLab)
+        tmpKeV, tmpBeam, tmpNK = KeV[0],Beam[0],NK[0]
         rowSize = len(tmpBeam)
         colSize = 2 + 1 + len(pathClient) * 2
         self.mygrid.CreateGrid(rowSize, colSize)
@@ -4190,11 +4198,8 @@ class RightPanelGrid(wx.Panel):
 
         for i in range(len(pathClient)):
             self.mygrid.SetColLabelValue(i + 2, "Run" + str(i + 1) + "_NK")
+            self.mygrid.SetColLabelValue(3 + len(pathClient) + i, "Run" + str(i + 1) + "/Avg")
         self.mygrid.SetColLabelValue(2 + len(pathClient), "Average")
-        for i in range(len(pathClient)):
-            self.mygrid.SetColLabelValue(
-                3 + len(pathClient) + i, "Run" + str(i + 1) + "/Avg"
-            )
 
         # put data for Beam and KEV_eff
         for i in range(len(tmpBeam)):
@@ -4206,8 +4211,8 @@ class RightPanelGrid(wx.Panel):
         for i in range(rowSize):
             tmp = 0
             for j in range(len(pathClient)):
-                KeV, Beam, NK = Testr(pathClient[j], pathLab[j])
-                tmp += NK[i]
+                KeV1, Beam1, NK1 = KeV[j],Beam[j],NK[j]
+                tmp += NK1[i]
             average_NK.append(tmp / len(pathClient))
 
         MainFrame.m_progress_bar.SetValue(40)
@@ -4219,11 +4224,12 @@ class RightPanelGrid(wx.Panel):
 
         # put data for Run1/2/3/4 NK, Run/Average
         for i in range(len(pathClient)):
-            KeV, Beam, NK = Testr(pathClient[i], pathLab[i])
+            #KeV2, Beam2, NK2 = Testr(pathClient[i], pathLab[i])
+            KeV2, Beam2, NK2 = KeV[i],Beam[i],NK[i]
             for j in range(rowSize):
-                self.mygrid.SetCellValue(j, i + 2, str(round(NK[j], 4)))
+                self.mygrid.SetCellValue(j, i + 2, str(round(NK2[j], 4)))
                 self.mygrid.SetCellValue(
-                    j, i + 3 + len(pathClient), str(round(NK[j] / average_NK[j], 4))
+                    j, i + 3 + len(pathClient), str(round(NK2[j] / average_NK[j], 4))
                 )
 
         MainFrame.m_progress_bar.SetValue(60)
