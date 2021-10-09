@@ -1717,34 +1717,34 @@ class MainFrame(wx.Frame):
 
         # reset confirm bind
         self.m_filePicker_run11.Bind(
-            wx.EVT_FILEPICKER_CHANGED, self.resetConfirm, self.m_filePicker_run11
+            wx.EVT_FILEPICKER_CHANGED, self.reset_confirm, self.m_filePicker_run11
         )
         self.m_filePicker_run12.Bind(
-            wx.EVT_FILEPICKER_CHANGED, self.resetConfirm, self.m_filePicker_run12
+            wx.EVT_FILEPICKER_CHANGED, self.reset_confirm, self.m_filePicker_run12
         )
         self.m_filePicker_run21.Bind(
-            wx.EVT_FILEPICKER_CHANGED, self.resetConfirm, self.m_filePicker_run21
+            wx.EVT_FILEPICKER_CHANGED, self.reset_confirm, self.m_filePicker_run21
         )
         self.m_filePicker_run22.Bind(
-            wx.EVT_FILEPICKER_CHANGED, self.resetConfirm, self.m_filePicker_run22
+            wx.EVT_FILEPICKER_CHANGED, self.reset_confirm, self.m_filePicker_run22
         )
         self.m_filePicker_run31.Bind(
-            wx.EVT_FILEPICKER_CHANGED, self.resetConfirm, self.m_filePicker_run31
+            wx.EVT_FILEPICKER_CHANGED, self.reset_confirm, self.m_filePicker_run31
         )
         self.m_filePicker_run32.Bind(
-            wx.EVT_FILEPICKER_CHANGED, self.resetConfirm, self.m_filePicker_run32
+            wx.EVT_FILEPICKER_CHANGED, self.reset_confirm, self.m_filePicker_run32
         )
         self.m_filePicker_run41.Bind(
-            wx.EVT_FILEPICKER_CHANGED, self.resetConfirm, self.m_filePicker_run41
+            wx.EVT_FILEPICKER_CHANGED, self.reset_confirm, self.m_filePicker_run41
         )
         self.m_filePicker_run42.Bind(
-            wx.EVT_FILEPICKER_CHANGED, self.resetConfirm, self.m_filePicker_run42
+            wx.EVT_FILEPICKER_CHANGED, self.reset_confirm, self.m_filePicker_run42
         )
         self.m_filePicker_run51.Bind(
-            wx.EVT_FILEPICKER_CHANGED, self.resetConfirm, self.m_filePicker_run51
+            wx.EVT_FILEPICKER_CHANGED, self.reset_confirm, self.m_filePicker_run51
         )
         self.m_filePicker_run52.Bind(
-            wx.EVT_FILEPICKER_CHANGED, self.resetConfirm, self.m_filePicker_run52
+            wx.EVT_FILEPICKER_CHANGED, self.reset_confirm, self.m_filePicker_run52
         )
 
     def compare(self, event):
@@ -1815,7 +1815,7 @@ class MainFrame(wx.Frame):
 
     def confirm(self, event):
 
-        self.resetConfirm(event)
+        self.reset_confirm(event)
         MainFrame.m_progress_bar.SetValue(0)
         self.m_textCtrl_selected_run.SetValue("0")
         self.m_textCtrl_total_run.SetValue("0")
@@ -2420,7 +2420,7 @@ class MainFrame(wx.Frame):
                 dlg.Destroy()
             return
 
-    def resetConfirm(self, event):
+    def reset_confirm(self, event):
         self.confirmed = False
         self.readed = False
         self.updated = False
@@ -2428,7 +2428,7 @@ class MainFrame(wx.Frame):
     def upload_csv(self, event):
         global pathClient
         global pathLab
-        progress = 0
+        progress = 10
         MainFrame.m_progress_bar.SetValue(progress)
         pathClient = []
         pathLab = []
@@ -2459,7 +2459,7 @@ class MainFrame(wx.Frame):
 
             #find whether this file have already exist in Database or not and find the Job_number
             df = pd.read_csv(pathClient[0], encoding="raw_unicode_escape", names = range(17), skiprows = 1)
-            print(df.to_string())
+            # print(df.to_string())
             filename = df.iloc[0][2]
             date = df.iloc[1][2]
             chamber = df.iloc[2][2]
@@ -2841,8 +2841,6 @@ class MainFrame(wx.Frame):
                                 # if fail rollback
                                 db.rollback()
                                 print("fail")
-                        # progress = progress + 10
-                        # MainFrame.m_progress_bar.SetValue(progress)
                     else:
                         dlg = wx.MessageDialog(
                             None,
@@ -3042,7 +3040,7 @@ class MainFrame(wx.Frame):
                 # store run12(Lab) file
                 csv_file_name = pathLab1
                 df = pd.read_csv(csv_file_name, encoding="raw_unicode_escape", names = range(17), skiprows = 1)
-                print(df)
+                # print(df)
 
                 if df.iloc[20][0] == "[DATA]":
                     print(".............................................................................................................................")
@@ -3193,9 +3191,9 @@ class MainFrame(wx.Frame):
             old_job = self.m_textCtrl_job_no.GetValue()
             self.m_textCtrl_job_no.SetValue('New: '+job_str+'  Old: '+old_job[-5:])
 
-            # rick
             CAL = ["CAL Number", "", 'CAL' + job_str]
 
+            # modify local csv file : add CAL
             for file in pathClient+pathLab:
                 bottle_list = []
 
@@ -3274,6 +3272,8 @@ class MainFrame(wx.Frame):
 
         pathClient = []
         pathLab = []
+
+        MainFrame.m_progress_bar.SetValue(0)
 
         if self.confirmed and self.readed and self.m_textCtrl_client_name.GetValue() != '':
             if self.m_checkBox_run1.GetValue():
@@ -4023,6 +4023,8 @@ class MainFrame(wx.Frame):
             pdf.set_font('Arial', size=9)
             pdf.cell(200, 5, txt="* With buildup cap on", ln=1, border=0)
 
+            MainFrame.m_progress_bar.SetValue(20)
+
             ######graph1 plot
             KeV_string = []
             for i in KeV:
@@ -4051,6 +4053,8 @@ class MainFrame(wx.Frame):
             pdf.line(5.0, 292.0, 205.0, 292.0)  # bottom one
             pdf.line(5.0, 5.0, 5.0, 292.0)  # left one
             pdf.line(205.0, 5.0, 205.0, 292.0)  # right one
+
+            MainFrame.m_progress_bar.SetValue(40)
             ########graph2 plot#############
             KeV_graph2 = []
             HVL_AL = []
@@ -4082,6 +4086,7 @@ class MainFrame(wx.Frame):
             pdf.set_font('Arial', size=9)
             pdf.cell(200, 5, txt="Figure 2: Calibration coefficients for IBA FC65-G serial number 457 versus HVL (mm Al)",ln=1, border=0)
 
+            MainFrame.m_progress_bar.SetValue(60)
             ########graph3 plot#############
             KeV_graph3 = []
             HVL_Cu = []
@@ -4121,13 +4126,13 @@ class MainFrame(wx.Frame):
             pdf.set_font('Arial', size=9)
             pdf.cell(200, 5, txt="Figure 3: Calibration coefficients for IBA FC65-G serial number 457 versus HVL (mm Cu)",ln=1, border=0)
 
-
+            MainFrame.m_progress_bar.SetValue(80)
 
             pdf.set_xy(180.0, 275.0)
             pdf.set_font('Arial', 'I', 8)
             pdf.cell(210, 0, txt="page 6 of 6", ln=1, border=0)
 
-
+            MainFrame.m_progress_bar.SetValue(100)
             # save the pdf with name .pdf
             pdf.output("Calibration Report.pdf")
 
