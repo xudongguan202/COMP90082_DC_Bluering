@@ -243,7 +243,7 @@ def MEXdata_PTB_Beams(path_Client, path_Lab):
 
     df_merge_col = pd.merge(df_merge_col, MEX, on='Filter')
     MEXreport = df_merge_col[
-        ['Filter', '(kV)', 'mm Al', 'mm Cu', '(mm Al)', '(mm Cu)', '(eff, Cu)', 'NK', 'Air kerma rate']]
+        ['Filter', '(kV)', 'mm Al', 'mm Cu', '(mm Al)', '(mm Cu)', '(eff, Cu)', 'NK', 'Air kerma rate']].copy(deep=False)
     MEXreport['U'] = 1.4
     MEXreport_sortByKev = MEXreport.sort_values(by=['(kV)'])
 
@@ -355,7 +355,7 @@ def MEX_data(path_Client, path_Lab):
     df_merge_col = df_merge_col.drop(df_merge_col[df_merge_col.XraysOn ==False].index)
 
     df_merge_col=pd.merge(df_merge_col, MEX, on='Filter')
-    MEXreport=df_merge_col[['Filter', '(kV)', 'mm Al', 'mm Cu', '(mm Al)', '(mm Cu)', '(eff, Cu)','NK', 'Air kerma rate']]
+    MEXreport=df_merge_col[['Filter', '(kV)', 'mm Al', 'mm Cu', '(mm Al)', '(mm Cu)', '(eff, Cu)','NK', 'Air kerma rate']].copy(deep=False)
     MEXreport['U']= 1.4
     MEXreport_sortByKev=MEXreport.sort_values(by=['(kV)'])
 
