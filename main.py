@@ -3311,6 +3311,7 @@ class MainFrame(wx.Frame):
             create_pdf = True
 
         if create_pdf:
+            MainFrame.m_progress_bar.SetValue(10)
             ############################################### Page 1 ###########################################
             pdf.add_page()
             # set style and size of font
@@ -3468,6 +3469,7 @@ class MainFrame(wx.Frame):
             pdf.set_font('Arial', 'I', 8)
             pdf.cell(210, 0, txt="page 1 of 6", ln=1, border=0)
 
+            MainFrame.m_progress_bar.SetValue(20)
             ############################################### Page 2 ###########################################
             pdf.add_page()
             pdf.line(5.0, 5.0, 205.0, 5.0)  # top one
@@ -3691,6 +3693,7 @@ class MainFrame(wx.Frame):
             pdf.set_font('Arial', 'I', 8)
             pdf.cell(210, 0, txt="page 2 of 6", ln=1, border=0)
 
+            MainFrame.m_progress_bar.SetValue(30)
             ############################################### Page 3 ###########################################
             pdf.add_page()
             pdf.line(5.0, 5.0, 205.0, 5.0)  # top one
@@ -3885,6 +3888,7 @@ class MainFrame(wx.Frame):
             pdf.set_font('Arial', 'I', 8)
             pdf.cell(210, 0, txt="page 3 of 6", ln=1, border=0)
 
+            MainFrame.m_progress_bar.SetValue(40)
             ############################################### Page 4 ###########################################
             pdf.add_page()
             pdf.line(5.0, 5.0, 205.0, 5.0)  # top one
@@ -3959,6 +3963,7 @@ class MainFrame(wx.Frame):
             pdf.set_font('Arial', 'I', 8)
             pdf.cell(210, 0, txt="page 4 of 6", ln=1, border=0)
 
+            MainFrame.m_progress_bar.SetValue(50)
             ############################################### Page 5 ###########################################
             pdf.add_page()
             pdf.line(5.0, 5.0, 205.0, 5.0)  # top one
@@ -4023,8 +4028,6 @@ class MainFrame(wx.Frame):
             pdf.set_font('Arial', size=9)
             pdf.cell(200, 5, txt="* With buildup cap on", ln=1, border=0)
 
-            MainFrame.m_progress_bar.SetValue(20)
-
             ######graph1 plot
             KeV_string = []
             for i in KeV:
@@ -4054,7 +4057,7 @@ class MainFrame(wx.Frame):
             pdf.line(5.0, 5.0, 5.0, 292.0)  # left one
             pdf.line(205.0, 5.0, 205.0, 292.0)  # right one
 
-            MainFrame.m_progress_bar.SetValue(40)
+            MainFrame.m_progress_bar.SetValue(60)
             ########graph2 plot#############
             KeV_graph2 = []
             HVL_AL = []
@@ -4086,7 +4089,7 @@ class MainFrame(wx.Frame):
             pdf.set_font('Arial', size=9)
             pdf.cell(200, 5, txt="Figure 2: Calibration coefficients for IBA FC65-G serial number 457 versus HVL (mm Al)",ln=1, border=0)
 
-            MainFrame.m_progress_bar.SetValue(60)
+            MainFrame.m_progress_bar.SetValue(70)
             ########graph3 plot#############
             KeV_graph3 = []
             HVL_Cu = []
