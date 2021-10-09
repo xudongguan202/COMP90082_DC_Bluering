@@ -4495,26 +4495,26 @@ class DatabaseFrame(wx.Frame):
             clientname = self.m_textCtrl_name.GetValue()
 
             if job_number == '' and chamber != '' and clientname != '':
-                sql = "SELECT b.chamber_ID, b.chamber, a.job_number, a.clientname FROM client a RIGHT JOIN header b ON a.job_number = b.job_number WHERE LOWER(a.clientname) = '%s' AND LOWER(b.chamber) = '%s'" \
-                      % (clientname.lower(),chamber.lower())
+                sql = "SELECT b.chamber_ID, b.chamber, a.job_number, a.clientname FROM client a RIGHT JOIN header b ON a.job_number = b.job_number WHERE LOWER(a.clientname) LIKE '%s' AND LOWER(b.chamber) LIKE '%s'" \
+                      % ('%'+clientname.lower()+'%','%'+chamber.lower()+'%')
             elif chamber == '' and job_number != '' and clientname != '':
-                sql = "SELECT b.chamber_ID, b.chamber, a.job_number, a.clientname FROM client a RIGHT JOIN header b ON a.job_number = b.job_number WHERE LOWER(a.clientname) = '%s' AND a.job_number = %s" \
-                      % (clientname.lower(),job_number)
+                sql = "SELECT b.chamber_ID, b.chamber, a.job_number, a.clientname FROM client a RIGHT JOIN header b ON a.job_number = b.job_number WHERE LOWER(a.clientname) LIKE '%s' AND a.job_number = %s" \
+                      % ('%'+clientname.lower()+'%',job_number)
             elif clientname == '' and job_number != '' and chamber != '':
-                sql = "SELECT b.chamber_ID, b.chamber, a.job_number, a.clientname FROM client a RIGHT JOIN header b ON a.job_number = b.job_number WHERE  a.job_number = %s AND LOWER(b.chamber) = '%s'" \
-                      % (job_number, chamber.lower())
+                sql = "SELECT b.chamber_ID, b.chamber, a.job_number, a.clientname FROM client a RIGHT JOIN header b ON a.job_number = b.job_number WHERE  a.job_number = %s AND LOWER(b.chamber) LIKE '%s'" \
+                      % (job_number, '%'+chamber.lower()+'%')
             elif job_number == '' and chamber == '' and clientname != '':
-                sql = "SELECT b.chamber_ID, b.chamber, a.job_number, a.clientname FROM client a RIGHT JOIN header b ON a.job_number = b.job_number WHERE LOWER(a.clientname) = '%s'" \
-                      % (clientname.lower())
+                sql = "SELECT b.chamber_ID, b.chamber, a.job_number, a.clientname FROM client a RIGHT JOIN header b ON a.job_number = b.job_number WHERE LOWER(a.clientname) LIKE '%s'" \
+                      % ('%'+clientname.lower()+'%')
             elif chamber == '' and clientname == ''and job_number != '':
                 sql = "SELECT b.chamber_ID, b.chamber, a.job_number, a.clientname FROM client a RIGHT JOIN header b ON a.job_number = b.job_number WHERE a.job_number = %s" % job_number
 
             elif job_number == '' and clientname == ''and chamber != '':
-                sql = "SELECT b.chamber_ID, b.chamber, a.job_number, a.clientname FROM client a RIGHT JOIN header b ON a.job_number = b.job_number WHERE LOWER(b.chamber) = '%s'" \
-                      % (chamber.lower())
+                sql = "SELECT b.chamber_ID, b.chamber, a.job_number, a.clientname FROM client a RIGHT JOIN header b ON a.job_number = b.job_number WHERE LOWER(b.chamber) LIKE '%s'" \
+                      % ('%'+chamber.lower()+'%')
             else:
-                sql = "SELECT b.chamber_ID, b.chamber, a.job_number, a.clientname FROM client a RIGHT JOIN header b ON a.job_number = b.job_number WHERE LOWER(a.clientname) = '%s' AND LOWER(b.chamber) = '%s' AND a.job_number = %s" \
-                      % (clientname.lower(), chamber.lower(),job_number)
+                sql = "SELECT b.chamber_ID, b.chamber, a.job_number, a.clientname FROM client a RIGHT JOIN header b ON a.job_number = b.job_number WHERE LOWER(a.clientname) LIKE '%s' AND LOWER(b.chamber) LIKE '%s' AND a.job_number = %s" \
+                      % ('%'+clientname.lower()+'%', '%'+chamber.lower()+'%',job_number)
 
             cursor.execute(sql)
             db_output = cursor.fetchall()
