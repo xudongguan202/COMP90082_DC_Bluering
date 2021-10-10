@@ -4166,8 +4166,9 @@ class LeftPanelGraph(wx.Panel):
             KeV, Beam, NK = Testr(pathClient[i], pathLab[i])
             x = KeV
             y = NK
-            self.axes.scatter(x, y, label="Run" + str(i + 1))
+            self.axes.scatter(x, y, label="Run" + str(i + 1), marker = '.')
             self.axes.set_xlim(xmin=0)
+        self.axes.grid(axis='y')
         self.axes.legend(loc="upper center", fancybox=True, shadow=True, ncol=5)
 
 
@@ -4248,11 +4249,12 @@ class RightPanelGrid(wx.Panel):
 
 class GraphFrame(wx.Frame):
     def __init__(self):
+        x_size = 1120 + 160*(len(pathClient)-1)
         wx.Frame.__init__(
-            self, parent=None, title=u"Graphs Demonstration", size=wx.Size(1200, 600)
+            self, parent=None, title=u"Graphs Demonstration", size=wx.Size(x_size, 600)
         )
-        self.SetMinSize(wx.Size(1200, 600))
-        self.SetMaxSize(wx.Size(1500, 600))
+        self.SetMinSize(wx.Size(1120, 600))
+        self.SetMaxSize(wx.Size(1800, 600))
 
         spliter = wx.SplitterWindow(self)
         leftgraph = LeftPanelGraph(spliter)
