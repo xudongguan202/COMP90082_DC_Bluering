@@ -127,6 +127,16 @@ other
 
    - **kaleido v1.0.48**<br/>
      Guide documentation: https://pypi.org/project/kaleido/<br/>
+     
+  | **Package**          | **cmd Window Download**              |
+  |pandas v1.3.1         |*pip install pandas*                  |
+  |numpy v1.21.1         |*pip install numpy*                   |
+  |matplotlib v3.4.3     |*pip install matplotlib*              |
+  |fpdf v1.7.2           |*pip install fpdf*                    |
+  |pymysql v1.0.2        |*pip install PyMySQL*                 |
+  |wx v4.1.1             |*pip install -U wxPython*             |
+  |plotly v5.3.1         |*pip install plotly*                  |
+  |kaleido v1.0.48       |*pip install -U kaleido*              |
            
 # Installation guide <a name="installation_guide"></a>
 installation_guide
