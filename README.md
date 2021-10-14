@@ -12,7 +12,7 @@
   - [Architecture <a name="architecture"></a>](#architecture-)
   - [Test case <a name="test_case"></a>](#test-case-)
   - [Other documents <a name="other_documents"></a>](#other-documents-)
-- [System requirements, Technologies&Tools <a name="System requirements, Technologies&Tools"></a>](#System requirements, Technologies&Tools-)
+- [System requirements, Technologies&Tools <a name="System_requirements"></a>](#System_requirements-)
 - [Installation guide <a name="installation_guide"></a>](#installation-guide-)
 - [Operation guide <a name="operation_guide"></a>](#operation-guide-)
 - [Change log <a name="change_log"></a>](#change-log-)
@@ -75,78 +75,11 @@ test
 ## Other documents <a name="other_documents"></a>
 other
 
-# System requirements, Technologies&Tools <a name="system_requirements"></a>
-Development Environment: 
-Windows 10 
-          Download location: https://www.microsoft.com/en-au/software-download/windows10
-
-Python v3.8.4
-          Download location: https://www.python.org/downloads/
-
-          Guide documentation: https://docs.python.org/3/
-
-Development IDE:
-PyCharm v2021.2.2
-Download location: Download PyCharm: Python IDE for Professional Developers by JetBrains
-
-Guide documentation: https://www.jetbrains.com/pycharm/learn/
-
-Database:
-MySQL v8.0.26
-          Download location: https://dev.mysql.com/downloads/mysql/
-
-          Guide documentation: MySQL :: MySQL 8.0 Reference Manual
-
-Packages:
-pandas v1.3.1
-           Pandas is a powerful toolset for analyzing structured data. It is used for data analysis and data cleaning. It is based on Numpy (providing high-performance matrix operations).
-
-           Installation tutorial: Enter the command "pip install pandas" in the cmd window, and click Enter. Wait for it to download and install.
-
-           Guide documentation: pandas documentation — pandas 1.3.1 documentation (pydata.org)
-
-numpy v1.21.1
-           Guide documentation: NumPy Documentation
-
-matplotlib v3.4.3
-           Matplotlib is a Python 2D plotting library, used to generate plots, histograms, power spectra, bar graphs, error graphs, scatter plots, etc.
-
-           Installation tutorial: Enter the command "pip install matplotlib" in the cmd window, and click Enter. Wait for it to download and install.
-
-           Guide documentation: matplotlib.pyplot — Matplotlib 3.4.3 documentation
-
-csv v1.0
- Guide documentation: https://docs.python.org/3/library/csv.html
-
-fpdf v1.7.2
-           Used to generate pdf.
-
-           Installation tutorial: Enter the command "pip install fpdf" in the cmd window, and click Enter.
-
-           Guide documentation: GitHub - reingart/pyfpdf: Simple PDF generation for Python (FPDF PHP port)
-
-pymysql v1.0.2
-           Used to connect MySQL.
-
-           Installation tutorial: Enter the command "pip install pymysql" in the cmd window, and click Enter. Wait for it to download and install.
-
-           Guide documentation: https://pymysql.readthedocs.io/en/latest/
-
-wx v4.1.1
-           Used for Python GUI. 
-
-           Guide documentation: https://wxpython.org/Phoenix/docs/html/
-
-plotly v5.3.1
-           Installation tutorial: Enter the command "pip install plotly" in the cmd window, and click Enter. Wait for it to download and install.
-
-           Guide documentation: https://plotly.com/python/
-
-kaleido v1.0.48
-           Installation tutorial: Enter the command "pip install kaleido" in the cmd window, and click Enter. Wait for it to download and install.
-
-           Guide documentation: https://pypi.org/project/kaleido/
-
+# System requirements, Technologies&Tools <a name="System_requirements"></a>
+- Development Environment: 
+- Development IDE:
+- Database:
+- Packages:
 # Installation guide <a name="installation_guide"></a>
 installation_guide
 
