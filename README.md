@@ -12,7 +12,7 @@
   - [Architecture <a name="architecture"></a>](#architecture-)
   - [Test case <a name="test_case"></a>](#test-case-)
   - [Other documents <a name="other_documents"></a>](#other-documents-)
-- [System requirements, Technologies&Tools <a name="System_requirements"></a>](#System_requirements-)
+- [System requirements, Technologies&Tools <a name="System_requirements"></a>](#System-requirements-)
 - [Installation guide <a name="installation_guide"></a>](#installation-guide-)
 - [Operation guide <a name="operation_guide"></a>](#operation-guide-)
 - [Change log <a name="change_log"></a>](#change-log-)
@@ -77,6 +77,12 @@ other
 
 # System requirements, Technologies&Tools <a name="System_requirements"></a>
 - Development Environment: 
+  - Windows 10 
+    Download location: https://www.microsoft.com/en-au/software-download/windows10
+  - Python v3.8.4
+    Download location: https://www.python.org/downloads/
+    Guide documentation: https://docs.python.org/3/
+    
 - Development IDE:
 - Database:
 - Packages:
