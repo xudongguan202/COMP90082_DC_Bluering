@@ -78,9 +78,9 @@ other
 # System requirements, Technologies&Tools <a name="System_requirements"></a>
 - Development Environment: 
   - Windows 10 
-    Download location: https://www.microsoft.com/en-au/software-download/windows10
+  - Download location: https://www.microsoft.com/en-au/software-download/windows10
   - Python v3.8.4
-    Download location: https://www.python.org/downloads/
+  - Download location: https://www.python.org/downloads/
     Guide documentation: https://docs.python.org/3/
     
 - Development IDE:
