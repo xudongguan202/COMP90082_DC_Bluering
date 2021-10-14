@@ -128,6 +128,7 @@ other
    - **kaleido v1.0.48**<br/>
      Guide documentation: https://pypi.org/project/kaleido/<br/>
      
+  <h4 align="center">:crescent_moon:cmd Window Download:high_brightness:</h4>
   | **Package**          | **cmd Window Download**              |
   |pandas v1.3.1         |*pip install pandas*                  |
   |numpy v1.21.1         |*pip install numpy*                   |
