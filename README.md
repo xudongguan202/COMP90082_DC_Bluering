@@ -111,7 +111,7 @@ other
 
    - **fpdf v1.7.2**<br/>
      Used to generate pdf.<br/>
-     Guide documentation: GitHub - reingart/pyfpdf: Simple PDF generation for Python (FPDF PHP port)<br/>
+     Guide documentation: https://github.com/reingart/pyfpdf<br/>
 
    - **pymysql v1.0.2**<br/>
      Used to connect MySQL.<br/>
