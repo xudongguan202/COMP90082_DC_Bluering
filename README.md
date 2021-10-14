@@ -77,14 +77,14 @@ other
 
 # System requirements, Technologies&Tools <a name="System_requirements"></a>
 - Development Environment: 
-  - Windows 10 
+  - Windows 10 <br/>
     Download location: https://www.microsoft.com/en-au/software-download/windows10<br/>
-  - Python v3.8.4
+  - Python v3.8.4<br/>
     Download location: https://www.python.org/downloads/<br/>
     Guide documentation: https://docs.python.org/3/<br/>
     
 - Development IDE:
-  - PyCharm v2021.2.2
+  - PyCharm v2021.2.2<br/>
     Download location: https://www.jetbrains.com/pycharm/download/#section=windows<br/>
     Guide documentation: https://www.jetbrains.com/pycharm/learn/<br/>
 - Database:
