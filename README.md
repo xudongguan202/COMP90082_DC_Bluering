@@ -79,6 +79,7 @@ other
 - Development Environment: 
   - Windows 10 <br/>
     Download location: https://www.microsoft.com/en-au/software-download/windows10<br/>
+    
   - Python v3.8.4<br/>
     Download location: https://www.python.org/downloads/<br/>
     Guide documentation: https://docs.python.org/3/<br/>
@@ -87,8 +88,46 @@ other
   - PyCharm v2021.2.2<br/>
     Download location: https://www.jetbrains.com/pycharm/download/#section=windows<br/>
     Guide documentation: https://www.jetbrains.com/pycharm/learn/<br/>
+    
 - Database:
+   - MySQL v8.0.26<br/>
+     Download location: https://dev.mysql.com/downloads/mysql/<br/>
+     Guide documentation: https://dev.mysql.com/doc/refman/8.0/en/<br/>
+     
 - Packages:
+   - pandas v1.3.1<br/>
+     Pandas is a powerful toolset for analyzing structured data. It is used for data analysis and data cleaning. It is based on Numpy (providing high-performance matrix operations).<br/>
+     Guide documentation: https://pandas.pydata.org/pandas-docs/stable/index.html<br/>
+     
+   - numpy v1.21.1<br/>
+     Guide documentation: https://numpy.org/doc/<br/>
+     
+   - matplotlib v3.4.3<br/>
+     Matplotlib is a Python 2D plotting library, used to generate plots, histograms, power spectra, bar graphs, error graphs, scatter plots, etc.<br/>
+     Guide documentation: https://matplotlib.org/stable/api/pyplot_summary.html<br/>
+     
+   - csv v1.0<br/>
+     Guide documentation: https://docs.python.org/3/library/csv.html<br/>
+
+   - fpdf v1.7.2<br/>
+     Used to generate pdf.<br/>
+     Guide documentation: GitHub - reingart/pyfpdf: Simple PDF generation for Python (FPDF PHP port)<br/>
+
+   - pymysql v1.0.2<br/>
+     Used to connect MySQL.<br/>
+     Guide documentation: https://pymysql.readthedocs.io/en/latest/<br/>
+
+   - wx v4.1.1<br/>
+     Used for Python GUI. <br/>
+     Guide documentation: https://wxpython.org/Phoenix/docs/html/<br/>
+
+   - plotly v5.3.1<br/>
+     Used for graph plot.<br/>
+     Guide documentation: https://plotly.com/python/<br/>
+
+   - kaleido v1.0.48<br/>
+     Guide documentation: https://pypi.org/project/kaleido/<br/>
+           
 # Installation guide <a name="installation_guide"></a>
 installation_guide
 
