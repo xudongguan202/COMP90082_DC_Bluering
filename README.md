@@ -15,6 +15,8 @@
 - [System requirements, Technologies & Tools <a name="System_requirements"></a>](#system-requirements-technologies--tools-)
 - [Installation guide <a name="installation_guide"></a>](#installation-guide-)
 - [Operation guide <a name="operation_guide"></a>](#operation-guide-)
+  - [Button Introduction](#button-introduction)
+  - [Workflow under different use cases](#workflow-under-different-use-cases)
 - [Change log <a name="change_log"></a>](#change-log-)
 - [Traceability matrix <a name="traceability_matrix"></a>](#traceability-matrix-)
 - [Contact information <a name="contact"></a>](#contact-information-)
@@ -143,7 +145,80 @@ other
 installation_guide
 
 # Operation guide <a name="operation_guide"></a>
-operation
+
+## Button Introduction
+
+1. Main Frame
+
+![Main frame](https://github.com/xudongguan202/COMP90082_DC_Bluering/blob/main/operation_guide/main.png?raw=true)
+
+**1.1 Browse:** select file from local drive
+
+**1.2 Check box:** check the box to use the files for analysis
+
+**1.3 Confirm:** to check the file validation
+
+**1.4 Compare:** start analysing and generate graph and table
+
+**1.5 Read Information:** display information on the interface
+
+**1.6 Update Information:** write the information filled in the interface to local files
+
+**1.7 Upload Data:** upload all files to database
+
+**1.8 Download Data:** jump to database page
+
+**1.9 Generate PDF:** jump to report page
+
+2. Database Frame
+
+![Database frame](https://github.com/xudongguan202/COMP90082_DC_Bluering/blob/main/operation_guide/database.png?raw=true)
+
+**2.1 Search:** search files in database by filled conditions (job id, client name, chamber)
+
+**2.2 File:** left click to select a file, press Ctrl and left click to select multiple files
+
+**2.3 Browse:** choose saving path
+
+**2.4 Download CSV:** download selected files to the chosen path
+
+3. PDF Frame
+
+![PDF frame](https://github.com/xudongguan202/COMP90082_DC_Bluering/blob/main/operation_guide/pdf.png?raw=true)
+
+**3.1 Save:** save the report to the local drive
+
+## Workflow under different use cases
+
+- To get analysis graph and table
+  1. Choose data files by **1.1 Browse**
+  2. Check the box (**1.2 Check box**) to select runs for analysis
+  3. Check file validation by **1.3 Confirm**
+  4. Start analysing by **1.4 Compare**
+  5. A new window with result will pop-up
+- To read or update information
+  1. Choose data files by **1.1Browse**
+  2. Check the box (**1.2 Check box**) to select runs for analysis
+  3. Check file validation by **1.3 Confirm**
+  4. Read information by **1.5 Read Information**
+  5. Fill the information in the text box
+  6. Write to the local file by **1.6 Update Information**
+- To upload files
+  1. Complete **read and update** steps above (files must be updated if the client information is missing)
+  2. Upload to database by **1.7 Upload Data**
+- To generate PDF report
+  1. Complete **read and update** steps above (files must be updated if the client information is missing)
+  2. A preview of the report will be opened in new window by pressing **1.9 Generate PDF**
+  3. Save the report to local drive by **3.1 Save**
+  4. Other operations can be done through the top bar
+- To download files
+  1. Go to database frame by **1.8 Download Data**
+  2. Fill in search conditions (any number of conditions can be used for searching)
+  3. Press 2.1 Search to search (support fuzzy search)
+  4. Choose files in the **2.2 tree** structure by left click (press Ctrl to select multiple files)
+  5. Choose saving path by **2.3 Browse**
+  6. Download file by pressing **2.4 Download CSV**
+
 
 # Change log <a name="change_log"></a>
 change_log
