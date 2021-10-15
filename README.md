@@ -12,7 +12,7 @@
   - [Architecture <a name="architecture"></a>](#architecture-)
   - [Test case <a name="test_case"></a>](#test-case-)
   - [Other documents <a name="other_documents"></a>](#other-documents-)
-- [System requirements, Technologies&Tools <a name="System_requirements"></a>](#System-requirements-)
+- [System requirements, Technologies & Tools <a name="System_requirements"></a>](#system-requirements-technologies--tools-)
 - [Installation guide <a name="installation_guide"></a>](#installation-guide-)
 - [Operation guide <a name="operation_guide"></a>](#operation-guide-)
 - [Change log <a name="change_log"></a>](#change-log-)
@@ -75,7 +75,7 @@ test
 ## Other documents <a name="other_documents"></a>
 other
 
-# System requirements, Technologies&Tools <a name="System_requirements"></a>
+# System requirements, Technologies & Tools <a name="System_requirements"></a>
 - **Development Environment**: 
   - **Windows 10** <br/>
     Download location: https://www.microsoft.com/en-au/software-download/windows10<br/>
