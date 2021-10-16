@@ -12,6 +12,7 @@
   - [Architecture <a name="architecture"></a>](#architecture-)
     - [High-level Diagram](#high-level-diagram)
     - [Database Diagram](#database-diagram)
+    - [Other Diagrams](#other-diagrams)
   - [Test case <a name="test_case"></a>](#test-case-)
   - [Product Backlog <a name="product_backlog"></a>](#product-backlog-)
   - [Other documents <a name="other_doc"></a>](#other-documents-)
@@ -95,6 +96,16 @@ demo link
 ### Database Diagram
 ![high-level-diagram](https://github.com/xudongguan202/COMP90082_DC_Bluering/blob/main/docs/database.png)
 
+### Other Diagrams
+[Sequence Diagram](docs/seqd.pdf)
+
+[GUI design diagram](docs/guid.pdf)
+
+[Class diagram](docs/classd.pdf)
+
+[Use case diagram](docs/usecased.pdf)
+
+[State diagram](docs/stated.pdf)
 
 ## Test case <a name="test_case"></a>
 [Sprint 1 Test](tests/Sprint1_UTA.pdf)
@@ -111,6 +122,10 @@ demo link
 [Design Notebook](https://github.com/xudongguan202/COMP90082_DC_Bluering/blob/main/docs/Design_Notebook.pdf)
 
 [Motivational Model](https://github.com/xudongguan202/COMP90082_DC_Bluering/blob/main/docs/motivational.pdf)
+
+[Project background](docs/pj_background.pdf)
+
+[Version Control](docs/vc.pdf)
 
 
 # System requirements, Technologies & Tools <a name="System_requirements"></a>
