@@ -10,8 +10,11 @@
 - [Documentation <a name="documentation"></a>](#documentation-)
   - [User story <a name="user_story"></a>](#user-story-)
   - [Architecture <a name="architecture"></a>](#architecture-)
+    - [High-level Diagram](#high-level-diagram)
+    - [Database Diagram](#database-diagram)
   - [Test case <a name="test_case"></a>](#test-case-)
-  - [Other documents <a name="other_documents"></a>](#other-documents-)
+  - [Product Backlog <a name="product_backlog"></a>](#product-backlog-)
+  - [Other documents <a name="other_doc"></a>](#other-documents-)
 - [System requirements, Technologies & Tools <a name="System_requirements"></a>](#system-requirements-technologies--tools-)
 - [Installation guide <a name="installation_guide"></a>](#installation-guide-)
 - [Operation guide <a name="operation_guide"></a>](#operation-guide-)
@@ -53,9 +56,12 @@ demo link
   - Save the report to local drive
 
 # Documentation <a name="documentation"></a>
-docuemnt
+
 
 ## User story <a name="user_story"></a>
+
+![User Story](https://github.com/xudongguan202/COMP90082_DC_Bluering/blob/main/docs/user_story.pdf)
+
 - 	I want to view the client's information (e.g Name, Address, Job number) and also relevant information about their dosimeter (e.g chambers ID, serial number, model)
 - I want to have visualizations(e.g graph, table of analysis results)
 - I want to select 1 or more pairs of data files(Client.csv, Lab.csv) 
@@ -69,13 +75,46 @@ docuemnt
 
 
 ## Architecture <a name="architecture"></a>
-architecture
+
+### High-level Diagram
+![high-level-diagram](https://github.com/xudongguan202/COMP90082_DC_Bluering/blob/main/docs/high-level.png)
+
+**Description**
+
+- This application contains 4 Parts, which are Present Layer, Application Layer, Processing Layer and File System Layer.
+
+- In Present Layer, it mainly focus on presenting the results to the user.
+
+- In Application Layer, it is used for realising two main feature, which are Generate PDF and Analysis Data.
+
+- In terms of Processing Layer, this layer contains some Python function to process the data.
+
+- The File System Layer is used to store all the data that used in analysis, which can be used for refer in future.
+
+### Database Diagram
+![high-level-diagram](https://github.com/xudongguan202/COMP90082_DC_Bluering/blob/main/docs/database.png)
+
 
 ## Test case <a name="test_case"></a>
-test
+![Sprint 1 Test](https://github.com/xudongguan202/COMP90082_DC_Bluering/blob/main/tests/Sprint1_UTA.pdf)
 
-## Other documents <a name="other_documents"></a>
-other
+![Sprint 2 Test](https://github.com/xudongguan202/COMP90082_DC_Bluering/blob/main/tests/Sprint2_UTA.pdf)
+
+## Product Backlog <a name="product_backlog"></a>
+![Sprint 1 Backlog](https://github.com/xudongguan202/COMP90082_DC_Bluering/blob/main/docs/Sprint1_Backlog.pdf)
+
+![Sprint 2 Backlog](https://github.com/xudongguan202/COMP90082_DC_Bluering/blob/main/docs/Sprint2_Backlog.pdf)
+
+## Other documents <a name="other_doc"></a>
+
+Design Notebook
+
+![Design Notebook](https://github.com/xudongguan202/COMP90082_DC_Bluering/blob/main/docs/Design_Notebook.pdf)
+
+Motivational Model
+
+![Motivational Model](https://github.com/xudongguan202/COMP90082_DC_Bluering/blob/main/docs/motivational.pdf)
+
 
 # System requirements, Technologies & Tools <a name="System_requirements"></a>
 - **Development Environment**: 
@@ -221,7 +260,19 @@ installation_guide
 
 
 # Change log <a name="change_log"></a>
-change_log
+In this section, the changes applied to our design and user story are discussed.
+
+Sprint 1:
+
+1. Mainframe GUI design: We use left to right operation sequence instead of up to down to make sure that it is easier for users to operate in a reasonable order
+2. Add Confirm button: We integrate "check validation" functionality to a new button "Confirm" instead of part of "Compare", which makes it easier for users to check if they select the right file before all operations.
+3. Text input for "operator": We add a new text input for "operator" as it is required in the client information section. (User Story 3)
+
+Sprint 2:
+
+1. Job ID: It is now read-only. Job ID will be automatically generated after uploading to the database and write into the local file no matter it exists or not. 
+2. Validation check: "Operator" can be different in different runs of one measurement.
+3. DCC with XML format is no longer one of the requirements. (User Story 10)
 
 # Traceability matrix <a name="traceability_matrix"></a>
 traceability_matrix
