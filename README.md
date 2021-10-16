@@ -23,7 +23,6 @@
   - [Button Introduction](#button-introduction)
   - [Workflow under different use cases](#workflow-under-different-use-cases)
 - [Change log <a name="change_log"></a>](#change-log-)
-- [Traceability matrix <a name="traceability_matrix"></a>](#traceability-matrix-)
 - [Contact information <a name="contact"></a>](#contact-information-)
 
 
@@ -321,9 +320,6 @@ Sprint 2:
 1. Job ID: It is now read-only. Job ID will be automatically generated after uploading to the database and write into the local file no matter it exists or not. 
 2. Validation check: "Operator" can be different in different runs of one measurement.
 3. DCC with XML format is no longer one of the requirements. (User Story 10)
-
-# Traceability matrix <a name="traceability_matrix"></a>
-traceability_matrix
 
 # Contact information <a name="contact"></a>
 
