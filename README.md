@@ -60,7 +60,7 @@ demo link
 
 ## User story <a name="user_story"></a>
 
-![User Story](https://github.com/xudongguan202/COMP90082_DC_Bluering/blob/main/docs/user_story.pdf)
+[User Story](https://github.com/xudongguan202/COMP90082_DC_Bluering/blob/main/docs/user_story.pdf)
 
 - 	I want to view the client's information (e.g Name, Address, Job number) and also relevant information about their dosimeter (e.g chambers ID, serial number, model)
 - I want to have visualizations(e.g graph, table of analysis results)
@@ -96,24 +96,24 @@ demo link
 
 
 ## Test case <a name="test_case"></a>
-![Sprint 1 Test](tests/Sprint1_UTA.pdf)
+[Sprint 1 Test](tests/Sprint1_UTA.pdf)
 
-![Sprint 2 Test](tests/Sprint2_UTA.pdf)
+[Sprint 2 Test](tests/Sprint2_UTA.pdf)
 
 ## Product Backlog <a name="product_backlog"></a>
-![Sprint 1 Backlog](docs/Sprint1_Backlog.pdf)
+[Sprint 1 Backlog](docs/Sprint1_Backlog.pdf)
 
-![Sprint 2 Backlog](docs/Sprint2_Backlog.pdf)
+[Sprint 2 Backlog](docs/Sprint2_Backlog.pdf)
 
 ## Other documents <a name="other_doc"></a>
 
 Design Notebook
 
-![Design Notebook](https://github.com/xudongguan202/COMP90082_DC_Bluering/blob/main/docs/Design_Notebook.pdf)
+[Design Notebook](https://github.com/xudongguan202/COMP90082_DC_Bluering/blob/main/docs/Design_Notebook.pdf)
 
 Motivational Model
 
-![Motivational Model](https://github.com/xudongguan202/COMP90082_DC_Bluering/blob/main/docs/motivational.pdf)
+[Motivational Model](https://github.com/xudongguan202/COMP90082_DC_Bluering/blob/main/docs/motivational.pdf)
 
 
 # System requirements, Technologies & Tools <a name="System_requirements"></a>
