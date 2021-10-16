@@ -17,6 +17,7 @@
   - [Other documents <a name="other_doc"></a>](#other-documents-)
 - [System requirements, Technologies & Tools <a name="System_requirements"></a>](#system-requirements-technologies--tools-)
 - [Installation guide <a name="installation_guide"></a>](#installation-guide-)
+  - [Database Installation](#database-installation)
 - [Operation guide <a name="operation_guide"></a>](#operation-guide-)
   - [Button Introduction](#button-introduction)
   - [Workflow under different use cases](#workflow-under-different-use-cases)
@@ -177,7 +178,42 @@ demo link
    |kaleido v1.0.48       |*pip install -U kaleido*              |
            
 # Installation guide <a name="installation_guide"></a>
-installation_guide
+
+## Database Installation
+
+1. Visit https://dev.mysql.com/downloads/windows/installer/8.0.html Website, and download the community version's mysql.
+
+2. Run the EXE file and accept the terms, then, click Next.
+
+3. Choosing a Setup Type. We recommend to choose Developer Default. Then, click the Next button.
+
+4. Then, the page would redirect you to the configration page. You could use the default setting, if you do not have specific requirement.
+
+5. Setting the password, use Strong Password Encryption for Authentication
+
+6. The Password should set as Bluering123. (If not, you need to change the password in our application. We do not recommend)
+
+7. (Optional) If you want to add other users, you could follow this guide. Firstly, click add user.Then key in the username and password.
+
+8. This Step just leave as default.
+
+9. You could untick the Start MySQL WorkBench after setup.
+
+10. You could open computer cmd terminal.
+
+>cd C:\Program Files \MySQL\MySQL Server 8.0\bin
+
+>mysql -u root -p
+
+>Bluering123. 
+
+(The password you setted before)
+
+>create database Bluering;
+
+>use database Bluering;
+
+(copy the create database file in here.)
 
 # Operation guide <a name="operation_guide"></a>
 
