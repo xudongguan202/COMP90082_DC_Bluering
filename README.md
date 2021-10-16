@@ -107,11 +107,7 @@ demo link
 
 ## Other documents <a name="other_doc"></a>
 
-Design Notebook
-
 [Design Notebook](https://github.com/xudongguan202/COMP90082_DC_Bluering/blob/main/docs/Design_Notebook.pdf)
-
-Motivational Model
 
 [Motivational Model](https://github.com/xudongguan202/COMP90082_DC_Bluering/blob/main/docs/motivational.pdf)
 
@@ -189,7 +185,7 @@ installation_guide
 
 1. Main Frame
 
-![Main frame](https://github.com/xudongguan202/COMP90082_DC_Bluering/blob/main/operation_guide/main.png?raw=true)
+![Main frame](https://github.com/xudongguan202/COMP90082_DC_Bluering/blob/main/operation_guide/main.png)
 
 **1.1 Browse:** select file from local drive
 
@@ -209,9 +205,9 @@ installation_guide
 
 **1.9 Generate PDF:** jump to report page
 
-2. Database Frame
+1. Database Frame
 
-![Database frame](https://github.com/xudongguan202/COMP90082_DC_Bluering/blob/main/operation_guide/database.png?raw=true)
+![Database frame](https://github.com/xudongguan202/COMP90082_DC_Bluering/blob/main/operation_guide/database.png)
 
 **2.1 Search:** search files in database by filled conditions (job id, client name, chamber)
 
@@ -221,9 +217,9 @@ installation_guide
 
 **2.4 Download CSV:** download selected files to the chosen path
 
-3. PDF Frame
+1. PDF Frame
 
-![PDF frame](https://github.com/xudongguan202/COMP90082_DC_Bluering/blob/main/operation_guide/pdf.png?raw=true)
+![PDF frame](https://github.com/xudongguan202/COMP90082_DC_Bluering/blob/main/operation_guide/pdf.png)
 
 **3.1 Save:** save the report to the local drive
 
