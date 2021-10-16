@@ -96,14 +96,14 @@ demo link
 
 
 ## Test case <a name="test_case"></a>
-![Sprint 1 Test](https://github.com/xudongguan202/COMP90082_DC_Bluering/blob/main/tests/Sprint1_UTA.pdf)
+![Sprint 1 Test](tests/Sprint1_UTA.pdf)
 
-![Sprint 2 Test](https://github.com/xudongguan202/COMP90082_DC_Bluering/blob/main/tests/Sprint2_UTA.pdf)
+![Sprint 2 Test](tests/Sprint2_UTA.pdf)
 
 ## Product Backlog <a name="product_backlog"></a>
-![Sprint 1 Backlog](https://github.com/xudongguan202/COMP90082_DC_Bluering/blob/main/docs/Sprint1_Backlog.pdf)
+![Sprint 1 Backlog](docs/Sprint1_Backlog.pdf)
 
-![Sprint 2 Backlog](https://github.com/xudongguan202/COMP90082_DC_Bluering/blob/main/docs/Sprint2_Backlog.pdf)
+![Sprint 2 Backlog](docs/Sprint2_Backlog.pdf)
 
 ## Other documents <a name="other_doc"></a>
 
