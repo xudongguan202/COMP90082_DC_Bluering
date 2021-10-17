@@ -34,9 +34,9 @@ def Testr(path_Client, path_Lab):
     df_Client = pd.read_csv(path_Client, skiprows=22)
     df_Lab = pd.read_csv(path_Lab, skiprows=22)
 
-    headLab = pd.read_csv("Raw MEX measurement data 1Lab.csv", usecols=[2], nrows=17)
+    headLab = pd.read_csv(path_Lab, usecols=[2], nrows=17)
     headClient = pd.read_csv(
-        "Raw MEX measurement data 1Client.csv", usecols=[2], nrows=17
+        path_Lab, usecols=[2], nrows=17
     )
     # print(headClient)
 
@@ -5465,12 +5465,12 @@ class PdfViewerFrame(sc.SizedFrame):
         )
         paneCont = self.GetContentsPane()
         self.buttonpanel = pdfButtonPanel(
-            paneCont, wx.NewId(), wx.DefaultPosition, wx.DefaultSize, 0
+            paneCont, wx.NewIdRef(count=1), wx.DefaultPosition, wx.DefaultSize, 0
         )
         self.buttonpanel.SetSizerProps(expand=True)
         self.viewer = pdfViewer(
             paneCont,
-            wx.NewId(),
+            wx.NewIdRef(count=1),
             wx.DefaultPosition,
             wx.DefaultSize,
             wx.HSCROLL | wx.VSCROLL | wx.SUNKEN_BORDER,
