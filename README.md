@@ -135,6 +135,10 @@ demo link
   - **Python v3.8.4**<br/>
     Download location: https://www.python.org/downloads/<br/>
     Guide documentation: https://docs.python.org/3/<br/>
+  
+  - **Conda v4.10.3 (Environment)**<br/>
+    Download location: https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html<br/>
+    Guide documentation: https://docs.conda.io/projects/conda/en/latest/user-guide/index.html<br/>
     
 - **Development IDE**:
   - **PyCharm v2021.2.2**<br/>
