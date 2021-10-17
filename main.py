@@ -29,15 +29,14 @@ from PyPDF2.pdf import ContentStream, PageObject
 from PyPDF2.filters import ASCII85Decode, FlateDecode
 import plotly.io as Pio
 
+
 def Testr(path_Client, path_Lab):
 
     df_Client = pd.read_csv(path_Client, skiprows=22)
     df_Lab = pd.read_csv(path_Lab, skiprows=22)
 
     headLab = pd.read_csv(path_Lab, usecols=[2], nrows=17)
-    headClient = pd.read_csv(
-        path_Lab, usecols=[2], nrows=17
-    )
+    headClient = pd.read_csv(path_Lab, usecols=[2], nrows=17)
     # print(headClient)
 
     # 提取Client基本信息
@@ -2680,27 +2679,24 @@ class MainFrame(wx.Frame):
             monitor_hv = df.iloc[12][2]
             mEFAC_ICElectrometerRange = df.iloc[13][2]
             ic_hv = df.iloc[14][2]
-            sql = (
-                "SELECT job_number FROM header WHERE filename = '%s' AND Date = '%s' AND chamber = '%s' AND model = '%s' AND serial = '%s' AND description = '%s' AND software = '%s' AND backgrounds = '%s' AND measurements = '%s' AND Trolley = '%s' AND SCD = '%s' AND aperturewheel = '%s' AND Comment = '%s' AND monitorelectrometerrange = '%s' AND monitorhv = '%s' AND MEFAC_ICElectrometerRange = '%s' AND ic_hv= '%s'"
-                % (
-                    filename,
-                    date,
-                    chamber,
-                    model,
-                    serial,
-                    description,
-                    software,
-                    backgrounds,
-                    measurements,
-                    trolley,
-                    sCD,
-                    aperture_wheel,
-                    comment,
-                    monitorelectrometerrange,
-                    monitor_hv,
-                    mEFAC_ICElectrometerRange,
-                    ic_hv,
-                )
+            sql = "SELECT job_number FROM header WHERE filename = '%s' AND Date = '%s' AND chamber = '%s' AND model = '%s' AND serial = '%s' AND description = '%s' AND software = '%s' AND backgrounds = '%s' AND measurements = '%s' AND Trolley = '%s' AND SCD = '%s' AND aperturewheel = '%s' AND Comment = '%s' AND monitorelectrometerrange = '%s' AND monitorhv = '%s' AND MEFAC_ICElectrometerRange = '%s' AND ic_hv= '%s'" % (
+                filename,
+                date,
+                chamber,
+                model,
+                serial,
+                description,
+                software,
+                backgrounds,
+                measurements,
+                trolley,
+                sCD,
+                aperture_wheel,
+                comment,
+                monitorelectrometerrange,
+                monitor_hv,
+                mEFAC_ICElectrometerRange,
+                ic_hv,
             )
             result_number = cursor.execute(sql)
             result = cursor.fetchall()
@@ -2756,27 +2752,24 @@ class MainFrame(wx.Frame):
                     monitor_hv = df.iloc[12][2]
                     mEFAC_ICElectrometerRange = df.iloc[13][2]
                     ic_hv = df.iloc[14][2]
-                    sql = (
-                        "SELECT job_number FROM header WHERE filename = '%s' AND Date = '%s' AND chamber = '%s' AND model = '%s' AND serial = '%s' AND description = '%s' AND software = '%s' AND backgrounds = '%s' AND measurements = '%s' AND Trolley = '%s' AND SCD = '%s' AND aperturewheel = '%s' AND Comment = '%s' AND monitorelectrometerrange = '%s' AND monitorhv = '%s' AND MEFAC_ICElectrometerRange = '%s' AND ic_hv= '%s'"
-                        % (
-                            filename,
-                            date,
-                            chamber,
-                            model,
-                            serial,
-                            description,
-                            software,
-                            backgrounds,
-                            measurements,
-                            trolley,
-                            sCD,
-                            aperture_wheel,
-                            comment,
-                            monitorelectrometerrange,
-                            monitor_hv,
-                            mEFAC_ICElectrometerRange,
-                            ic_hv,
-                        )
+                    sql = "SELECT job_number FROM header WHERE filename = '%s' AND Date = '%s' AND chamber = '%s' AND model = '%s' AND serial = '%s' AND description = '%s' AND software = '%s' AND backgrounds = '%s' AND measurements = '%s' AND Trolley = '%s' AND SCD = '%s' AND aperturewheel = '%s' AND Comment = '%s' AND monitorelectrometerrange = '%s' AND monitorhv = '%s' AND MEFAC_ICElectrometerRange = '%s' AND ic_hv= '%s'" % (
+                        filename,
+                        date,
+                        chamber,
+                        model,
+                        serial,
+                        description,
+                        software,
+                        backgrounds,
+                        measurements,
+                        trolley,
+                        sCD,
+                        aperture_wheel,
+                        comment,
+                        monitorelectrometerrange,
+                        monitor_hv,
+                        mEFAC_ICElectrometerRange,
+                        ic_hv,
                     )
                     result_number = cursor.execute(sql)
                     if result_number != 0:
@@ -2807,33 +2800,30 @@ class MainFrame(wx.Frame):
                         address2 = df.iloc[17][2]
                         operator = df.iloc[18][2]
                         calnumber = df.iloc[19][2]
-                        sql = (
-                            "INSERT INTO header(job_number,filename,Date,chamber,model,serial,description,software,backgrounds,measurements,Trolley,SCD,aperturewheel,Comment,monitorelectrometerrange,monitorhv,MEFAC_ICElectrometerRange,ic_hv,clientname,address1,address2,operator,calnumber) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')"
-                            % (
-                                job_number,
-                                filename,
-                                date,
-                                chamber,
-                                model,
-                                serial,
-                                description,
-                                software,
-                                backgrounds,
-                                measurements,
-                                trolley,
-                                sCD,
-                                aperture_wheel,
-                                comment,
-                                monitorelectrometerrange,
-                                monitor_hv,
-                                mEFAC_ICElectrometerRange,
-                                ic_hv,
-                                client_name,
-                                address1,
-                                address2,
-                                operator,
-                                calnumber,
-                            )
+                        sql = "INSERT INTO header(job_number,filename,Date,chamber,model,serial,description,software,backgrounds,measurements,Trolley,SCD,aperturewheel,Comment,monitorelectrometerrange,monitorhv,MEFAC_ICElectrometerRange,ic_hv,clientname,address1,address2,operator,calnumber) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')" % (
+                            job_number,
+                            filename,
+                            date,
+                            chamber,
+                            model,
+                            serial,
+                            description,
+                            software,
+                            backgrounds,
+                            measurements,
+                            trolley,
+                            sCD,
+                            aperture_wheel,
+                            comment,
+                            monitorelectrometerrange,
+                            monitor_hv,
+                            mEFAC_ICElectrometerRange,
+                            ic_hv,
+                            client_name,
+                            address1,
+                            address2,
+                            operator,
+                            calnumber,
                         )
                         try:
                             # excute sql
@@ -2872,28 +2862,25 @@ class MainFrame(wx.Frame):
                             t_Air = float(df2.iloc[i]["T(Air)"])
                             t_SC = float(df2.iloc[i]["T(SC)"])
                             h = float(df2.iloc[i]["H(%)"])
-                            sql = (
-                                "INSERT INTO body(chamber_ID,chamber,kv,ma,barcode,xrayson,HVLFilter,filter,filterready,hvlready,n,Current1,Current2,P,T_MC,T_Air,T_SC,H) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')"
-                                % (
-                                    chamber_ID,
-                                    chamber,
-                                    kV,
-                                    mA,
-                                    barCode,
-                                    xraysOn,
-                                    hVLFilter,
-                                    filter,
-                                    filterReady,
-                                    hVLReady,
-                                    n,
-                                    current1,
-                                    current2,
-                                    p,
-                                    t_MC,
-                                    t_Air,
-                                    t_SC,
-                                    h,
-                                )
+                            sql = "INSERT INTO body(chamber_ID,chamber,kv,ma,barcode,xrayson,HVLFilter,filter,filterready,hvlready,n,Current1,Current2,P,T_MC,T_Air,T_SC,H) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')" % (
+                                chamber_ID,
+                                chamber,
+                                kV,
+                                mA,
+                                barCode,
+                                xraysOn,
+                                hVLFilter,
+                                filter,
+                                filterReady,
+                                hVLReady,
+                                n,
+                                current1,
+                                current2,
+                                p,
+                                t_MC,
+                                t_Air,
+                                t_SC,
+                                h,
                             )
                             try:
                                 # excute sql
@@ -2950,33 +2937,30 @@ class MainFrame(wx.Frame):
                         address2 = df.iloc[17][2]
                         operator = df.iloc[18][2]
                         calnumber = df.iloc[19][2]
-                        sql = (
-                            "INSERT INTO header(job_number,filename,Date,chamber,model,serial,description,software,backgrounds,measurements,Trolley,SCD,aperturewheel,Comment,monitorelectrometerrange,monitorhv,MEFAC_ICElectrometerRange,ic_hv,clientname,address1,address2,operator,calnumber) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')"
-                            % (
-                                job_number,
-                                filename,
-                                date,
-                                chamber,
-                                model,
-                                serial,
-                                description,
-                                software,
-                                backgrounds,
-                                measurements,
-                                trolley,
-                                sCD,
-                                aperture_wheel,
-                                comment,
-                                monitorelectrometerrange,
-                                monitor_hv,
-                                mEFAC_ICElectrometerRange,
-                                ic_hv,
-                                client_name,
-                                address1,
-                                address2,
-                                operator,
-                                calnumber,
-                            )
+                        sql = "INSERT INTO header(job_number,filename,Date,chamber,model,serial,description,software,backgrounds,measurements,Trolley,SCD,aperturewheel,Comment,monitorelectrometerrange,monitorhv,MEFAC_ICElectrometerRange,ic_hv,clientname,address1,address2,operator,calnumber) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')" % (
+                            job_number,
+                            filename,
+                            date,
+                            chamber,
+                            model,
+                            serial,
+                            description,
+                            software,
+                            backgrounds,
+                            measurements,
+                            trolley,
+                            sCD,
+                            aperture_wheel,
+                            comment,
+                            monitorelectrometerrange,
+                            monitor_hv,
+                            mEFAC_ICElectrometerRange,
+                            ic_hv,
+                            client_name,
+                            address1,
+                            address2,
+                            operator,
+                            calnumber,
                         )
                         try:
                             # excute sql
@@ -3016,28 +3000,25 @@ class MainFrame(wx.Frame):
                             t_Air = float(df2.iloc[i]["T(Air)"])
                             t_SC = float(df2.iloc[i]["T(SC)"])
                             h = float(df2.iloc[i]["H(%)"])
-                            sql = (
-                                "INSERT INTO body(chamber_ID,chamber,kv,ma,barcode,xrayson,HVLFilter,filter,filterready,hvlready,n,Current1,Current2,P,T_MC,T_Air,T_SC,H) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')"
-                                % (
-                                    chamber_ID,
-                                    chamber,
-                                    kV,
-                                    mA,
-                                    barCode,
-                                    xraysOn,
-                                    hVLFilter,
-                                    filter,
-                                    filterReady,
-                                    hVLReady,
-                                    n,
-                                    current1,
-                                    current2,
-                                    p,
-                                    t_MC,
-                                    t_Air,
-                                    t_SC,
-                                    h,
-                                )
+                            sql = "INSERT INTO body(chamber_ID,chamber,kv,ma,barcode,xrayson,HVLFilter,filter,filterready,hvlready,n,Current1,Current2,P,T_MC,T_Air,T_SC,H) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')" % (
+                                chamber_ID,
+                                chamber,
+                                kV,
+                                mA,
+                                barCode,
+                                xraysOn,
+                                hVLFilter,
+                                filter,
+                                filterReady,
+                                hVLReady,
+                                n,
+                                current1,
+                                current2,
+                                p,
+                                t_MC,
+                                t_Air,
+                                t_SC,
+                                h,
                             )
                             try:
                                 # excute sql
@@ -3136,33 +3117,30 @@ class MainFrame(wx.Frame):
                     address2 = df.iloc[17][2]
                     operator = df.iloc[18][2]
                     calnumber = df.iloc[19][2]
-                    sql = (
-                        "INSERT INTO header(job_number,filename,Date,chamber,model,serial,description,software,backgrounds,measurements,Trolley,SCD,aperturewheel,Comment,monitorelectrometerrange,monitorhv,MEFAC_ICElectrometerRange,ic_hv,clientname,address1,address2,operator,calnumber) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')"
-                        % (
-                            job_number,
-                            filename,
-                            date,
-                            chamber,
-                            model,
-                            serial,
-                            description,
-                            software,
-                            backgrounds,
-                            measurements,
-                            trolley,
-                            sCD,
-                            aperture_wheel,
-                            comment,
-                            monitorelectrometerrange,
-                            monitor_hv,
-                            mEFAC_ICElectrometerRange,
-                            ic_hv,
-                            client_name,
-                            address1,
-                            address2,
-                            operator,
-                            calnumber,
-                        )
+                    sql = "INSERT INTO header(job_number,filename,Date,chamber,model,serial,description,software,backgrounds,measurements,Trolley,SCD,aperturewheel,Comment,monitorelectrometerrange,monitorhv,MEFAC_ICElectrometerRange,ic_hv,clientname,address1,address2,operator,calnumber) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')" % (
+                        job_number,
+                        filename,
+                        date,
+                        chamber,
+                        model,
+                        serial,
+                        description,
+                        software,
+                        backgrounds,
+                        measurements,
+                        trolley,
+                        sCD,
+                        aperture_wheel,
+                        comment,
+                        monitorelectrometerrange,
+                        monitor_hv,
+                        mEFAC_ICElectrometerRange,
+                        ic_hv,
+                        client_name,
+                        address1,
+                        address2,
+                        operator,
+                        calnumber,
                     )
                     try:
                         # excute sql
@@ -3201,28 +3179,25 @@ class MainFrame(wx.Frame):
                         t_Air = float(df2.iloc[i]["T(Air)"])
                         t_SC = float(df2.iloc[i]["T(SC)"])
                         h = float(df2.iloc[i]["H(%)"])
-                        sql = (
-                            "INSERT INTO body(chamber_ID,chamber,kv,ma,barcode,xrayson,HVLFilter,filter,filterready,hvlready,n,Current1,Current2,P,T_MC,T_Air,T_SC,H) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')"
-                            % (
-                                chamber_ID,
-                                chamber,
-                                kV,
-                                mA,
-                                barCode,
-                                xraysOn,
-                                hVLFilter,
-                                filter,
-                                filterReady,
-                                hVLReady,
-                                n,
-                                current1,
-                                current2,
-                                p,
-                                t_MC,
-                                t_Air,
-                                t_SC,
-                                h,
-                            )
+                        sql = "INSERT INTO body(chamber_ID,chamber,kv,ma,barcode,xrayson,HVLFilter,filter,filterready,hvlready,n,Current1,Current2,P,T_MC,T_Air,T_SC,H) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')" % (
+                            chamber_ID,
+                            chamber,
+                            kV,
+                            mA,
+                            barCode,
+                            xraysOn,
+                            hVLFilter,
+                            filter,
+                            filterReady,
+                            hVLReady,
+                            n,
+                            current1,
+                            current2,
+                            p,
+                            t_MC,
+                            t_Air,
+                            t_SC,
+                            h,
                         )
                         try:
                             # excute sql
@@ -3285,33 +3260,30 @@ class MainFrame(wx.Frame):
                     address2 = df.iloc[17][2]
                     operator = df.iloc[18][2]
                     calnumber = df.iloc[19][2]
-                    sql = (
-                        "INSERT INTO header(job_number,filename,Date,chamber,model,serial,description,software,backgrounds,measurements,Trolley,SCD,aperturewheel,Comment,monitorelectrometerrange,monitorhv,MEFAC_ICElectrometerRange,ic_hv,clientname,address1,address2,operator,calnumber) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')"
-                        % (
-                            job_number,
-                            filename,
-                            date,
-                            chamber,
-                            model,
-                            serial,
-                            description,
-                            software,
-                            backgrounds,
-                            measurements,
-                            trolley,
-                            sCD,
-                            aperture_wheel,
-                            comment,
-                            monitorelectrometerrange,
-                            monitor_hv,
-                            mEFAC_ICElectrometerRange,
-                            ic_hv,
-                            client_name,
-                            address1,
-                            address2,
-                            operator,
-                            calnumber,
-                        )
+                    sql = "INSERT INTO header(job_number,filename,Date,chamber,model,serial,description,software,backgrounds,measurements,Trolley,SCD,aperturewheel,Comment,monitorelectrometerrange,monitorhv,MEFAC_ICElectrometerRange,ic_hv,clientname,address1,address2,operator,calnumber) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')" % (
+                        job_number,
+                        filename,
+                        date,
+                        chamber,
+                        model,
+                        serial,
+                        description,
+                        software,
+                        backgrounds,
+                        measurements,
+                        trolley,
+                        sCD,
+                        aperture_wheel,
+                        comment,
+                        monitorelectrometerrange,
+                        monitor_hv,
+                        mEFAC_ICElectrometerRange,
+                        ic_hv,
+                        client_name,
+                        address1,
+                        address2,
+                        operator,
+                        calnumber,
                     )
                     try:
                         # excute sql
@@ -3351,28 +3323,25 @@ class MainFrame(wx.Frame):
                         t_Air = float(df2.iloc[i]["T(Air)"])
                         t_SC = float(df2.iloc[i]["T(SC)"])
                         h = float(df2.iloc[i]["H(%)"])
-                        sql = (
-                            "INSERT INTO body(chamber_ID,chamber,kv,ma,barcode,xrayson,HVLFilter,filter,filterready,hvlready,n,Current1,Current2,P,T_MC,T_Air,T_SC,H) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')"
-                            % (
-                                chamber_ID,
-                                chamber,
-                                kV,
-                                mA,
-                                barCode,
-                                xraysOn,
-                                hVLFilter,
-                                filter,
-                                filterReady,
-                                hVLReady,
-                                n,
-                                current1,
-                                current2,
-                                p,
-                                t_MC,
-                                t_Air,
-                                t_SC,
-                                h,
-                            )
+                        sql = "INSERT INTO body(chamber_ID,chamber,kv,ma,barcode,xrayson,HVLFilter,filter,filterready,hvlready,n,Current1,Current2,P,T_MC,T_Air,T_SC,H) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')" % (
+                            chamber_ID,
+                            chamber,
+                            kV,
+                            mA,
+                            barCode,
+                            xraysOn,
+                            hVLFilter,
+                            filter,
+                            filterReady,
+                            hVLReady,
+                            n,
+                            current1,
+                            current2,
+                            p,
+                            t_MC,
+                            t_Air,
+                            t_SC,
+                            h,
                         )
                         try:
                             # excute sql
@@ -4645,10 +4614,23 @@ class MainFrame(wx.Frame):
             graph1_df = pd.DataFrame(graph1_data)
             # pltx1 = px.scatter(graph1_df, x='kVp', y='NK (mGy/nC)', color='kVp_values')
 
-            pltx1 = px.line(graph1_df, x='kVp', y='NK (mGy/nC)', color='kVp_values', line_shape="spline")
-            pltx1.update_traces(mode='markers+lines')
-            Pio.write_image(pltx1, file='pltx1.png', format='png', width=700, height=450)
-            pltx1 = (os.getcwd() + '/' + "pltx1.png")
+            pltx1 = px.line(
+                graph1_df,
+                x="kVp",
+                y="NK (mGy/nC)",
+                color="kVp_values",
+                line_shape="spline",
+            )
+            pltx1.update_traces(mode="markers+lines")
+            Pio.write_image(
+                pltx1,
+                file="pltx1.png",
+                format="png",
+                width=700,
+                height=450,
+                engine="orca",
+            )
+            pltx1 = os.getcwd() + "/" + "pltx1.png"
 
             pltx1 = px.line(
                 graph1_df,
@@ -4659,7 +4641,12 @@ class MainFrame(wx.Frame):
             )
             pltx1.update_traces(mode="markers+lines")
             plotly.io.write_image(
-                pltx1, file="pltx1.png", format="png", width=700, height=450
+                pltx1,
+                file="pltx1.png",
+                format="png",
+                width=700,
+                height=450,
+                engine="orca",
             )
             pltx1 = os.getcwd() + "/" + "pltx1.png"
             pdf.set_xy(40.0, 160.0)
@@ -4714,10 +4701,23 @@ class MainFrame(wx.Frame):
             graph2_df = pd.DataFrame(graph2_data)
             # pltx2 = px.scatter(graph2_df, x='HVL (mm Al)', y='NK (mGy/nC)', color='kVp_values')
 
-            pltx2 = px.line(graph2_df, x='HVL (mm Al)', y='NK (mGy/nC)', color='kVp_values', line_shape="spline")
-            pltx2.update_traces(mode='markers+lines')
-            Pio.write_image(pltx2, file='pltx2.png', format='png', width=700, height=450)
-            pltx2 = (os.getcwd() + '/' + "pltx2.png")
+            pltx2 = px.line(
+                graph2_df,
+                x="HVL (mm Al)",
+                y="NK (mGy/nC)",
+                color="kVp_values",
+                line_shape="spline",
+            )
+            pltx2.update_traces(mode="markers+lines")
+            Pio.write_image(
+                pltx2,
+                file="pltx2.png",
+                format="png",
+                width=700,
+                height=450,
+                engine="orca",
+            )
+            pltx2 = os.getcwd() + "/" + "pltx2.png"
 
             pltx2 = px.line(
                 graph2_df,
@@ -4728,7 +4728,12 @@ class MainFrame(wx.Frame):
             )
             pltx2.update_traces(mode="markers+lines")
             plotly.io.write_image(
-                pltx2, file="pltx2.png", format="png", width=700, height=450
+                pltx2,
+                file="pltx2.png",
+                format="png",
+                width=700,
+                height=450,
+                engine="orca",
             )
             pltx2 = os.getcwd() + "/" + "pltx2.png"
             pdf.set_xy(40.0, 10.0)
@@ -4772,11 +4777,24 @@ class MainFrame(wx.Frame):
             graph3_df = pd.DataFrame(graph3_data)
             # pltx3 = px.scatter(graph3_df, x='HVL (mm Cu)', y='NK (mGy/nC)', color='kVp_values')
 
-            pltx3 = px.line(graph3_df, x='HVL (mm Cu)', y='NK (mGy/nC)', color='kVp_values', line_shape="spline")
-            pltx3.update_traces(mode='markers+lines')
-            #plt.savefig('line_plot.pdf')
-            Pio.write_image(pltx3, file='pltx3.png', format='png', width=700, height=450)
-            pltx3 = (os.getcwd() + '/' + "pltx3.png")
+            pltx3 = px.line(
+                graph3_df,
+                x="HVL (mm Cu)",
+                y="NK (mGy/nC)",
+                color="kVp_values",
+                line_shape="spline",
+            )
+            pltx3.update_traces(mode="markers+lines")
+            # plt.savefig('line_plot.pdf')
+            Pio.write_image(
+                pltx3,
+                file="pltx3.png",
+                format="png",
+                width=700,
+                height=450,
+                engine="orca",
+            )
+            pltx3 = os.getcwd() + "/" + "pltx3.png"
 
             pltx3 = px.line(
                 graph3_df,
@@ -4787,7 +4805,12 @@ class MainFrame(wx.Frame):
             )
             pltx3.update_traces(mode="markers+lines")
             plotly.io.write_image(
-                pltx3, file="pltx3.png", format="png", width=700, height=450
+                pltx3,
+                file="pltx3.png",
+                format="png",
+                width=700,
+                height=450,
+                engine="orca",
             )
             pltx3 = os.getcwd() + "/" + "pltx3.png"
 
@@ -5216,13 +5239,10 @@ class DatabaseFrame(wx.Frame):
                     % ("%" + chamber.lower() + "%")
                 )
             else:
-                sql = (
-                    "SELECT b.chamber_ID, b.chamber, a.job_number, a.clientname FROM client a RIGHT JOIN header b ON a.job_number = b.job_number WHERE LOWER(a.clientname) LIKE '%s' AND LOWER(b.chamber) LIKE '%s' AND a.job_number = %s"
-                    % (
-                        "%" + clientname.lower() + "%",
-                        "%" + chamber.lower() + "%",
-                        job_number,
-                    )
+                sql = "SELECT b.chamber_ID, b.chamber, a.job_number, a.clientname FROM client a RIGHT JOIN header b ON a.job_number = b.job_number WHERE LOWER(a.clientname) LIKE '%s' AND LOWER(b.chamber) LIKE '%s' AND a.job_number = %s" % (
+                    "%" + clientname.lower() + "%",
+                    "%" + chamber.lower() + "%",
+                    job_number,
                 )
 
             cursor.execute(sql)
