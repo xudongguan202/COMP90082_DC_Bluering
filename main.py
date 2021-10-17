@@ -27,7 +27,7 @@ import PyPDF2
 from PyPDF2 import PdfFileReader
 from PyPDF2.pdf import ContentStream, PageObject
 from PyPDF2.filters import ASCII85Decode, FlateDecode
-
+import plotly.io as Pio
 
 
 def Testr(path_Client, path_Lab):
@@ -4038,7 +4038,7 @@ class MainFrame(wx.Frame):
             # pltx1 = px.scatter(graph1_df, x='kVp', y='NK (mGy/nC)', color='kVp_values')
             pltx1 = px.line(graph1_df, x='kVp', y='NK (mGy/nC)', color='kVp_values', line_shape="spline")
             pltx1.update_traces(mode='markers+lines')
-            plotly.io.write_image(pltx1, file='pltx1.png', format='png', width=700, height=450)
+            Pio.write_image(pltx1, file='pltx1.png', format='png', width=700, height=450)
             pltx1 = (os.getcwd() + '/' + "pltx1.png")
             pdf.set_xy(40.0, 160.0)
             pdf.image('./pltx1.png', w=700 / 5, h=450 / 5)
@@ -4082,7 +4082,7 @@ class MainFrame(wx.Frame):
             # pltx2 = px.scatter(graph2_df, x='HVL (mm Al)', y='NK (mGy/nC)', color='kVp_values')
             pltx2 = px.line(graph2_df, x='HVL (mm Al)', y='NK (mGy/nC)', color='kVp_values', line_shape="spline")
             pltx2.update_traces(mode='markers+lines')
-            plotly.io.write_image(pltx2, file='pltx2.png', format='png', width=700, height=450)
+            Pio.write_image(pltx2, file='pltx2.png', format='png', width=700, height=450)
             pltx2 = (os.getcwd() + '/' + "pltx2.png")
             pdf.set_xy(40.0, 10.0)
             pdf.image('./pltx2.png', w=700 / 5, h=450 / 5)
@@ -4115,7 +4115,8 @@ class MainFrame(wx.Frame):
             # pltx3 = px.scatter(graph3_df, x='HVL (mm Cu)', y='NK (mGy/nC)', color='kVp_values')
             pltx3 = px.line(graph3_df, x='HVL (mm Cu)', y='NK (mGy/nC)', color='kVp_values', line_shape="spline")
             pltx3.update_traces(mode='markers+lines')
-            plotly.io.write_image(pltx3, file='pltx3.png', format='png', width=700, height=450)
+            plt.savefig('line_plot.pdf')
+            Pio.write_image(pltx3, file='pltx3.png', format='png', width=700, height=450)
             pltx3 = (os.getcwd() + '/' + "pltx3.png")
             pdf.set_xy(40.0, 140.0)
             pdf.image('./pltx3.png', w=700 / 5, h=450 / 5)
