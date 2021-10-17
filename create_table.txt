@@ -1,0 +1,56 @@
+CREATE TABLE body (
+    chamber_ID       INTEGER NOT NULL,
+    chamber          VARCHAR(255) NOT NULL,
+    kv               INTEGER,
+    ma               INTEGER,
+    barcode          VARCHAR(255),
+    xrayson          VARCHAR(255),
+    HVLFilter        INTEGER,
+    filter           VARCHAR(255),
+    filterready      VARCHAR(255),
+    hvlready         VARCHAR(255),
+    n                INTEGER,
+    Current1  FLOAT,
+    Current2  FLOAT,
+    P         FLOAT,
+    T_MC         FLOAT,
+    T_Air        FLOAT,
+    T_SC         FLOAT,
+    H          FLOAT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE header (
+    chamber_ID                   INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    job_number                   int(5) ZEROFILL NOT NULL,
+    filename                     VARCHAR(255),
+    Date                         VARCHAR(255),
+    chamber                      VARCHAR(255),
+    model                        VARCHAR(255),
+    serial                       VARCHAR(255),
+    description                  VARCHAR(255),
+    software                     VARCHAR(255),
+    backgrounds                  VARCHAR(255),
+    measurements                 VARCHAR(255),
+    Trolley                      INTEGER,
+    SCD                          INTEGER,
+    aperturewheel                VARCHAR(255),
+    Comment                      VARCHAR(255),
+    monitorelectrometerrange     VARCHAR(255),
+    monitorhv                    VARCHAR(255),
+    MEFAC_ICElectrometerRange    VARCHAR(255),
+    ic_hv                        VARCHAR(255),
+    clientname                   VARCHAR(255),
+    address1                     VARCHAR(255),
+    address2                     VARCHAR(255),
+    operator                     VARCHAR(255),
+    calnumber                    VARCHAR(255)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE client (
+    job_number                  int(5) ZEROFILL NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    clientname                   VARCHAR(255),
+    address1                     VARCHAR(255),
+    address2                     VARCHAR(255),
+    operator                     VARCHAR(255),
+    calnumber                   VARCHAR(255)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
