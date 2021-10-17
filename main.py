@@ -4115,7 +4115,7 @@ class MainFrame(wx.Frame):
             # pltx3 = px.scatter(graph3_df, x='HVL (mm Cu)', y='NK (mGy/nC)', color='kVp_values')
             pltx3 = px.line(graph3_df, x='HVL (mm Cu)', y='NK (mGy/nC)', color='kVp_values', line_shape="spline")
             pltx3.update_traces(mode='markers+lines')
-            plt.savefig('line_plot.pdf')
+            #plt.savefig('line_plot.pdf')
             Pio.write_image(pltx3, file='pltx3.png', format='png', width=700, height=450)
             pltx3 = (os.getcwd() + '/' + "pltx3.png")
             pdf.set_xy(40.0, 140.0)
