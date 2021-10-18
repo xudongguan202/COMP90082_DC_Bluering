@@ -242,7 +242,7 @@ demo link
 
 >use database Bluering;
 
-[create tables file](https://github.com/xudongguan202/COMP90082_DC_Bluering/blob/main/create_table.txt)
+[create tables file](https://drive.google.com/file/d/122_i_O_6PMiBLAekM0fHKvD4D8I7rXkn/view?usp=sharing)
 (copy the create database file in here.)
 
 # Operation guide <a name="operation_guide"></a>
