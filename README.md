@@ -18,6 +18,7 @@
   - [Other documents <a name="other_doc"></a>](#other-documents-)
 - [System requirements, Technologies & Tools <a name="System_requirements"></a>](#system-requirements-technologies--tools-)
 - [Installation guide <a name="installation_guide"></a>](#installation-guide-)
+  - [Software Installation](#software-installation)
   - [Database Installation](#database-installation)
 - [Operation guide <a name="operation_guide"></a>](#operation-guide-)
   - [Button Introduction](#button-introduction)
@@ -196,6 +197,16 @@ demo link
    |kaleido v1.0.48       |*pip install -U kaleido*              |
            
 # Installation guide <a name="installation_guide"></a>
+
+## Software Installation
+
+1. Down load zip file from [link](https://drive.google.com/file/d/1UbsF9W5zXl5pY3oqAL9-Hflieb60R9bA/view?usp=sharing)
+
+2. Unzip the file at any path you want to save the software
+
+3. Go to *your_path_to_dcc/dist/* to find *main.exe*
+
+4. Right click *main.exe* and send a shortcut to desktop for quick access
 
 ## Database Installation
 
