@@ -2612,6 +2612,17 @@ class MainFrame(wx.Frame):
         self.confirmed = False
         self.readed = False
         self.updated = False
+        # reset empty
+        self.m_textCtrl_job_no.SetValue("")
+        self.m_textCtrl_model1.SetValue("")
+        self.m_textCtrl_serial1.SetValue("")
+        self.m_textCtrl_model2.SetValue("")
+        self.m_textCtrl_client_name.SetValue("")
+        self.m_textCtrl_operator.SetValue("")
+        self.m_textCtrl_client_address1.SetValue("")
+        self.m_textCtrl_client_address2.SetValue("")
+        # progress bar
+        MainFrame.m_progress_bar.SetValue(0)
 
     def upload_csv(self, event):
         global pathClient
