@@ -38,7 +38,7 @@ However, this process is time-consuming nowadays, and with the increasing number
 The goal of this project is to provide our client a solution that can replace the manual process of transferring data and the reply on Microsoft Excel spreadsheets, including storing the data centrally, performing the analysis and providing results such as graph automatically, and finally producing the report as desired PDF certificate.
 
 # Demo <a name="demo"></a>
-demo link
+[Final Demo Presentation](https://confluence.cis.unimelb.edu.au:8443/display/COMP900822021SM2DC/Bluering+Presentation+and+Demo?preview=/83149299/83149301/Bluering.mp4)
 
 # Features <a name="features"></a>
 
